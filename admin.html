@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | Rezervacije</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <header>
+    <div class="navbar container">
+      <a href="index.html" class="logo">DogWalkingSarajevo</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Početna</a></li>
+        <li><a href="reviews.html">Recenzije</a></li>
+        <li><a href="reservation.html">Rezervacija</a></li>
+
+        <!-- auth UI -->
+        <li><a id="navAdmin" href="admin.html">Admin</a></li>
+        <li id="navUser" style="display:none">
+          <span class="user-pill">👤 <strong id="navUsername">Guest</strong></span>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container admin-wrap">
+    <div class="admin-head">
+      <h1>Rezervacije</h1>
+    </div>
+
+    <table class="admin-table" id="rezTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Datum</th>
+          <th>Početak</th>
+          <th>Kraj</th>
+          <th>Trajanje (min)</th>
+          <th>Ime i prezime</th>
+          <th>Životinja</th>
+          <th>Vrsta</th>
+          <th>Napomena</th>
+        </tr>
+      </thead>
+      <tbody id="rezBody">
+        <tr><td colspan="9" class="muted">Učitavanje…</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  
+  <script src="script.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

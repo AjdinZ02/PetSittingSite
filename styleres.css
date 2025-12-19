@@ -1,0 +1,316 @@
+
+/* Background i postojeći stilovi */
+body.reservation-page {
+  min-height: 100vh;
+  background-color: rgba(213, 53, 208, 0.6);
+  background-image: url('dog-walking.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-blend-mode: multiply;
+}
+
+.reservation-nav {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+}
+
+.reservation-nav .back-link {
+  color: #d535d0;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+.reservation-nav .back-link:hover { border-color: #d535d0; }
+
+.reservation-hero { text-align: center; padding: 80px 20px 40px; }
+.reservation-hero h1 { font-size: 2.5rem; color: white; margin-bottom: 15px; }
+.reservation-hero p { color: white; max-width: 600px; margin: 0 auto; }
+
+.reservation-form-section { max-width: 700px; margin: 0 auto 80px; padding: 0 20px 40px; }
+.reservation-form {
+  background: rgba(255,255,255,0.9);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.reservation-form label { display: block; font-weight: 600; margin-bottom: 8px; color: #444; }
+.reservation-form button { align-self: flex-start; }
+.reservation-form textarea { min-height: 120px; }
+.btn:hover { cursor: pointer; }
+
+footer { background: #333; color: #fff; text-align: center; padding: 20px; }
+.socials a { color: #fff; margin: 0 10px; text-decoration: none; }
+
+/* === KALENDAR === */
+.calendar { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cal-title { font-weight: 700; }
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin: 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.day {
+  position: relative;
+  padding: 12px 8px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  user-select: none;
+  background: #f7f7f7;
+  color: #333;
+}
+.day.disabled { opacity: 0.4; cursor: not-allowed; }
+.day.free    { background-color: #25a362; color: #fff; } /* zeleno */
+.day.full    { background-color: #d63c3c; color: #fff; } /* crveno */
+.day.partial { background-color: #f0ad4e; color: #fff; } /* narandžasto */
+.day.selected { outline: 2px solid #fff; box-shadow: 0 0 0 2px #1e7f50; }
+
+/* legenda */
+.cal-legend { margin-top: 12px; display: flex; align-items: center; gap: 16px; font-size: 0.9rem; }
+.legend-square { width: 14px; height: 14px; display: inline-block; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+.legend-square.free { background-color: #25a362; }
+.legend-square.full { background-color: #d63c3c; }
+.legend-square.partial { background-color: #f0ad4e; }
+
+/* === SLOTOVI === */
+.slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 20px;
+}
+.slot {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.slot.free  { background-color: #25a362; color: #fff; } /* zeleno */
+.slot.taken { background-color: #d63c3c; color: #fff; } /* crveno */
+.slot:disabled { opacity: 0.85; cursor: not-allowed; }
+.slot.selected { outline: 2px solid #fff; box-shadow: 0 0 0 2px #1e7f50; }
+
+/* Centriraj sve i daj “full-page section” osjećaj */
+.reservation-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Kalendar + forma zajedno kao card */
+.reservation-card {
+  background: rgba(255,255,255,0.92);
+  padding: 35px 40px;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+  margin-top: 40px;
+}
+
+/* Ukupni razmak */
+.reservation-form-section {
+  padding-top: 20px;
+}
+
+/* Poravnaj tekst i headline */
+.reservation-hero h1 {
+  font-size: 2.3rem;
+  margin-bottom: 10px;
+  color:rgba(213, 53, 208, 0.6);
+}
+
+.reservation-hero p {
+  font-size: 1.1rem;
+  margin-top: 0;
+  color: rgba(213, 53, 208, 0.6);
+}
+
+/* Bolje poravnanje kalendara */
+.calendar {
+  margin-bottom: 25px;
+}
+
+/* Centriraj kalendarsku legendu */
+.cal-legend {
+  justify-content: center;
+}
+
+/* Inputi malo čišći */
+.reservation-form input,
+.reservation-form select,
+.reservation-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.reservation-form button {
+  padding: 10px 20px;
+  background: #d535d0;
+  color: #fff;
+   border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.reservation-form button:hover {
+  background: #c12dbe;
+  cursor: pointer;
+}
+
+/* Pozadina: finiji overlay da tekst bude čitljiviji */
+body.reservation-page {
+  position: relative;
+  isolation: isolate;
+}
+body.reservation-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(600px 300px at 85% 10%, rgba(255,255,255,0.15), transparent),
+    linear-gradient(180deg, rgba(0,0,0,0.15), transparent 35%),
+    linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.10));
+  z-index: -1;
+}
+
+/* Centriranje i “card” efekat bez mijenjanja strukture */
+.reservation-form-section {
+  max-width: 980px;
+  padding: 20px 20px 60px;
+}
+.reservation-form {
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+  padding: 28px;
+}
+
+/* Naslovi i paragrafi */
+.reservation-hero h1 {
+  letter-spacing: 0.2px;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.25);
+}
+.reservation-hero p {
+  opacity: 0.95;
+}
+
+/* Calendar polish */
+.calendar {
+  border: 1px solid rgba(0,0,0,0.06);
+  backdrop-filter: blur(6px);
+}
+.cal-header .btn {
+  background: #fff;
+  color: #d535d0;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: transform .15s ease, background .25s ease;
+}
+.cal-header .btn:hover { transform: translateY(-1px); background: #ffe8fb; }
+.cal-title { text-transform: capitalize; }
+
+/* Disable prošle dane vizuelno */
+.day {
+  transition: transform .12s ease, box-shadow .12s ease, background .25s ease;
+}
+.day:not(.disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+.day.full { background-image: linear-gradient(180deg, #d63c3c, #c13232); }
+.day.free { background-image: linear-gradient(180deg, #27b26a, #1f8a53); }
+.day.partial { background-image: linear-gradient(180deg, #f0ad4e, #e39b37); }
+.day.selected { outline: 2px solid rgba(255,255,255,0.9); }
+
+/* Slotovi */
+.slots-grid { gap: 10px; }
+.slot {
+  letter-spacing: .2px;
+  transition: transform .12s ease, filter .15s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+.slot.free:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.slot.taken { opacity: 0.95; }
+.slot.selected { box-shadow: 0 0 0 2px #1e7f50, 0 6px 14px rgba(0,0,0,0.12); }
+
+/* Inputs & buttons */
+.reservation-form input,
+.reservation-form select,
+.reservation-form textarea {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s;
+}
+.reservation-form input:focus,
+.reservation-form select:focus,
+.reservation-form textarea:focus {
+  outline: none;
+  border-color: #d535d0;
+  box-shadow: 0 0 0 3px rgba(213,53,208,0.15);
+}
+.reservation-form button.btn {
+  background: linear-gradient(180deg, #d535d0, #c12dbe);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(213,53,208,0.35);
+  transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
+}
+.reservation-form button.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 14px 28px rgba(213,53,208,0.42);
+}
+
+/* Legenda centrirana i smanjena */
+.cal-legend {
+  justify-content: center;
+  gap: 20px;
+  opacity: 0.95;
+}
+
+/* Subtilne reveal animacije */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all .6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Responsive finese */
+@media (max-width: 820px) {
+  .reservation-form { padding: 22px; }
+  .cal-weekdays { font-size: .85rem; }
+}
+@media (max-width: 560px) {
+  .reservation-hero { padding: 60px 16px 28px; }
+  .reservation-form { padding: 18px; border-radius: 16px; }
+  .day { padding: 10px 6px; }
+}

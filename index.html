@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petsittingapp</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <nav class="navbar">
+      <div class="logo">DogWalkingSarajevo</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+
+        <!-- OVO su ID-evi koje koristi script.js -->
+        <li><a id="navLogin" href="login.html">Login</a></li>
+        <li><a id="navLogout" href="#" style="display:none">Logout</a></li>
+        <li><a id="navAdmin" href="admin.html" style="display:none">Admin</a></li>
+        <li id="navUser" style="display:none">
+          <span class="user-pill">👤 <strong id="navUsername">Guest</strong></span>
+        </li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Happy pets, happy life</h1>
+      <p>
+        Reliable walks. Loving care. Stress-free service.
+        We keep your pets happy, active, and comfortable while you’re busy or away.
+      </p>
+      <a href="#cta" class="btn">Learn More</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <p>
+      Hi! We’re pet lovers who believe every wag, purr, and tail flick deserves attention. We offer fun walks,
+      cozy sitting services, and lots of love to make sure your pets enjoy every moment while you’re away.
+      Happy pets are what we do best!
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="services" class="services">
+    <h2>Our Services</h2>
+    <div class="service-cards">
+      <div class="card">
+        <h3>Pet Walking</h3>
+        <p>Daily walks designed to keep your pet active, healthy, and happy.</p>
+      </div>
+      <div class="card">
+        <h3>Pet Sitting</h3>
+        <p>Comfortable, stress-free care right at home.</p>
+      </div>
+      <div class="card">
+        <h3>Drop-In Visits</h3>
+        <p>Quick visits to check on your pet, provide food, and offer companionship.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>You can contact us via email or phone.</p>
+    <p>Email: petsittingsarajevo@gmail.com</p>
+    <p>Telefon: +387 61/271-246</p>
+    <p>Adresa: Grbavička 1921, Sarajevo</p>
+    <p>Working hours: Flexible according to customer needs</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="cta" class="cta">
+    <h2>Ready for a reservation?</h2>
+    <p>Ensure a walk or care - a reservation is just one click away.</p>
+    <a href="reservation.html" class="btn">Reserve</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <footer>
+    <p>&copy; 2025 Petsittingapp. All rights reserved.</p>
+    <div class="socials">
+      <a href="https://www.instagram.com/setnja_pasa_sarajevo" target="_blank">Instagram</a>
+    </div>
+  </footer>
+
+  <!-- ZAJEDNIČKI SCRIPT MORA IĆI NA DNU -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registracija</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="navbar container">
+      <a href="index.html">Dog Walking Sarajevo</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Početna</a></li>
+        <li><a href="reviews.html">Recenzije</a></li>
+        <li><a href="reservation.html">Rezervacija</a></li>
+        <!-- VAŽNO: ovi id-ovi omogućavaju Login→Logout zamjenu -->
+        <li><a id="navLogin" href="login.html">Prijava</a></li>
+        <li><a id="navLogout" href="#" style="display:none;">Odjava</a></li>
+        <li><a id="navAdmin" href="admin.html" style="display:none;">Admin</a></li>
+      </ul>
+      <button id="hamburger" class="hamburger">☰</button>
+    </div>
+  </header>
+
+  <main class="container" style="padding:40px 0;">
+    <h1>Registracija</h1>
+    <div style="max-width:420px;margin-top:16px;">
+      <label for="reg-username">Korisničko ime</label>
+      <input id="reg-username" type="text" autocomplete="username" />
+
+      <label for="reg-password">Lozinka (min 6)</label>
+      <input id="reg-password" type="password" autocomplete="new-password" />
+
+      <button id="reg-btn" class="btn" style="margin-top:12px;">Kreiraj nalog</button>
+    </div>
+  </main>
+
+  <!-- redoslijed skripti: zajednički pa registracija -->
+  <script src="script.js"></script>
+  <script src="register.js"></script>
+</body>

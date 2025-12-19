@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recenzije | DogWalkingSarajevo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><div class="navbar container">
+    <a href="index.html" class="logo">DogWalkingSarajevo</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Početna</a></li>
+      <li><a href="reservation.html">Rezervacija</a></li>
+    </ul>
+    <button id="hamburger" class="hamburger">☰</button>
+  </div></header>
+
+  <main class="container" style="padding:40px 0;">
+    <h1>Recenzije</h1>
+
+    <section id="review-form" style="max-width:560px;margin-top:16px;">
+      <p><small>Prijavite se za dodavanje/uređivanje.</small></p>
+      <label>Ocjena (1–5)</label>
+      <select id="rev-rating">
+        <option>5</option><option>4</option><option>3</option><option>2</option><option>1</option>
+      </select>
+      <label>Sadržaj</label>
+      <textarea id="rev-content" placeholder="Napišite iskustvo..."></textarea>
+      <button id="rev-submit" class="btn" style="margin-top:10px;">Pošalji recenziju</button>
+    </section>
+
+    <hr class="divider" />
+
+    <section id="reviews-list" style="margin-top:18px;"></section>
+  </main>
+
+  <script src="reviews.js"></script>
+</body>
+</html>

@@ -67,7 +67,6 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
-// Login (admin ili user)
 app.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;

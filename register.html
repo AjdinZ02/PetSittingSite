@@ -3,40 +3,65 @@
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Registracija</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <div class="navbar container">
-      <a href="index.html">Dog Walking Sarajevo</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Početna</a></li>
-        <li><a href="reviews.html">Recenzije</a></li>
-        <li><a href="reservation.html">Rezervacija</a></li>
-        <!-- VAŽNO: ovi id-ovi omogućavaju Login→Logout zamjenu -->
-        <li><a id="navLogin" href="login.html">Prijava</a></li>
-        <li><a id="navLogout" href="#" style="display:none;">Odjava</a></li>
-        <li><a id="navAdmin" href="admin.html" style="display:none;">Admin</a></li>
-      </ul>
-      <button id="hamburger" class="hamburger">☰</button>
-    </div>
-  </header>
+<body class="auth-page">
+  <main class="auth-card">
+    <h2>Registracija</h2>
+    <p class="sub">Email, telefon i adresa su obavezni.</p>
 
-  <main class="container" style="padding:40px 0;">
-    <h1>Registracija</h1>
-    <div style="max-width:420px;margin-top:16px;">
-      <label for="reg-username">Korisničko ime</label>
-      <input id="reg-username" type="text" autocomplete="username" />
+    <!-- Bez action/onsubmit; koristimo JS; gasimo native validation -->
+    <form id="registerForm" novalidate>
+      <div class="auth-grid">
 
-      <label for="reg-password">Lozinka (min 6)</label>
-      <input id="reg-password" type="password" autocomplete="new-password" />
+        <div class="full">
+          <label for="reg-username">Korisničko ime</label>
+          <input id="reg-username" name="username" type="text" required minlength="3" />
+        </div>
 
-      <button id="reg-btn" class="btn" style="margin-top:12px;">Kreiraj nalog</button>
-    </div>
+        <div>
+          <label for="reg-email">Email</label>
+          <input id="reg-email" name="email" type="email" required />
+        </div>
+
+        <div>
+          <label for="reg-phone">Telefon</label>
+          <input id="reg-phone" name="phone" type="tel" required
+                 pattern="^\+?[0-9 ()-]{7,20}$"
+                 title="Unesite važeći broj telefona (7–20 cifara)" />
+        </div>
+
+        <div class="full">
+          <label for="reg-address">Adresa stanovanja</label>
+          <input id="reg-address" name="address" type="text" required minlength="5" />
+        </div>
+
+        <div class="full">
+          <label for="reg-password">Lozinka (min 6)</label>
+          <input id="reg-password" name="password" type="password" required minlength="6" />
+        </div>
+
+      </div>
+
+      <div style="margin-top:16px;">
+        <!-- Button NIJE submit; JS hendla klik -->
+        <button id="reg-btn" type="button">Kreiraj nalog</button>
+      </div>
+
+      <div class="auth-split">
+        <div class="line"></div><span>ili</span><div class="line"></div>
+      </div>
+
+      <div class="auth-links">
+        <a href="login.html">Već imate nalog? Prijavite se</a>
+      </div>
+    </form>
   </main>
 
-  <!-- redoslijed skripti: zajednički pa registracija -->
-  <script src="script.js"></script>
-  <script src="register.js"></script>
+  <!-- Skripte moraju biti učitane! Redoslijed: TOAST pa REGISTER. -->
+  <script src="toast.js" defer></script>
+  <script src="register.js" defer></script>
 </body>
+</html>

@@ -1,71 +1,94 @@
 
 // admin.js
-const API = 'http://localhost:3000';
 
-// --- helpers ---
-function byId(id) { return document.getElementById(id); }
+const API = ''; // isti origin (http://localhost:3000)
+const byId = (id) => document.getElementById(id);
+
+function authHeaders() {
+  const token = localStorage.getItem('auth_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 function showDebug(obj) {
   const el = byId('debug');
   if (!el) return;
   el.style.display = 'block';
   el.textContent = typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2);
 }
+
 function renderError(msg) {
   const e = byId('admin-error');
   if (!e) return;
   e.textContent = msg;
   e.style.display = 'block';
 }
+
+function renderUserPill() {
+  const pill = byId('admin-user-pill');
+  if (!pill) return;
+  const userStr = localStorage.getItem('auth_user');
+  const user = userStr ? JSON.parse(userStr) : null;
+  pill.textContent = user ? `👤 ${user.username} (${user.role})` : '👤 Guest';
+}
+
 function renderTable(rows) {
   const body = byId('rezBody');
   if (!body) return;
+
   body.innerHTML = '';
 
   if (!rows || rows.length === 0) {
-    body.innerHTML = '<tr><td colspan="9" class="muted">Nema rezervacija.</td></tr>';
+    body.innerHTML = '<tr><td colspan="13" style="padding:10px;">Nema rezervacija.</td></tr>';
     return;
   }
 
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td data-label="ID">${r.id}</td>
-      <td data-label="Datum">${r.datum}</td>
-      <td data-label="Početak">${r.vrijeme ?? ''}</td>
-      <td data-label="Kraj">${r.kraj ?? ''}</td>
-      <td data-label="Trajanje (min)">${r.trajanje_min}</td>
-      <td data-label="Ime i prezime">${r.ime_prezime}</td>
-      <td data-label="Životinja">${r.ime_zivotinje}</td>
-      <td data-label="Vrsta">${r.vrsta_zivotinje}</td>
-      <td data-label="Napomena">${r.napomena ?? ''}</td>
+      <td>${r.id}</td>
+      <td>${r.datum}</td>
+      <td>${r.vrijeme ?? ''}</td>
+      <td>${r.kraj ?? ''}</td>
+      <td>${r.trajanje_min}</td>
+      <td>${r.ime_prezime}</td>
+      <td>${r.ime_zivotinje}</td>
+      <td>${r.vrsta_zivotinje}</td>
+      <td>${r.adresa ?? ''}</td>
+      <td>${r.telefon ?? ''}</td>
+      <td>${r.napomena ?? ''}</td>
+      <td><span class="admin-pill">${r.status}</span></td>
+      <td class="admin-actions">
+        <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
+        <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>
+      </td>
     `;
     body.appendChild(tr);
   });
 }
 
-// --- main ---
 async function loadReservations() {
-  const token   = localStorage.getItem('auth_token');
+  const token = localStorage.getItem('auth_token');
   const userStr = localStorage.getItem('auth_user');
-  const user    = userStr ? JSON.parse(userStr) : null;
+  const user = userStr ? JSON.parse(userStr) : null;
 
+  renderUserPill();
   showDebug({ tokenExists: !!token, user });
 
   if (!token || !user) {
     renderError('Niste prijavljeni. Molimo ulogujte se.');
-    location.href = 'login.html';
+    setTimeout(() => { location.href = 'login.html'; }, 800);
     return;
   }
   if (user.role !== 'admin') {
     renderError('Pristup samo za admin.');
-    location.href = 'index.html';
+    setTimeout(() => { location.href = 'index.html'; }, 1200);
     return;
   }
 
   try {
     const r = await fetch(`${API}/rezervacije`, {
       method: 'GET',
-      headers: { 'Authorization': 'Bearer ' + token }
+      headers: { ...authHeaders() }
     });
 
     showDebug({ status: r.status, ok: r.ok, url: r.url });
@@ -74,12 +97,12 @@ async function loadReservations() {
       renderError('Sesija istekla ili nevažeća (401). Prijavite se ponovo.');
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
-      setTimeout(() => location.href = 'login.html', 800);
+      setTimeout(() => (location.href = 'login.html'), 800);
       return;
     }
     if (r.status === 403) {
       renderError('Nedovoljna ovlaštenja (403).');
-      setTimeout(() => location.href = 'index.html', 1200);
+      setTimeout(() => (location.href = 'index.html'), 1200);
       return;
     }
     if (!r.ok) {
@@ -91,6 +114,7 @@ async function loadReservations() {
     const data = await r.json();
     showDebug({ rows: Array.isArray(data) ? data.length : 0 });
     renderTable(data);
+    window.toast?.success?.('Rezervacije učitane.');
   } catch (e) {
     console.error(e);
     renderError('Greška u mreži. Provjerite da backend radi na http://localhost:3000.');
@@ -98,7 +122,39 @@ async function loadReservations() {
   }
 }
 
-// ✅ jedini event-listener: pozovi kad se DOM// ✅ jedini event-listener: pozovi kad se DOM učita
+// Delegirani klikovi na dugmad Odobri/Odbij
+const body = byId('rezBody');
+if (body) {
+  body.addEventListener('click', async (ev) => {
+    const t = ev.target;
+    if (!(t instanceof HTMLElement)) return;
+    const id = Number(t.getAttribute('data-id'));
+    if (!id) return;
+
+    const headers = { ...authHeaders(), 'Content-Type': 'application/json' };
+    try {
+      if (t.classList.contains('btn-approve')) {
+        const r = await fetch(`${API}/rezervacije/${id}/approve`, { method: 'PUT', headers });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.error || 'Greška');
+        window.toast?.success?.('Zahtjev odobren.');
+        loadReservations();
+      } else if (t.classList.contains('btn-reject')) {
+        const r = await fetch(`${API}/rezervacije/${id}/reject`, { method: 'PUT', headers });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.error || 'Greška');
+        window.toast?.success?.('Zahtjev odbijen.');
+        loadReservations();
+      }
+    } catch (e) {
+      console.error(e);
+      renderError('Greška pri izmjeni statusa.');
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadReservations();
+  const reloadBtn = byId('reload-btn');
+  if (reloadBtn) reloadBtn.addEventListener('click', loadReservations);
 });

@@ -3,44 +3,48 @@
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
-  <title>Login | DogWalkingSarajevo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prijava</title>
   <link rel="stylesheet" href="style.css">
+  <script src="toast.js"></script>
 </head>
-<body>
-  <header><div class="navbar container">
-    <a href="index.html" class="logo">DogWalkingSarajevo</a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="reviews.html">Recenzije</a></li>
-      <li><a href="reservation.html">Rezervacija</a></li>
-    </ul>
-    <button id="hamburger" class="hamburger">☰</button>
-  </div></header>
 
-  <main class="container" style="padding:40px 0;">
-    <h1>Prijava</h1>
-    <p>Uloguj se kao korisnik ili admin.</p>
-    <div style="max-width:420px;margin-top:16px;">
-      <label>Korisničko ime</label>
-      <input id="login-username" type="text" />
-      <label>Lozinka</label>
-      <input id="login-password" type="password" />
-      <button id="login-btn" class="btn" style="margin-top:12px;">Prijava</button>
+<body class="auth-page">
 
-      <div style="margin-top:18px;">
-        <small>Nemate nalog? <a href="register.html">Registrujte se</a></small>
+  <main class="auth-card">
+    <h2>Prijava</h2>
+    <p class="sub">Unesite korisničko ime i lozinku za nastavak.</p>
+
+    <form id="loginForm" onsubmit="return false;">
+      <div class="auth-grid">
+
+        <div class="full">
+          <label for="login-username">Korisničko ime</label>
+          <input id="login-username" type="text" required />
+        </div>
+
+        <div class="full">
+          <label for="login-password">Lozinka</label>
+          <input id="login-password" type="password" required />
+        </div>
+
       </div>
 
-      <div id="register-box" style="display:none;margin-top:16px;">
-        <label>Novo korisničko ime</label>
-        <input id="reg-username" type="text" />
-        <label>Lozinka (min 6)</label>
-        <input id="reg-password" type="password" />
-        <button id="reg-btn" class="btn" style="margin-top:10px;">Kreiraj nalog</button>
-           </div>
-    </div>
-  </main>
+      <div style="margin-top:16px;">
+        <button id="login-btn" type="button">Prijava</button>
+      </div>
 
+      <div class="auth-split">
+        <div class="line"></div>
+        <span>ili</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="auth-links">
+        <a href="register.html">Nemate nalog? Registrujte se</a>
+      </div>
+    </form>
+  </main>
+  
   <script src="login.js"></script>
 </body>
-</html>

@@ -1,13 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin | Rezervacije</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="admin.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Rezervacije | DogWalkingSarajevo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-wrap { width: min(1140px, 92%); margin: 40px auto; }
+    .admin-title { font-weight: 800; letter-spacing: .2px; margin-bottom: 8px; color: var(--brand, #d535d0); }
+    .admin-error { display:none; margin:12px 0; padding:10px; border-radius:10px; background:#fdecea; color:#b91c1c; font-weight:600; }
+    .admin-debug { display:none; padding:10px; background:#f3f4f6; border-radius:10px; overflow:auto; }
+    .admin-table { width:100%; border-collapse:collapse; margin-top:12px; background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:12px; }
+    .admin-table thead tr { background:#f3f4f6; }
+    .admin-table th, .admin-table td { text-align:left; padding:10px; border-bottom:1px solid rgba(0,0,0,0.06); }
+    .admin-table tbody tr:hover { background:#fafafa; }
+    .admin-actions { display:flex; gap:8px; align-items:center; }
+    .admin-pill { display:inline-block; padding:6px 10px; border-radius:16px; background:#f3f4f6; color:#111; font-size:0.9rem; }
+  </style>
 </head>
 <body>
+  <!-- Header / Nav  -->
   <header>
     <div class="navbar container">
       <a href="index.html" class="logo">DogWalkingSarajevo</a>
@@ -15,22 +28,26 @@
         <li><a href="index.html">Početna</a></li>
         <li><a href="reviews.html">Recenzije</a></li>
         <li><a href="reservation.html">Rezervacija</a></li>
-
-        <!-- auth UI -->
-        <li><a id="navAdmin" href="admin.html">Admin</a></li>
-        <li id="navUser" style="display:none">
-          <span class="user-pill">👤 <strong id="navUsername">Guest</strong></span>
-        </li>
+        <li><a class="active" href="admin.html">Admin</a></li>
       </ul>
+      <button id="hamburger" class="hamburger">☰</button>
     </div>
   </header>
 
-  <main class="container admin-wrap">
-    <div class="admin-head">
-      <h1>Rezervacije</h1>
+  <main class="admin-wrap">
+    <h1 class="admin-title">Rezervacije</h1>
+
+    <!-- Poruka o grešci -->
+    <div id="admin-error" class="admin-error">Greška</div>
+    <div class="admin-actions" style="margin:10px 0;">
+      <span class="admin-pill" id="admin-user-pill">👤</span>
+      <button id="reload-btn" class="btn" type="button">Osvježi</button>
     </div>
 
-    <table class="admin-table" id="rezTable">
+   
+
+    <!-- Tabela rezervacija -->
+    <table class="admin-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -41,17 +58,20 @@
           <th>Ime i prezime</th>
           <th>Životinja</th>
           <th>Vrsta</th>
+          <th>Adresa</th>
+          <th>Telefon</th>
           <th>Napomena</th>
+          <th>Status</th>   <!-- ✅ novo -->
+          <th>Akcije</th>   <!-- ✅ novo -->
         </tr>
       </thead>
       <tbody id="rezBody">
-        <tr><td colspan="9" class="muted">Učitavanje…</td></tr>
+        <tr><td colspan="13">Učitavanje…</td></tr>
       </tbody>
     </table>
   </main>
 
-  
-  <script src="script.js"></script>
+  <script src="toast.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

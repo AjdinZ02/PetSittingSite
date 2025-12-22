@@ -58,6 +58,7 @@ header.shrink {
   align-items: center;
   gap: 10px;
   margin-left: 50px;
+  color: black;
 }
 
 /* NAV LINKS */
@@ -572,3 +573,188 @@ main p,
   color: #111;
   font-size: 0.9rem;
 }
+
+/* =========================
+   AUTH PAGES (Login + Register)
+   IDs-only, no HTML changes
+   ========================= */
+
+/* Wrap & layout */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px 16px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+}
+
+/* Card container */
+.auth-card {
+  width: min(720px, 98%);
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 26px 26px 30px;
+}
+
+/* Heading & subtitle */
+.auth-card h2 {
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.auth-card p.sub {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+/* Form grid */
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.auth-grid .full {
+  grid-column: 1 / -1;
+}
+
+/* Inputs (IDs koje koristiš) */
+#login-username,
+#login-password,
+#reg-username,
+#reg-email,
+#reg-phone,
+#reg-address,
+#reg-password {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  font-size: 1rem;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+#login-username:focus,
+#login-password:focus,
+#reg-username:focus,
+#reg-email:focus,
+#reg-phone:focus,
+#reg-address:focus,
+#reg-password:focus {
+  outline: none;
+  border-color: var(--brand, #d535d0);
+  box-shadow: 0 0 0 3px rgba(213,53,208,0.15);
+}
+
+/* Labels */
+.auth-card label {
+  display: block;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+/* Buttons */
+#login-btn,
+#reg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  background: linear-gradient(180deg, var(--brand, #d535d0), var(--brand-700, #c12dbe));
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(213,53,208,0.28);
+  transition: transform .15s ease, filter .2s ease, box-shadow .2s ease;
+}
+#login-btn:hover,
+#reg-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 14px 28px rgba(213,53,208,0.38);
+  cursor: pointer;
+}
+
+/* Splitter & small links */
+.auth-split {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+.auth-split .line {
+  flex: 1;
+  height: 1px;
+  background: var(--stroke);
+}
+.auth-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.auth-links a {
+  color: var(--brand, #d535d0);
+  font-weight: 700;
+  text-decoration: none;
+}
+.auth-links a:hover { text-decoration: underline; }
+
+/* Embedded register box na login stranici */
+#register-box {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px dashed rgba(0,0,0,0.12);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.85);
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .auth-card { padding: 20px; }
+  .auth-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* ===== Pseće šape rating ===== */
+.paw-rating {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.paw-rating .paw {
+  font-size: 28px;          /* veličina šape */
+  line-height: 1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  filter: grayscale(80%);   /* neaktivne šape su sivkaste */
+  opacity: 0.7;
+  transition: transform 120ms ease, filter 120ms ease, opacity 120ms ease;
+  padding: 0;
+}
+
+.paw-rating .paw:hover {
+  transform: translateY(-2px) scale(1.06);
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+/* Aktivne (odabrane) šape – JS dodaje .selected do granice izbora */
+.paw-rating .paw.selected {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+/* Fokus radi pristupačnosti (tastatura) */
+.paw-rating .paw:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+

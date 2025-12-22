@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <title>Recenzije | DogWalkingSarajevo</title>
   <link rel="stylesheet" href="style.css">
+  
 </head>
 <body>
   <header><div class="navbar container">
@@ -19,22 +20,30 @@
   <main class="container" style="padding:40px 0;">
     <h1>Recenzije</h1>
 
-    <section id="review-form" style="max-width:560px;margin-top:16px;">
+    <section id="review-form" onsubmit="return false;" style="max-width:560px;margin-top:16px;">
       <p><small>Prijavite se za dodavanje/uređivanje.</small></p>
-      <label>Ocjena (1–5)</label>
-      <select id="rev-rating">
-        <option>5</option><option>4</option><option>3</option><option>2</option><option>1</option>
-      </select>
-      <label>Sadržaj</label>
+      
+      <label>Ocjena</label>
+      <div id="paw-rating" class="paw-rating" aria-label="Ocjena 1 do 5" style="margin-top:6px;">
+        <button type="button" class="paw" data-value="1" aria-label="1 šapa">🐾</button>
+        <button type="button" class="paw" data-value="2" aria-label="2 šape">🐾</button>
+        <button type="button" class="paw" data-value="3" aria-label="3 šape">🐾</button>
+        <button type="button" class="paw" data-value="4" aria-label="4 šape">🐾</button>
+        <button type="button" class="paw" data-value="5" aria-label="5 šapa">🐾</button>
+      </div>
+      <input type="hidden" id="rev-rating" value="5">
+      <br/>
+      <br/>
+      <label for ="rev-content" style="display:block;margin-top:10px;">Sadržaj:</label>
       <textarea id="rev-content" placeholder="Napišite iskustvo..."></textarea>
-      <button id="rev-submit" class="btn" style="margin-top:10px;">Pošalji recenziju</button>
+      <button id="rev-submit" class="btn" type="button" style="margin-top:10px;">Pošalji recenziju</button>
     </section>
 
     <hr class="divider" />
 
     <section id="reviews-list" style="margin-top:18px;"></section>
   </main>
-
+  <script src="toast.js"></script>
   <script src="reviews.js"></script>
 </body>
 </html>

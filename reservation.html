@@ -9,6 +9,8 @@
   <!-- Stilovi za rezervacijsku stranicu -->
   <link rel="stylesheet" href="styleres.css">
   <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
   <!-- Navigacija / povratak -->
   <nav class="reservation-nav">
@@ -61,27 +63,53 @@
 
           <!-- Datum (sinhronizovan sa kalendarom) -->
           <label for="res-date">Date (datum)</label>
-          <input id="res-date" type="date" />
+          <input id="res-date" type="date" required />
 
           <!-- Slotovi (zeleno slobodno, crveno zauzeto) -->
           <div id="time-slots" class="slots-grid" aria-live="polite"></div>
 
           <!-- Izabrano vrijeme (popunjava se klikom na slot) -->
-          <input id="res-time" type="text" placeholder="HH:mm" readonly />
+          <input id="res-time" type="text" placeholder="HH:mm" readonly required />
 
           <!-- Polja forme -->
           <label for="res-name">Name and surname (ime i prezime)</label>
-          <input id="res-name" type="text" placeholder="Unesite ime i prezime" />
+          <input id="res-name" type="text" placeholder="Unesite ime i prezime" required minlength="2" autocomplete="name" />
+
+          <!-- ✅ NOVO: Adresa (obavezno) -->
+          <label for="res-address">Address (adresa)</label>
+          <input
+            id="res-address"
+            type="text"
+            placeholder="Ulica i broj, naselje"
+            required
+            minlength="5"
+            autocomplete="street-address"
+          />
+
+          <!-- ✅ NOVO: Broj telefona (obavezno) -->
+          <label for="res-phone">Phone (broj telefona)</label>
+          <input
+            id="res-phone"
+            type="tel"
+            inputmode="tel"
+            placeholder="+387 61 123 456"
+            required
+            pattern="^[+]?[\d\s\-()]{7,15}$"
+            autocomplete="tel"
+          />
+          <small style="opacity:.8;margin-top:-6px;margin-bottom:8px;display:block">
+            Dozvoljeni su brojevi, razmaci, crtice i zagrade (npr. +387 61 123 456).
+          </small>
 
           <label for="res-pet-type">Pet type (vrsta zivotinje)</label>
-          <select id="res-pet-type">
+          <select id="res-pet-type" required>
             <option value="Dog">Dog</option>
             <option value="Cat">Cat</option>
             <option value="Other">Other</option>
           </select>
 
           <label for="res-pet-name">Pet name (ime zivotinje)</label>
-          <input id="res-pet-name" type="text" placeholder="Unesite ime ljubimca" />
+          <input id="res-pet-name" type="text" placeholder="Unesite ime ljubimca" required />
 
           <label for="res-notes">Special notes (posebna napomena)</label>
           <textarea id="res-notes" placeholder="Npr. temperament, posebne potrebe..."></textarea>
@@ -107,5 +135,7 @@
 
   <!-- Glavni skript (mora biti na dnu da bi svi elementi bili u DOM-u) -->
   <script src="script.js"></script>
+  <script src="toast.js"></script>
 </body>
-</html
+</html>
+

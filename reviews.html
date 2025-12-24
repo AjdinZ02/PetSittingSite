@@ -5,25 +5,51 @@
   <meta charset="UTF-8" />
   <title>Recenzije | DogWalkingSarajevo</title>
   <link rel="stylesheet" href="style.css">
-  
+
+  <!-- Minimalni stil za jezičke dugmiće -->
+  <style>
+    #lang-switch.lang-switch { display: inline-flex; align-items: center; gap: 8px; }
+    #lang-switch .lang-btn {
+      min-width: 34px; height: 26px; padding: 0 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #fff; color: #111; border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 6px; box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      font-weight: 700; font-size: 14px; cursor: pointer; line-height: 1;
+    }
+    #lang-switch .lang-btn.active { outline: 2px solid var(--brand, #d535d0); outline-offset: 2px; }
+  </style>
 </head>
 <body>
-  <header><div class="navbar container">
-    <a href="index.html" class="logo">DogWalkingSarajevo</a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Početna</a></li>
-      <li><a href="reservation.html">Rezervacija</a></li>
-    </ul>
-    <button id="hamburger" class="hamburger">☰</button>
-  </div></header>
+  <header>
+    <div class="navbar container">
+      <a href="index.html" class="logo">DogWalkingSarajevo</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Početna</a></li>
+        <li><a href="reservation.html">Rezervacija</a></li>
+
+        
+        <li id="lang-switch" class="lang-switch">
+          <!-- Bosanski -->
+          <button type="button" data-lang="bs" class="lang-btn" title="Bosanski" aria-label="Promijeni jezik na bosanski">
+            <img src="Images/Bosna.png" alt="Bosanska zastava" width="20" height="14" />
+           
+          </button>
+          <!-- English -->
+          <button type="button" data-lang="en" class="lang-btn" title="English" aria-label="Switch language to English">
+            <img src="Images/GB.png" alt="UK flag" width="20" height="14" />
+           
+          </button>
+        </li>
+      </ul>
+      <button id="hamburger" class="hamburger">☰</button>
+    </div>
+  </header>
 
   <main class="container" style="padding:40px 0;">
-    <h1>Recenzije</h1>
+    <h1 id="rev-title">Recenzije</h1>
 
     <section id="review-form" onsubmit="return false;" style="max-width:560px;margin-top:16px;">
-      <p><small>Prijavite se za dodavanje/uređivanje.</small></p>
-      
-      <label>Ocjena</label>
+      <label id="lbl-rating">Ocjena</label>
       <div id="paw-rating" class="paw-rating" aria-label="Ocjena 1 do 5" style="margin-top:6px;">
         <button type="button" class="paw" data-value="1" aria-label="1 šapa">🐾</button>
         <button type="button" class="paw" data-value="2" aria-label="2 šape">🐾</button>
@@ -34,16 +60,27 @@
       <input type="hidden" id="rev-rating" value="5">
       <br/>
       <br/>
-      <label for ="rev-content" style="display:block;margin-top:10px;">Sadržaj:</label>
+      <label for="rev-content" id="lbl-content" style="display:block;margin-top:10px;">Sadržaj:</label>
       <textarea id="rev-content" placeholder="Napišite iskustvo..."></textarea>
       <button id="rev-submit" class="btn" type="button" style="margin-top:10px;">Pošalji recenziju</button>
+
+      
+      <small id="eligibility-hint" style="opacity:.8; display:block; margin-top:8px;">
+        Napomena: recenzije mogu ostaviti korisnici sa završenom rezervacijom.
+      </small>
     </section>
 
     <hr class="divider" />
 
-    <section id="reviews-list" style="margin-top:18px;"></section>
+    <section style="margin-top:18px;">
+      <h2 id="list-title" style="margin-bottom:10px;">Sve recenzije</h2>
+      <div id="reviews-list" aria-live="polite"></div>
+    </section>
   </main>
+
+  <!-- Skripte (redoslijed: prvo app, zatim i18n) -->
   <script src="toast.js"></script>
   <script src="reviews.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>

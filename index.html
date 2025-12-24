@@ -1,32 +1,95 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bs">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Petsittingapp</title>
+
+  <!-- Stilovi -->
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Minimalni stil za zastavice unutar navigacije -->
+  <style>
+    /* Container za jezički switch */
+    #lang-switch.lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Dugmad (isti stil kao prije) */
+    #lang-switch .lang-btn {
+      min-width: 34px;
+      height: 26px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #111;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 6px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      cursor: pointer;
+      line-height: 1;
+    }
+    #lang-switch .lang-btn.active {
+      outline: 2px solid var(--brand, #d535d0);
+      outline-offset: 2px;
+    }
+    /* Ikone zastava (PNG/SVG) */
+    #lang-switch .lang-btn img {
+      display: block;
+      width: 20px; 
+      height: 14px; 
+      object-fit: cover;
+    }
+    
+    #lang-switch .lang-btn:focus-visible {
+      outline: 2px solid #6a5acd;
+      outline-offset: 2px;
+    }
+  </style>
 </head>
 <body>
   <header>
     <nav class="navbar">
       <div class="logo">DogWalkingSarajevo</div>
+
       <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="reservation.html">Reserve</a></li>
-        <li><a href="reviews.html">Reviews</a></li>
-        <!-- OVO su ID-evi koje koristi script.js -->
-        <li><a id="navLogin" href="login.html">Login</a></li>
-        <li><a id="navLogout" href="#" style="display:none">Logout</a></li>
+        <li><a href="#home">Početna</a></li>
+        <li><a href="#about">O nama</a></li>
+        <li><a href="#services">Usluge</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+        <li><a href="reservation.html">Rezervacija</a></li>
+        <li><a href="reviews.html">Recenzije</a></li>
+
+        <!-- Auth linkovi (ne diramo) -->
+        <li><a id="navLogin" href="login.html">Prijava</a></li>
+        <li><a id="navLogout" href="#" style="display:none">Odjava</a></li>
         <li><a id="navAdmin" href="admin.html" style="display:none">Admin</a></li>
+
+        
         <li id="navUser" style="display:none">
           <span class="user-pill">👤 <strong id="navUsername">Guest</strong></span>
         </li>
+
+        
+        <li id="lang-switch" class="lang-switch">
+          <!-- Bosanski -->
+          <button type="button" data-lang="bs" class="lang-btn" title="Bosanski" aria-label="Promijeni jezik na bosanski">
+            <img src="Images/Bosna.png" alt="Bosanska zastava" width="20" height="14" />
+           
+          </button>
+          <!-- English -->
+          <button type="button" data-lang="en" class="lang-btn" title="English" aria-label="Switch language to English">
+            <img src="Images/GB.png" alt="UK flag" width="20" height="14" />
+            
+          </button>
+        </li>
       </ul>
+
       <div class="hamburger" id="hamburger">
         <span></span><span></span><span></span>
       </div>
@@ -34,13 +97,31 @@
   </header>
 
   <section id="home" class="hero">
-    <div class="hero-content">
-      <h1>Happy pets, happy life</h1>
-      <p>
-        Reliable walks. Loving care. Stress-free service.
-        We keep your pets happy, active, and comfortable while you’re busy or away.
-      </p>
-      <a href="#cta" class="btn">Learn More</a>
+    <div class="hero-container">
+      <div class="hero-text">
+        <h1>Happy pets, happy life</h1>
+        <p>
+          Reliable walks. Loving care. Stress-free service.
+          We keep your pets happy, active, and comfortable while you’re busy or away.
+        </p>
+        <a href="#cta" class="btn">Learn More</a>
+      </div>
+
+      <div class="service-options">
+        <!-- Kartice: data-image + this u onclick -->
+        <div class="option-card"
+             data-image="Images/homevisit.png"
+             onclick="redirectToReservation('homevisit', this)">
+          <img src="Images/homevisit.png" alt="Home Visits" class="option-image">
+          <h3>Home Visits</h3>
+        </div>
+        <div class="option-card"
+             data-image="Images/petwalking.png"
+             onclick="redirectToReservation('petwalking', this)">
+          <img src="Images/petwalking.png" alt="Pet Walking" class="option-image">
+          <h3>Pet Walking</h3>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -81,8 +162,8 @@
     <h2>Contact Us</h2>
     <p>You can contact us via email or phone.</p>
     <p>Email: petsittingsarajevo@gmail.com</p>
-    <p>Telefon: +387 61/271-246</p>
-    <p>Adresa: Grbavička 1921, Sarajevo</p>
+    <p>Telefon: +387 62/096-295</p>
+    <p>Instagram :<a href="https://www.instagram.com/setnja_pasa_sarajevo" target="_blank">@setnja_pasa_sarajevo</a></p>
     <p>Working hours: Flexible according to customer needs</p>
   </section>
 
@@ -103,9 +184,21 @@
     </div>
   </footer>
 
-  <!-- ZAJEDNIČKI SCRIPT NA DNU -->
+  <!-- Skripte -->
   <script src="toast.js"></script>
   <script src="script.js"></script>
+
+  
+  <script>
+    function redirectToReservation(type, el) {
+      const img = el?.dataset?.image || '';
+      const url = `reservation.html?type=${encodeURIComponent(type)}&img=${encodeURIComponent(img)}`;
+      window.location.href = url;
+    }
+  </script>
+
+  
+  <script src="i18n.js"></script>
 </body>
 </html>
-``
+

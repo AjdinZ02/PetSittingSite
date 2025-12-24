@@ -3,21 +3,71 @@
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,  initial-scale=1.0"/>
   <title>Rezervacija | DogWalkingSarajevo</title>
 
-  <!-- Stilovi za rezervacijsku stranicu -->
+  <!-- Stilovi -->
   <link rel="stylesheet" href="styleres.css">
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-  <!-- Navigacija / povratak -->
+  
+  <style>
+    .reservation-nav { display: flex; align-items: center; gap: 12px; padding: 10px 20px; }
+    .reservation-nav .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; list-style: none; }
+    #lang-switch.lang-switch { display: inline-flex; align-items: center; gap: 8px; }
+    #lang-switch .lang-btn {
+      min-width: 34px; height: 26px; padding: 0 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #fff; color: #111; border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 6px; box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      font-weight: 700; font-size: 14px; cursor: pointer; line-height: 1;
+    }
+    #lang-switch .lang-btn.active { outline: 2px solid var(--brand, #d535d0); outline-offset: 2px; }
+    .user-pill { display: inline-flex; align-items: center; gap: 6px; }
+
+    
+    #bg-blur {
+      position: fixed;
+      inset: 0;                 
+      width: 100%;
+      height: 100%;
+      object-fit: cover;        
+      filter: blur(24px) saturate(1.08);
+      transform: scale(1.08);   
+      z-index: -1;              
+      opacity: 0.55;           
+      pointer-events: none;
+    }
+
+   
+    .reservation-card {
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+  </style>
+</head>
+<body class="reservation-page">
+  <!-- Blur pozadina preko cijelog ekrana -->
+  <img id="bg-blur" alt="" aria-hidden="true">
+
   <nav class="reservation-nav">
     <a class="back-link" href="index.html">← Back to Home</a>
-    <!-- Hamburger meni (podržan u script.js) -->
-    <button id="hamburger" aria-label="Menu" class="btn" style="margin-left:auto">☰</button>
-    <div id="navLinks" class="nav-links" style="display:none"></div>
+
+    <ul class="nav-right">
+      <li id="navUser" style="display:none">
+        <span class="user-pill">👤 <strong id="navUsername">Guest</strong></span>
+      </li>
+      <li id="lang-switch" class="lang-switch">
+        <!-- Bosanski -->
+        <button type="button" data-lang="bs" class="lang-btn" title="Bosanski" aria-label="Promijeni jezik na bosanski">
+          <img src="Images/Bosna.png" alt="Bosanska zastava" width="20" height="14" />
+        </button>
+        <!-- English -->
+        <button type="button" data-lang="en" class="lang-btn" title="English" aria-label="Switch language to English">
+          <img src="Images/GB.png" alt="UK flag" width="20" height="14" />
+        </button>
+      </li>
+    </ul>
   </nav>
 
   <!-- Hero sekcija -->
@@ -29,12 +79,12 @@
     </p>
   </section>
 
-  <!-- Glavna sekcija: kalendar + forma u card containeru -->
+  <!-- Glavna sekcija: kalendar + forma -->
   <section class="reservation-form-section">
     <div class="reservation-container">
       <div class="reservation-card">
 
-        <!-- KALENDAR sa bojenjem dana (IDs odgovaraju script.js) -->
+        <!-- KALENDAR -->
         <div class="calendar">
           <div class="cal-header">
             <button id="prev-month" type="button" class="btn" aria-label="Prethodni mjesec">&lsaquo;</button>
@@ -60,43 +110,28 @@
 
         <!-- Forma za rezervaciju -->
         <div class="reservation-form">
-
-          <!-- Datum (sinhronizovan sa kalendarom) -->
           <label for="res-date">Date (datum)</label>
           <input id="res-date" type="date" required />
 
-          <!-- Slotovi (zeleno slobodno, crveno zauzeto) -->
           <div id="time-slots" class="slots-grid" aria-live="polite"></div>
 
-          <!-- Izabrano vrijeme (popunjava se klikom na slot) -->
           <input id="res-time" type="text" placeholder="HH:mm" readonly required />
 
-          <!-- Polja forme -->
+          <label for="res-service">Service type (vrsta usluge)</label>
+          <select id="res-service" required>
+            <option value="Pet Walking">Pet Walking</option>
+            <option value="Home Visit">Home Visit</option>
+          </select>
+
           <label for="res-name">Name and surname (ime i prezime)</label>
           <input id="res-name" type="text" placeholder="Unesite ime i prezime" required minlength="2" autocomplete="name" />
 
-          <!-- ✅ NOVO: Adresa (obavezno) -->
           <label for="res-address">Address (adresa)</label>
-          <input
-            id="res-address"
-            type="text"
-            placeholder="Ulica i broj, naselje"
-            required
-            minlength="5"
-            autocomplete="street-address"
-          />
+          <input id="res-address" type="text" placeholder="Ulica i broj, naselje" required minlength="5" autocomplete="street-address" />
 
-          <!-- ✅ NOVO: Broj telefona (obavezno) -->
           <label for="res-phone">Phone (broj telefona)</label>
-          <input
-            id="res-phone"
-            type="tel"
-            inputmode="tel"
-            placeholder="+387 61 123 456"
-            required
-            pattern="^[+]?[\d\s\-()]{7,15}$"
-            autocomplete="tel"
-          />
+          <input id="res-phone" type="tel" inputmode="tel" placeholder="+387 61 123 456" required
+                 pattern="^[+]?[\d\s\-()]{7,15}$" autocomplete="tel" />
           <small style="opacity:.8;margin-top:-6px;margin-bottom:8px;display:block">
             Dozvoljeni su brojevi, razmaci, crtice i zagrade (npr. +387 61 123 456).
           </small>
@@ -114,7 +149,6 @@
           <label for="res-notes">Special notes (posebna napomena)</label>
           <textarea id="res-notes" placeholder="Npr. temperament, posebne potrebe..."></textarea>
 
-          <!-- Dugme za slanje -->
           <button id="submit-res" type="button" class="btn">
             Send request (pošalji zahtjev)
           </button>
@@ -133,9 +167,47 @@
     </div>
   </footer>
 
-  <!-- Glavni skript (mora biti na dnu da bi svi elementi bili u DOM-u) -->
+  <!-- Skripte -->
   <script src="script.js"></script>
   <script src="toast.js"></script>
+
+ 
+  <script>
+    (function () {
+      const p = new URLSearchParams(window.location.search);
+      let bg = p.get('img');
+
+     
+      if (!bg) {
+        const type = p.get('type');
+        if (type === 'homevisit')   bg = 'Images/homevisit.png';
+        else if (type === 'petwalking') bg = 'Images/petwalking.png';
+      }
+
+      
+      if (!bg) {
+        const svg =
+          `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'>
+             <defs>
+               <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+                 <stop offset='0%'  stop-color='#6a0dad'/>
+                 <stop offset='50%' stop-color='#9b59b6'/>
+                 <stop offset='100%' stop-color='#3f2b96'/>
+               </linearGradient>
+               <filter id='blur'><feGaussianBlur stdDeviation='40'/></filter>
+             </defs>
+             <rect width='1200' height='800' fill='url(#g)'/>
+             <circle cx='300' cy='200' r='220' fill='#d535d0' opacity='0.12' filter='url(#blur)'/>
+             <circle cx='900' cy='600' r='260' fill='#8e44ad' opacity='0.12' filter='url(#blur)'/>
+           </svg>`;
+        bg = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+      }
+
+      const el = document.getElementById('bg-blur');
+      if (el) el.src = bg;
+    })();
+  </script>
+  <script src="i18n.js"></script>
 </body>
 </html>
 

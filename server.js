@@ -1,7 +1,3 @@
-
-// server.js
-// Pokreni: node server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -22,7 +18,7 @@ const {
 
 const app = express();
 
-// === Statika: služi sve iz trenutnog foldera ===
+// Statika: služi sve iz trenutnog foldera 
 app.use(express.static(path.join(__dirname)));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
@@ -30,16 +26,15 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.use(cors());
 app.use(bodyParser.json());
 
-// ===== Config rasporeda =====
+// Config rasporeda 
 const SLOT_STEP_MIN = 60;
 const WORK_FROM = '08:00';
 const WORK_TO = '22:00';
 
-// ===== Token store =====
-/** activeTokens: Map(token => { userId, role, username }) */
+//  Token store 
 const activeTokens = new Map();
 
-// ===== Middleware =====
+// Middleware 
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'Authorization missing.' });
@@ -71,7 +66,7 @@ function tryAuthenticate(req, res, next) {
   next();
 }
 
-// ===== AUTH =====
+// AUTH 
 app.post('/auth/register', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -109,7 +104,7 @@ app.get('/auth/me', authenticate, (req, res) => {
   res.json({ id: req.user.userId, username: req.user.username, role: req.user.role });
 });
 
-// ===== RESERVATIONS =====
+// RESERVATIONS 
 app.get('/availability', async (req, res) => {
   try {
     const date = req.query.date;
@@ -204,7 +199,7 @@ app.post('/rezervacija', tryAuthenticate, async (req, res) => {
   }
 });
 
-// === ADMIN lista (sa statusom) ===
+// ADMIN lista 
 app.get('/rezervacije', authenticate, authorizeRole('admin'), async (req, res) => {
   try {
     const rows = await listReservationsAdmin();
@@ -219,8 +214,8 @@ app.get('/rezervacije', authenticate, authorizeRole('admin'), async (req, res) =
   }
 });
 
-// === ADMIN akcije: odobri / odbij ===
-// Provjera konflikta pri odobravanju: ne smije se preklapati sa već odobrenim
+// ADMIN akcije: odobri / odbij
+
 app.put('/rezervacije/:id/approve', authenticate, authorizeRole('admin'), async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -263,7 +258,7 @@ app.put('/rezervacije/:id/reject', authenticate, authorizeRole('admin'), async (
   }
 });
 
-// ===== REVIEWS =====
+//  REVIEWS 
 app.get('/reviews', async (req, res) => {
   try {
     const items = await listReviews();
@@ -348,6 +343,6 @@ app.delete('/reviews/:id', authenticate, async (req, res) => {
   }
 });
 
-// ===== Start =====
+// Start 
 const PORT = process.env.PORT ?? 3000;
 app.listen(PORT, () => console.log(`Server sluša na portu ${PORT}`));

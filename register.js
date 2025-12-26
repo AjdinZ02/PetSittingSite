@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const r = await fetch(`${API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, email, phone, address }),
       });
       const j = await safeJSON(r);
 

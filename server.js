@@ -69,13 +69,13 @@ function tryAuthenticate(req, res, next) {
 // AUTH 
 app.post('/auth/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email, phone, address } = req.body;
     if (!username || !password || password.length < 6) {
       return res.status(400).json({ error: 'Unesite korisničko ime i lozinku (min 6 znakova).' });
     }
     const exists = await findUserByUsername(username);
     if (exists) return res.status(409).json({ error: 'Korisničko ime je zauzeto.' });
-    const user = await createUser({ username, password, role: 'user' });
+    const user = await createUser({ username, password, email, phone, address, role: 'user' });
     res.status(201).json({ id: user.id, username: user.username, role: user.role });
   } catch (e) {
     console.error(e);

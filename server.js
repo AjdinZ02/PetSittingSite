@@ -222,29 +222,28 @@ app.get('/rezervacije', authenticate, authorizeRole('admin'), async (req, res) =
 app.put('/rezervacije/:id/approve', authenticate, authorizeRole('admin'), async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const row = await new Promise((resolve, reject) => {
-      db.get(`SELECT datum, start_minutes, end_minutes FROM rezervacije WHERE id = ?`, [id],
-        (err, r) => err ? reject(err) : resolve(r));
-    });
+    const rowResult = await db.query(
+      `SELECT datum, start_minutes, end_minutes FROM rezervacije WHERE id = $1`,
+      [id]
+    );
+    const row = rowResult.rows[0];
     if (!row) return res.status(404).json({ error: 'Rezervacija nije pronađena.' });
 
-    const conflict = await new Promise((resolve, reject) => {
-      db.get(
-        `SELECT 1 FROM rezervacije
-          WHERE datum = ? AND status='approved'
-            AND start_minutes < ? AND ? < end_minutes
-          LIMIT 1`,
-        [row.datum, row.end_minutes, row.start_minutes],
-        (err, r) => err ? reject(err) : resolve(!!r)
-      );
-    });
+    const conflictResult = await db.query(
+      `SELECT 1 FROM rezervacije
+        WHERE datum = $1 AND status='approved'
+          AND start_minutes < $2 AND $3 < end_minutes
+        LIMIT 1`,
+      [row.datum, row.end_minutes, row.start_minutes]
+    );
+    const conflict = conflictResult.rows.length > 0;
     if (conflict) return res.status(409).json({ error: 'Konflikt sa postojećom odobrenom rezervacijom.' });
 
     const r = await updateReservationStatus(id, 'approved');
     if (!r.updated) return res.status(404).json({ error: 'Rezervacija nije pronađena.' });
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    console.error('[APPROVE ERROR]', e);
     res.status(500).json({ error: 'Greška pri odobravanju.' });
   }
 });
@@ -256,8 +255,10 @@ app.put('/rezervacije/:id/reject', authenticate, authorizeRole('admin'), async (
     if (!r.updated) return res.status(404).json({ error: 'Rezervacija nije pronađena.' });
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    console.error('[REJECT ERROR]', e);
     res.status(500).json({ error: 'Greška pri odbijanju.' });
+  }
+});
   }
 });
 

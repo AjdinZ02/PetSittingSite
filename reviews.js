@@ -54,6 +54,9 @@ function renderReviews(items) {
 
     const author = r.username ? r.username :
       (T('author_fallback', (id)=>'Korisnik #' + id)(r.user_id));
+    
+    // Format date without time
+    const dateOnly = r.createdAt ? r.createdAt.split('T')[0] : '';
 
     wrap.innerHTML = `
       <div class="rating">
@@ -61,7 +64,7 @@ function renderReviews(items) {
         <span class="stars">⭐ ${r.rating}</span>
       </div>
       <div class="content" style="margin-top:6px">${r.content}</div>
-      <div class="muted" style="margin-top:6px">${T('added_at','Dodano')}: ${r.createdAt}</div>
+      <div class="muted" style="margin-top:6px;font-size:0.85rem">${T('added_at','Dodano')}: ${dateOnly}</div>
 
       ${
         (user && user.id === r.user_id)

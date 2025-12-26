@@ -715,10 +715,11 @@ footer p {
 .review-card,
 #reviews-list .card {
   background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  max-width: 600px;
 }
 
 .review-card:hover,

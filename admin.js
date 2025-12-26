@@ -4,6 +4,15 @@
 const API = ''; // isti origin (http://localhost:3000)
 const byId = (id) => document.getElementById(id);
 
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 function authHeaders() {
   const token = localStorage.getItem('auth_token');
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -46,7 +55,7 @@ function renderTable(rows) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${r.id}</td>
-      <td>${r.datum}</td>
+      <td>${formatDate(r.datum)}</td>
       <td>${r.vrijeme ?? ''}</td>
       <td>${r.kraj ?? ''}</td>
       <td>${r.trajanje_min}</td>

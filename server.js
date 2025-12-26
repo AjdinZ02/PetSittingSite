@@ -259,8 +259,7 @@ app.put('/rezervacije/:id/reject', authenticate, authorizeRole('admin'), async (
     res.status(500).json({ error: 'Greška pri odbijanju.' });
   }
 });
-  }
-});
+  
 
 //  REVIEWS 
 app.get('/reviews', async (req, res) => {

@@ -799,21 +799,50 @@ footer p {
 /* Laptop/Tablet optimization */
 @media (max-width: 1400px) {
   .admin-table {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .admin-table th,
   .admin-table td {
-    padding: 0.5rem 0.4rem;
+    padding: 0.4rem 0.3rem;
   }
   
   .btn {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
   
   .admin-actions {
-    gap: 4px !important;
+    gap: 3px !important;
+    flex-wrap: nowrap;
+  }
+  
+  .btn-approve,
+  .btn-reject {
+    min-width: 50px;
+  }
+  
+  /* Hide Trajanje column on smaller laptops */
+  .admin-table th:nth-child(5),
+  .admin-table td:nth-child(5) {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .admin-wrap {
+    padding: 1.5rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 0.4rem 0.25rem;
+    font-size: 0.75rem;
+  }
+  
+  .btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
   }
 }
 

@@ -712,7 +712,8 @@ footer p {
   gap: 1.5rem;
 }
 
-.review-card {
+.review-card,
+#reviews-list .card {
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -720,7 +721,8 @@ footer p {
   transition: all 0.3s ease;
 }
 
-.review-card:hover {
+.review-card:hover,
+#reviews-list .card:hover {
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }

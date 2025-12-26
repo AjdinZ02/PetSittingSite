@@ -777,11 +777,44 @@ footer p {
   padding: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .admin-table {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.6rem 0.5rem;
+}
+
+.admin-table th {
+  font-size: 0.85rem;
+}
+
+/* Laptop/Tablet optimization */
+@media (max-width: 1400px) {
+  .admin-table {
+    font-size: 0.85rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.4rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .admin-actions {
+    gap: 4px !important;
+  }
 }
 
 /* Mobile: Convert table to cards */

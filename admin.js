@@ -54,19 +54,19 @@ function renderTable(rows) {
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${r.id}</td>
-      <td>${formatDate(r.datum)}</td>
-      <td>${r.vrijeme ?? ''}</td>
-      <td>${r.kraj ?? ''}</td>
-      <td>${r.trajanje_min}</td>
-      <td>${r.ime_prezime}</td>
-      <td>${r.ime_zivotinje}</td>
-      <td>${r.vrsta_zivotinje}</td>
-      <td>${r.adresa ?? ''}</td>
-      <td>${r.telefon ?? ''}</td>
-      <td>${r.napomena ?? ''}</td>
-      <td><span class="admin-pill">${r.status}</span></td>
-      <td class="admin-actions">
+      <td data-label="ID">${r.id}</td>
+      <td data-label="Datum">${formatDate(r.datum)}</td>
+      <td data-label="Početak">${r.vrijeme ?? ''}</td>
+      <td data-label="Kraj">${r.kraj ?? ''}</td>
+      <td data-label="Trajanje">${r.trajanje_min} min</td>
+      <td data-label="Ime i prezime">${r.ime_prezime}</td>
+      <td data-label="Životinja">${r.ime_zivotinje}</td>
+      <td data-label="Vrsta">${r.vrsta_zivotinje}</td>
+      <td data-label="Adresa">${r.adresa ?? ''}</td>
+      <td data-label="Telefon">${r.telefon ?? ''}</td>
+      <td data-label="Napomena">${r.napomena ?? ''}</td>
+      <td data-label="Status"><span class="admin-pill">${r.status}</span></td>
+      <td data-label="Akcije" class="admin-actions">
         <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
         <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>
       </td>

@@ -101,17 +101,24 @@ function seedAdmin(client) {
       const ADMIN_USER = process.env.ADMIN_USER ?? 'admin';
       const ADMIN_PASS = process.env.ADMIN_PASS ?? 'adminadmin123';
       
+      console.log('[SEED] Checking for admin user:', ADMIN_USER);
       const res = await client.query(`SELECT id FROM users WHERE username = $1`, [ADMIN_USER]);
-      if (res.rows.length > 0) return resolve(res.rows[0].id);
+      if (res.rows.length > 0) {
+        console.log('[SEED] Admin user already exists, id:', res.rows[0].id);
+        return resolve(res.rows[0].id);
+      }
       
+      console.log('[SEED] Creating admin user...');
       const { salt, hash } = hashPassword(ADMIN_PASS);
       const insert = await client.query(
         `INSERT INTO users (username, role, password_salt, password_hash)
          VALUES ($1,$2,$3,$4) RETURNING id`,
         [ADMIN_USER, 'admin', salt, hash]
       );
+      console.log('[SEED] Admin user created successfully, id:', insert.rows[0].id);
       resolve(insert.rows[0].id);
     } catch (e) {
+      console.error('[SEED] Error creating admin user:', e.message);
       reject(e);
     }
   });

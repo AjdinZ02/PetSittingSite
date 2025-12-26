@@ -1,9 +1,12 @@
 
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const crypto = require('crypto');
-const path = require('path');
 
-const db = new sqlite3.Database(path.join(__dirname, 'dogwalking.db'));
+// PostgreSQL pool
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
 // =====================
 // Password hashing
@@ -22,17 +25,32 @@ function verifyPassword(password, salt, hash) {
 }
 
 // =====================
-// Init & migracije (bez brisanja baze)
+// Init & migracije
 // =====================
-const ready = new Promise((resolve, reject) => {
-  db.serialize(() => {
-    // 1) Kreiraj tabele ako ne postoje (sa svim kolonama za nove baze)
-    db.run(`
+const ready = (async () => {
+  const client = await pool.connect();
+  try {
+    // Kreiraj tabele
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        role TEXT NOT NULL CHECK(role IN ('admin','user')),
+        password_salt TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        email TEXT UNIQUE,
+        phone TEXT,
+        address TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await client.query(`
       CREATE TABLE IF NOT EXISTS rezervacije (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        datum TEXT NOT NULL,            -- YYYY-MM-DD
-        start_minutes INTEGER,          -- minute od ponoći
-        end_minutes INTEGER,            -- minute od ponoći
+        id SERIAL PRIMARY KEY,
+        datum DATE NOT NULL,
+        start_minutes INTEGER,
+        end_minutes INTEGER,
         trajanje_min INTEGER NOT NULL DEFAULT 60,
         ime_prezime TEXT NOT NULL,
         ime_zivotinje TEXT NOT NULL,
@@ -40,104 +58,62 @@ const ready = new Promise((resolve, reject) => {
         napomena TEXT,
         adresa TEXT NOT NULL DEFAULT '',
         telefon TEXT NOT NULL DEFAULT '',
-        status TEXT NOT NULL DEFAULT 'pending', -- pending|approved|rejected
-        user_id INTEGER NULL,
-        createdAt TEXT DEFAULT (datetime('now'))
+        status TEXT NOT NULL DEFAULT 'pending',
+        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
-    `, onErr);
+    `);
 
-    // Ovi indexi su bezbjedni jer kolone sigurno postoje
-    db.run(`CREATE INDEX IF NOT EXISTS idx_rezervacije_datum  ON rezervacije(datum)`, onErr);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_rezervacije_user   ON rezervacije(user_id)`, onErr);
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_rezervacije_datum ON rezervacije(datum)
+    `);
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_rezervacije_user ON rezervacije(user_id)
+    `);
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_rezervacije_status ON rezervacije(status)
+    `);
 
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        role TEXT NOT NULL CHECK(role IN ('admin','user')),
-        password_salt TEXT NOT NULL,
-        password_hash TEXT NOT NULL,
-        email TEXT,
-        phone TEXT,
-        address TEXT,
-        createdAt TEXT DEFAULT (datetime('now'))
-      )
-    `, onErr);
-    db.run(
-      `CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_unique
-         ON users(email) WHERE email IS NOT NULL`,
-      onErr
-    );
-
-    db.run(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS reviews (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
         content TEXT NOT NULL,
-        createdAt TEXT DEFAULT (datetime('now')),
-        updatedAt TEXT DEFAULT (datetime('now')),
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
-    `, onErr);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_reviews_user ON reviews(user_id)`, onErr);
+    `);
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_reviews_user ON reviews(user_id)
+    `);
 
-    // 2) Migracije kolona za već postojeće baze (redoslijed je bitan)
-    ensureColumn('rezervacije', `adresa TEXT NOT NULL DEFAULT ''`)
-      .then(() => ensureColumn('rezervacije', `telefon TEXT NOT NULL DEFAULT ''`))
-      .then(() => ensureColumn('rezervacije', `status TEXT NOT NULL DEFAULT 'pending'`))
-      .then(() => ensureColumn('rezervacije', `user_id INTEGER NULL`))
-      .then(() => {
-        // ✅ Tek sada, kad sigurno postoji kolona status, pravimo indeks na status
-        db.run(`CREATE INDEX IF NOT EXISTS idx_rezervacije_status ON rezervacije(status)`, onErr);
-      })
-      .then(() => seedAdmin())
-      .then(() => resolve())
-      .catch(reject);
-  });
-});
+    // Seed admin
+    await seedAdmin(client);
+  } finally {
+    client.release();
+  }
+})();
 
-function onErr(err) {
-  // Loguj ali ne ruši proces – migracije/indeksi su idempotentni
-  if (err) console.error('[DB] SQL error:', err.message);
-}
-
-function ensureColumn(table, columnDef) {
-  return new Promise((resolve, reject) => {
-    db.all(`PRAGMA table_info(${table})`, [], (err, cols) => {
-      if (err) return reject(err);
-      const names = Array.isArray(cols) ? cols.map(c => c.name) : [];
-      const colName = String(columnDef).trim().split(/\s+/)[0];
-      if (names.includes(colName)) return resolve({ added: false, name: colName });
-      db.run(`ALTER TABLE ${table} ADD COLUMN ${columnDef}`, (e) => {
-        if (e) return reject(e);
-        resolve({ added: true, name: colName });
-      });
-    });
-  });
-}
-
-// =====================
-// Admin seeding
-// =====================
-function seedAdmin() {
-  return new Promise((resolve, reject) => {
-    const ADMIN_USER = process.env.ADMIN_USER ?? 'admin';
-    const ADMIN_PASS = process.env.ADMIN_PASS ?? 'adminadmin123';
-    db.get(`SELECT id FROM users WHERE username = ?`, [ADMIN_USER], (err, row) => {
-      if (err) return reject(err);
-      if (row) return resolve(row.id);
+function seedAdmin(client) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ADMIN_USER = process.env.ADMIN_USER ?? 'admin';
+      const ADMIN_PASS = process.env.ADMIN_PASS ?? 'adminadmin123';
+      
+      const res = await client.query(`SELECT id FROM users WHERE username = $1`, [ADMIN_USER]);
+      if (res.rows.length > 0) return resolve(res.rows[0].id);
+      
       const { salt, hash } = hashPassword(ADMIN_PASS);
-      db.run(
+      const insert = await client.query(
         `INSERT INTO users (username, role, password_salt, password_hash)
-         VALUES (?,?,?,?)`,
-        [ADMIN_USER, 'admin', salt, hash],
-        function (err2) {
-          if (err2) return reject(err2);
-          resolve(this.lastID);
-        }
+         VALUES ($1,$2,$3,$4) RETURNING id`,
+        [ADMIN_USER, 'admin', salt, hash]
       );
-    });
+      resolve(insert.rows[0].id);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -145,34 +121,37 @@ function seedAdmin() {
 // Users helpers
 // =====================
 function createUser({ username, password, email, phone, address, role = 'user' }) {
-  return new Promise((resolve, reject) => {
-    const { salt, hash } = hashPassword(password);
-    db.run(
-      `INSERT INTO users (username, role, password_salt, password_hash, email, phone, address)
-       VALUES (?,?,?,?,?,?,?)`,
-      [username, role, salt, hash, email, phone, address],
-      function (err) {
-        if (err) {
-          const msg = String(err.message || '');
-          if (msg.includes('UNIQUE') && msg.includes('users.username'))
-            return reject({ code: 'USERNAME_EXISTS', message: 'Korisničko ime je zauzeto.' });
-          if (msg.includes('UNIQUE') && (msg.includes('users.email') || msg.includes('idx_users_email_unique')))
-            return reject({ code: 'EMAIL_EXISTS', message: 'Email je već registrovan.' });
-          return reject(err);
-        }
-        resolve({ id: this.lastID, username, role });
-      }
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { salt, hash } = hashPassword(password);
+      const result = await pool.query(
+        `INSERT INTO users (username, role, password_salt, password_hash, email, phone, address)
+         VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`,
+        [username, role, salt, hash, email, phone, address]
+      );
+      resolve({ id: result.rows[0].id, username, role });
+    } catch (err) {
+      const msg = String(err.message || '');
+      if (err.code === '23505' && msg.includes('users_username'))
+        return reject({ code: 'USERNAME_EXISTS', message: 'Korisničko ime je zauzeto.' });
+      if (err.code === '23505' && msg.includes('email'))
+        return reject({ code: 'EMAIL_EXISTS', message: 'Email je već registrovan.' });
+      reject(err);
+    }
   });
 }
 function findUserByUsername(username) {
-  return new Promise((resolve, reject) => {
-    db.get(
-      `SELECT id, username, role, password_salt AS salt, password_hash AS hash
-       FROM users WHERE username = ?`,
-      [username],
-      (err, row) => (err ? reject(err) : resolve(row || null))
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT id, username, role, password_salt AS salt, password_hash AS hash
+         FROM users WHERE username = $1`,
+        [username]
+      );
+      resolve(result.rows[0] || null);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function verifyUser(username, password) {
@@ -192,47 +171,58 @@ function verifyUser(username, password) {
 // Reviews helpers
 // =====================
 function listReviews() {
-  return new Promise((resolve, reject) => {
-    db.all(
-      `SELECT r.id, r.user_id, u.username, r.rating, r.content, r.createdAt, r.updatedAt
-         FROM reviews r
-         JOIN users u ON u.id = r.user_id
-        ORDER BY r.createdAt DESC`,
-      [],
-      (err, rows) => (err ? reject(err) : resolve(rows || []))
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT r.id, r.user_id, u.username, r.rating, r.content, 
+                r.created_at AS "createdAt", r.updated_at AS "updatedAt"
+           FROM reviews r
+           JOIN users u ON u.id = r.user_id
+          ORDER BY r.created_at DESC`
+      );
+      resolve(result.rows);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function listUserReviews(userId) {
-  return new Promise((resolve, reject) => {
-    db.all(
-      `SELECT id, user_id, rating, content, createdAt, updatedAt
-         FROM reviews
-        WHERE user_id = ?
-        ORDER BY createdAt DESC`,
-      [userId],
-      (err, rows) => (err ? reject(err) : resolve(rows || []))
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT id, user_id, rating, content, created_at AS "createdAt", updated_at AS "updatedAt"
+           FROM reviews
+          WHERE user_id = $1
+          ORDER BY created_at DESC`,
+        [userId]
+      );
+      resolve(result.rows);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function createReview({ userId, rating, content }) {
-  return new Promise((resolve, reject) => {
-    db.run(
-      `INSERT INTO reviews (user_id, rating, content) VALUES (?,?,?)`,
-      [userId, rating, content],
-      function (err) {
-        if (err) return reject(err);
-        resolve({ id: this.lastID });
-      }
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `INSERT INTO reviews (user_id, rating, content) VALUES ($1,$2,$3) RETURNING id`,
+        [userId, rating, content]
+      );
+      resolve({ id: result.rows[0].id });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function getReviewOwner(reviewId) {
-  return new Promise((resolve, reject) => {
-    db.get(`SELECT id, user_id FROM reviews WHERE id = ?`, [reviewId], (err, row) => {
-      if (err) return reject(err);
-      resolve(row || null);
-    });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(`SELECT id, user_id FROM reviews WHERE id = $1`, [reviewId]);
+      resolve(result.rows[0] || null);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function updateReview({ id, userId, rating, content }) {
@@ -243,27 +233,26 @@ function updateReview({ id, userId, rating, content }) {
       if (rev.user_id !== userId)
         return reject({ code: 'FORBIDDEN', message: 'Možete uređivati samo svoje recenzije.' });
 
-      db.run(
+      const result = await pool.query(
         `UPDATE reviews
-            SET rating = ?, content = ?, updatedAt = datetime('now')
-          WHERE id = ?`,
-        [rating, content, id],
-        function (err) {
-          if (err) return reject(err);
-          resolve({ updated: this.changes });
-        }
+            SET rating = $1, content = $2, updated_at = CURRENT_TIMESTAMP
+          WHERE id = $3`,
+        [rating, content, id]
       );
+      resolve({ updated: result.rowCount });
     } catch (e) {
       reject(e);
     }
   });
 }
 function deleteReview(reviewId) {
-  return new Promise((resolve, reject) => {
-    db.run(`DELETE FROM reviews WHERE id = ?`, [reviewId], function (err) {
-      if (err) return reject(err);
-      resolve({ deleted: this.changes });
-    });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(`DELETE FROM reviews WHERE id = $1`, [reviewId]);
+      resolve({ deleted: result.rowCount });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -283,17 +272,18 @@ function formatHHMM(mins) {
 
 // Za zauzeće uzimamo SAMO odobrene rezervacije
 function getDayReservations(date) {
-  return new Promise((resolve, reject) => {
-    db.all(
-      `SELECT start_minutes, end_minutes
-         FROM rezervacije
-        WHERE datum = ? AND status = 'approved'`,
-      [date],
-      (err, rows) => {
-        if (err) return reject(err);
-        resolve(rows || []);
-      }
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT start_minutes, end_minutes
+           FROM rezervacije
+          WHERE datum = $1 AND status = 'approved'`,
+        [date]
+      );
+      resolve(result.rows);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -313,26 +303,26 @@ async function getTakenSlots(date, slotStepMin, workFromHHMM, workToHHMM) {
 
 // Korisnik ima li makar jednu (po defaultu: prošlu) ODOBRENU rezervaciju?
 function hasUserReservation(userId, requirePast = true) {
-  return new Promise((resolve, reject) => {
-    const nowMinutesExpr = `CAST(strftime('%H','now','localtime') AS INTEGER) * 60
-                            + CAST(strftime('%M','now','localtime') AS INTEGER)`;
-    const wherePast = `
-      (
-        date(datum) < date('now','localtime')
-        OR (date(datum) = date('now','localtime') AND end_minutes <= ${nowMinutesExpr})
-      )
-    `;
-    const sql = `
-      SELECT EXISTS(
-        SELECT 1 FROM rezervacije
-         WHERE user_id = ? AND status = 'approved' ${requirePast ? `AND ${wherePast}` : ``}
-         LIMIT 1
-      ) AS has
-    `;
-    db.get(sql, [userId], (err, row) => {
-      if (err) return reject(err);
-      resolve(!!(row && row.has === 1));
-    });
+  return new Promise(async (resolve, reject) => {
+    try {
+      let sql = `
+        SELECT EXISTS(
+          SELECT 1 FROM rezervacije
+           WHERE user_id = $1 AND status = 'approved'
+      `;
+      if (requirePast) {
+        sql += ` AND (
+          datum < CURRENT_DATE
+          OR (datum = CURRENT_DATE AND end_minutes <= EXTRACT(HOUR FROM CURRENT_TIME) * 60 + EXTRACT(MINUTE FROM CURRENT_TIME))
+        )`;
+      }
+      sql += ` LIMIT 1) AS has`;
+      
+      const result = await pool.query(sql, [userId]);
+      resolve(result.rows[0].has);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -343,58 +333,63 @@ function createReservation({
   adresa, telefon,
   user_id = null
 }) {
-  return new Promise((resolve, reject) => {
-    const start = toMinutes(vrijeme);
-    if (start == null) return reject({ code: 'BAD_TIME', message: 'Neispravno vrijeme HH:mm.' });
-    const end = start + Number(trajanje_min ?? 60);
+  return new Promise(async (resolve, reject) => {
+    try {
+      const start = toMinutes(vrijeme);
+      if (start == null) return reject({ code: 'BAD_TIME', message: 'Neispravno vrijeme HH:mm.' });
+      const end = start + Number(trajanje_min ?? 60);
 
-    db.run(
-      `INSERT INTO rezervacije
-        (datum, start_minutes, end_minutes, trajanje_min,
-         ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
-         adresa, telefon, user_id, status)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [
-        datum, start, end, trajanje_min,
-        ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena ?? '',
-        adresa ?? '', telefon ?? '', user_id ?? null,
-        'pending'
-      ],
-      function (err2) {
-        if (err2) return reject(err2);
-        resolve({ id: this.lastID });
-      }
-    );
+      const result = await pool.query(
+        `INSERT INTO rezervacije
+          (datum, start_minutes, end_minutes, trajanje_min,
+           ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
+           adresa, telefon, user_id, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING id`,
+        [
+          datum, start, end, trajanje_min,
+          ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena ?? '',
+          adresa ?? '', telefon ?? '', user_id ?? null,
+          'pending'
+        ]
+      );
+      resolve({ id: result.rows[0].id });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
 // Admin: promjena statusa
 function updateReservationStatus(id, status) {
-  return new Promise((resolve, reject) => {
-    if (!['approved', 'rejected', 'pending'].includes(String(status))) {
-      return reject(new Error('Invalid status'));
-    }
-    db.run(
-      `UPDATE rezervacije SET status = ? WHERE id = ?`,
-      [status, id],
-      function (err) {
-        if (err) return reject(err);
-        resolve({ updated: this.changes });
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!['approved', 'rejected', 'pending'].includes(String(status))) {
+        return reject(new Error('Invalid status'));
       }
-    );
+      const result = await pool.query(
+        `UPDATE rezervacije SET status = $1 WHERE id = $2`,
+        [status, id]
+      );
+      resolve({ updated: result.rowCount });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 function listReservationsAdmin() {
-  return new Promise((resolve, reject) => {
-    db.all(
-      `SELECT id, datum, start_minutes, end_minutes, trajanje_min,
-              ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
-              adresa, telefon, status, user_id
-         FROM rezervacije
-     ORDER BY datum ASC, start_minutes ASC`,
-      [],
-      (err, rows) => (err ? reject(err) : resolve(rows || []))
-    );
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT id, datum, start_minutes, end_minutes, trajanje_min,
+                ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
+                adresa, telefon, status, user_id
+           FROM rezervacije
+       ORDER BY datum ASC, start_minutes ASC`
+      );
+      resolve(result.rows);
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -402,7 +397,7 @@ function listReservationsAdmin() {
 // Exports
 // =====================
 module.exports = {
-  db, ready,
+  db: pool, ready,
   // auth
   createUser, findUserByUsername, verifyUser, hashPassword, verifyPassword,
   // reviews

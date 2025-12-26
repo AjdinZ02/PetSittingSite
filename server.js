@@ -85,14 +85,17 @@ app.post('/auth/register', async (req, res) => {
 app.post('/auth/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('[LOGIN] Attempt for username:', username);
     if (!username || !password) return res.status(400).json({ error: 'Unesite korisničko ime i lozinku.' });
     const user = await verifyUser(username, password);
+    console.log('[LOGIN] verifyUser result:', user ? `User found: ${user.username}, role: ${user.role}` : 'User NOT found');
     if (!user) return res.status(401).json({ error: 'Pogrešno korisničko ime ili lozinka.' });
     const token = crypto.randomBytes(24).toString('hex');
     activeTokens.set(token, { userId: user.id, role: user.role, username: user.username });
+    console.log('[LOGIN] Success! Token created for user:', user.username);
     res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
   } catch (e) {
-    console.error(e);
+    console.error('[LOGIN] Error:', e);
     res.status(500).json({ error: 'Greška pri prijavi.' });
   }
 });

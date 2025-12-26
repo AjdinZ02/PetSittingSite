@@ -309,7 +309,7 @@ async function getTakenSlots(date, slotStepMin, workFromHHMM, workToHHMM) {
 }
 
 // Korisnik ima li makar jednu (po defaultu: prošlu) ODOBRENU rezervaciju?
-function hasUserReservation(userId, requirePast = true) {
+function hasUserReservation(userId, requirePast = false) {
   return new Promise(async (resolve, reject) => {
     try {
       let sql = `

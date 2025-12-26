@@ -282,10 +282,10 @@ app.get('/reviews/mine', authenticate, async (req, res) => {
   }
 });
 
-// Korisnik smije ostaviti recenziju samo ako ima barem jednu prošlu ODOBRENU rezervaciju
+// Korisnik smije ostaviti recenziju samo ako ima barem jednu ODOBRENU rezervaciju
 app.get('/reviews/eligible', authenticate, async (req, res) => {
   try {
-    const eligible = await hasUserReservation(req.user.userId, true);
+    const eligible = await hasUserReservation(req.user.userId, false);
     res.json({ eligible: !!eligible });
   } catch (e) {
     console.error(e);
@@ -299,9 +299,9 @@ app.post('/reviews', authenticate, async (req, res) => {
     if (!rating || !content || content.trim().length < 3) {
       return res.status(400).json({ error: 'Unesite ocjenu (1–5) i sadržaj (min 3 znaka).' });
     }
-    const eligible = await hasUserReservation(req.user.userId, true);
+    const eligible = await hasUserReservation(req.user.userId, false);
     if (!eligible) {
-      return res.status(403).json({ error: 'Samo korisnici sa završenom odobrenom rezervacijom mogu ostaviti recenziju.' });
+      return res.status(403).json({ error: 'Samo korisnici sa odobrenom rezervacijom mogu ostaviti recenziju.' });
     }
     const r = Math.max(1, Math.min(5, Number(rating)));
     const result = await createReview({ userId: req.user.userId, rating: r, content: content.trim() });

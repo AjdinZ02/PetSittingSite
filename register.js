@@ -3,7 +3,7 @@
 // register.js (robustna + debug)
 // ===========================
 
-const API = "http://localhost:3000";
+const API = '';
 
 // Sigurni toast
 const _toastFallback = {

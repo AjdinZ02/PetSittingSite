@@ -1,6 +1,6 @@
 
 // reviews.js — render i CRUD za recenzije, sa i18n hookovima
-const API = 'http://localhost:3000';
+const API = '';
 const token = localStorage.getItem('auth_token');
 const userStr = localStorage.getItem('auth_user');
 const user = userStr ? JSON.parse(userStr) : null;

@@ -1,9 +1,6 @@
 
 // login.js
-const API =
-  (location.origin.startsWith('http') && (location.port === '3000' || location.port === '4000'))
-    ? ''
-    : 'http://localhost:3000';
+const API = '';
 
 document.getElementById('login-btn').addEventListener('click', async () => {
   const username = document.getElementById('login-username').value.trim();

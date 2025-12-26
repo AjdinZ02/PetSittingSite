@@ -479,6 +479,295 @@ footer p {
 }
 
 /* ========================================
+   AUTH PAGES (LOGIN, REGISTER)
+   ======================================== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-card h2 {
+  font-size: 2rem;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.auth-card .sub {
+  text-align: center;
+  color: var(--gray);
+  margin-bottom: 2rem;
+}
+
+.auth-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.auth-grid .full {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-grid label {
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.auth-grid input {
+  padding: 0.9rem 1.2rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.auth-grid input:focus {
+  outline: none;
+  border-color: var(--brand);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+}
+
+.auth-card button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+}
+
+.auth-card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+}
+
+.auth-card button:active {
+  transform: translateY(0);
+}
+
+.auth-split {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.auth-split .line {
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.auth-split span {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.auth-links a {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: var(--brand-dark);
+  text-decoration: underline;
+}
+
+/* Responsive auth pages */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .auth-card h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* ========================================
+   REVIEWS PAGE
+   ======================================== */
+
+#review-form {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 560px;
+}
+
+#review-form label {
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+#review-form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  margin-top: 0.5rem;
+}
+
+#review-form textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+}
+
+.paw-rating {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.paw-rating .paw {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.paw-rating .paw:hover,
+.paw-rating .paw.selected {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+#eligibility-hint {
+  color: var(--gray);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  margin: 3rem 0;
+}
+
+#reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.review-card:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.review-user {
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 1.1rem;
+}
+
+.review-rating {
+  font-size: 1.2rem;
+}
+
+.review-content {
+  color: var(--gray);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  #review-form {
+    padding: 1.5rem;
+  }
+  
+  .paw-rating .paw {
+    font-size: 1.5rem;
+  }
+}
+
+footer p {
+  color: var(--gray);
+}
+
+/* ========================================
    UTILITY CLASSES
    ======================================== */
 

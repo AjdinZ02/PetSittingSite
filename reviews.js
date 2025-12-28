@@ -5,13 +5,10 @@ const token = localStorage.getItem('auth_token');
 const userStr = localStorage.getItem('auth_user');
 const user = userStr ? JSON.parse(userStr) : null;
 
-const ratingEl = document.getElementById('rev-rating');
-const contentEl = document.getElementById('rev-content');
-const submitBtn = document.getElementById('rev-submit');
-const listEl = document.getElementById('reviews-list');
+let ratingEl, contentEl, submitBtn, listEl;
 
 // Pseće šape rating (1–5)
-(function initPawRating() {
+function initPawRating() {
   const pawWrap = document.getElementById('paw-rating');
   if (!pawWrap) return;
   const paws = Array.from(pawWrap.querySelectorAll('.paw'));
@@ -30,7 +27,25 @@ const listEl = document.getElementById('reviews-list');
       renderSelected(v);
     });
   });
-})();
+}
+
+// Inicijalizacija nakon učitavanja DOM-a
+document.addEventListener('DOMContentLoaded', () => {
+  ratingEl = document.getElementById('rev-rating');
+  contentEl = document.getElementById('rev-content');
+  submitBtn = document.getElementById('rev-submit');
+  listEl = document.getElementById('reviews-list');
+  
+  initPawRating();
+  
+  // Ostatak inicijalizacije...
+  if (submitBtn) {
+    submitBtn.addEventListener('click', submitReview);
+  }
+  
+  checkReviewEligibility();
+  loadReviews();
+});
 
 function authHeaders() {
   return token ? { Authorization: 'Bearer ' + token } : {};
@@ -126,26 +141,24 @@ function loadReviews() {
     .catch(() => toast.error(T('fetch_error','Greška pri dohvaćanju recenzija.')));
 }
 
-if (submitBtn) {
-  submitBtn.addEventListener('click', () => {
-    if (!token) { toast.warn(T('must_login','Prijavite se da biste dodali recenziju.')); return; }
-    const rating = Number(ratingEl.value);
-    const content = contentEl.value.trim();
-    if (!content || content.length < 3) { toast.warn(T('content_warn','Unesite sadržaj (min 3 znaka).')); return; }
+function submitReview() {
+  if (!token) { toast.warn(T('must_login','Prijavite se da biste dodali recenziju.')); return; }
+  const rating = Number(ratingEl.value);
+  const content = contentEl.value.trim();
+  if (!content || content.length < 3) { toast.warn(T('content_warn','Unesite sadržaj (min 3 znaka).')); return; }
 
-    fetch(`${API}/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...authHeaders() },
-      body: JSON.stringify({ rating, content })
-    })
-      .then(r => r.json().then(j => ({ ok: r.ok, j })))
-      .then(({ ok }) => {
-        if (!ok) { toast.error(T('sent_error','Greška pri slanju.')); return; }
-        toast.success(T('added_ok','Recenzija dodana.'));
-        contentEl.value = '';
-        loadReviews();
-      });
-  });
+  fetch(`${API}/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ rating, content })
+  })
+    .then(r => r.json().then(j => ({ ok: r.ok, j })))
+    .then(({ ok }) => {
+      if (!ok) { toast.error(T('sent_error','Greška pri slanju.')); return; }
+      toast.success(T('added_ok','Recenzija dodana.'));
+      contentEl.value = '';
+      loadReviews();
+    });
 }
 
 async function checkReviewEligibility() {
@@ -171,10 +184,6 @@ async function checkReviewEligibility() {
 window.reviewsRerender = function() {
   loadReviews();
 };
-
-// init
-checkReviewEligibility();
-loadReviews();
 
 // expose user global (ako želiš ga koristiti u templatu)
 window.user = user;

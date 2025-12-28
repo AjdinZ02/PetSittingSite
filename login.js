@@ -25,7 +25,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     localStorage.setItem('auth_token', j.token);
     localStorage.setItem('auth_user', JSON.stringify(j.user));
     toast.success(`Prijavljeni: ${j.user.username} (${j.user.role})`);
-    location.href = (j.user.role === 'admin') ? 'admin.html' : 'reservation.html';
+    location.href = (j.user.role === 'admin') ? 'admin.html' : 'index.html';
   } catch (e) {
     console.error(e);
     toast.error('Greška pri prijavi.');

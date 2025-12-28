@@ -5,9 +5,30 @@
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 if (hamburger) {
-  hamburger.addEventListener('click', () => {
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
     if (navLinks) navLinks.classList.toggle('active');
   });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (navLinks && navLinks.classList.contains('active')) {
+      // Check if click is outside both hamburger and navLinks
+      if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+        navLinks.classList.remove('active');
+      }
+    }
+  });
+  
+  // Close menu when clicking on a nav link
+  if (navLinks) {
+    const links = navLinks.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+  }
 }
 
 // ===== Auth helperi (localStorage) =====
@@ -349,4 +370,86 @@ if (submitBtn) {
   if (calGrid && calTitle) {
     renderCalendar(currentMonth.year, currentMonth.month);
   }
+  
+  // Gallery tab functionality
+  initGallery();
 })();
+
+// ===== Gallery Tab Functionality =====
+function initGallery() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  
+  if (tabBtns.length === 0 || galleryItems.length === 0) return;
+  
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const category = this.getAttribute('data-category');
+      
+      // Update active tab
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      
+      // Filter gallery items
+      galleryItems.forEach(function(item) {
+        if (category === 'all') {
+          item.classList.remove('hidden');
+        } else {
+          if (item.getAttribute('data-category') === category) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        }
+      });
+    });
+  });
+  
+  // Add click handlers to gallery images for lightbox
+  galleryItems.forEach(function(item) {
+    const img = item.querySelector('img');
+    if (img) {
+      item.addEventListener('click', function() {
+        openLightbox(img.src, img.alt);
+      });
+      // Make it clear it's clickable
+      item.style.cursor = 'pointer';
+    }
+  });
+}
+
+// ===== Lightbox Functions =====
+function openLightbox(src, alt) {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  if (lightbox && lightboxImg) {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  if (lightbox) {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// Close lightbox on click outside image
+if (document.getElementById('lightbox')) {
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeLightbox();
+    }
+  });
+  
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  });
+}

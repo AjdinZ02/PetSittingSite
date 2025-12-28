@@ -18,7 +18,7 @@
       align-items: center;
       gap: 8px;
     }
-    /* Dugmad (isti stil kao prije) */
+    /* Dugmad */
     #lang-switch .lang-btn {
       min-width: 34px;
       height: 26px;
@@ -61,11 +61,12 @@
         <li><a href="#home">Početna</a></li>
         <li><a href="#about">O nama</a></li>
         <li><a href="#services">Usluge</a></li>
+        <li><a href="#gallery">Galerija</a></li>
         <li><a href="#contact">Kontakt</a></li>
         <li><a href="reservation.html">Rezervacija</a></li>
         <li><a href="reviews.html">Recenzije</a></li>
 
-        <!-- Auth linkovi (ne diramo) -->
+        <!-- Auth linkovi -->
         <li><a id="navLogin" href="login.html">Prijava</a></li>
         <li><a id="navLogout" href="#" style="display:none">Odjava</a></li>
         <li><a id="navAdmin" href="admin.html" style="display:none">Admin</a></li>
@@ -104,7 +105,7 @@
           Reliable walks. Loving care. Stress-free service.
           We keep your pets happy, active, and comfortable while you’re busy or away.
         </p>
-        <a href="#cta" class="btn">Learn More</a>
+        <a href="#cta" class="btn">Reserve</a>
       </div>
 
       <div class="service-options">
@@ -112,13 +113,13 @@
         <div class="option-card"
              data-image="Images/homevisit.png"
              onclick="redirectToReservation('homevisit', this)">
-          <img src="Images/homevisit.png" alt="Home Visits" class="option-image">
+          <img src="PetSittingImages/PetSitting10.jpg" alt="Home Visits" class="option-image">
           <h3>Home Visits</h3>
         </div>
         <div class="option-card"
              data-image="Images/petwalking.png"
              onclick="redirectToReservation('petwalking', this)">
-          <img src="Images/petwalking.png" alt="Pet Walking" class="option-image">
+          <img src="PetSittingImages/PetSitting4.jpg" alt="Pet Walking" class="option-image">
           <h3>Pet Walking</h3>
         </div>
       </div>
@@ -158,6 +159,94 @@
 
   <div class="divider"></div>
 
+  <section id="gallery" class="gallery-section">
+    <h2>Galerija</h2>
+    <div class="gallery-tabs">
+      <button class="tab-btn active" data-category="all">Sve</button>
+      <button class="tab-btn" data-category="walks">Šetnje</button>
+      <button class="tab-btn" data-category="care">Njega</button>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting1.jpg" alt="Pet Sitting 1">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting2.jpg" alt="Pet Sitting 2">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting3.jpg" alt="Pet Sitting 3">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting4.jpg" alt="Pet Sitting 4">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting5.jpg" alt="Pet Sitting 5">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting6.jpg" alt="Pet Sitting 6">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting7.jpg" alt="Pet Sitting 7">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting8.jpg" alt="Pet Sitting 8">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting9.jpg" alt="Pet Sitting 9">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting10.jpg" alt="Pet Sitting 10">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting11.jpg" alt="Pet Sitting 11">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting12.jpg" alt="Pet Sitting 12">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting13.jpg" alt="Pet Sitting 13">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting14.jpg" alt="Pet Sitting 14">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting15.jpg" alt="Pet Sitting 15">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting16.jpg" alt="Pet Sitting 16">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting17.jpg" alt="Pet Sitting 17">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting18.jpg" alt="Pet Sitting 18">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting19.jpg" alt="Pet Sitting 19">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting20.jpg" alt="Pet Sitting 20">
+      </div>
+      <div class="gallery-item" data-category="care">
+        <img src="PetSittingImages/PetSitting21.jpg" alt="Pet Sitting 21">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting22.jpg" alt="Pet Sitting 22">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting23.jpg" alt="Pet Sitting 23">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting24.jpg" alt="Pet Sitting 24">
+      </div>
+      <div class="gallery-item" data-category="walks">
+        <img src="PetSittingImages/PetSitting25.jpg" alt="Pet Sitting 25">
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
   <section id="contact" class="contact">
     <h2>Contact Us</h2>
     <p>You can contact us via email or phone.</p>
@@ -183,6 +272,14 @@
       <a href="https://www.instagram.com/setnja_pasa_sarajevo" target="_blank">Instagram</a>
     </div>
   </footer>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+  </div>
 
   <!-- Skripte -->
   <script src="toast.js"></script>

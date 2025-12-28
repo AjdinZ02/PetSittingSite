@@ -3,84 +3,68 @@
 <html lang="bs">
 <head>
   <meta charset="UTF-8" />
-  <title>Recenzije | DogWalkingSarajevo</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Minimalni stil za jezičke dugmiće -->
-  <style>
-    #lang-switch.lang-switch { display: inline-flex; align-items: center; gap: 8px; }
-    #lang-switch .lang-btn {
-      min-width: 34px; height: 26px; padding: 0 8px;
-      display: inline-flex; align-items: center; justify-content: center;
-      background: #fff; color: #111; border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 6px; box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-      font-weight: 700; font-size: 14px; cursor: pointer; line-height: 1;
-    }
-    #lang-switch .lang-btn.active { outline: 2px solid var(--brand, #d535d0); outline-offset: 2px; }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registracija</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <div class="navbar container">
-      <a href="index.html" class="logo">DogWalkingSarajevo</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Početna</a></li>
-        <li><a href="reservation.html">Rezervacija</a></li>
-
-        
-        <li id="lang-switch" class="lang-switch">
-          <!-- Bosanski -->
-          <button type="button" data-lang="bs" class="lang-btn" title="Bosanski" aria-label="Promijeni jezik na bosanski">
-            <img src="Images/Bosna.png" alt="Bosanska zastava" width="20" height="14" />
-           
-          </button>
-          <!-- English -->
-          <button type="button" data-lang="en" class="lang-btn" title="English" aria-label="Switch language to English">
-            <img src="Images/GB.png" alt="UK flag" width="20" height="14" />
-           
-          </button>
-        </li>
-      </ul>
-      <button id="hamburger" class="hamburger">☰</button>
-    </div>
+<body class="auth-page">
+  <header style="text-align: center; padding: 20px 0;">
+    <a href="index.html" class="logo" style="text-decoration: none; color: inherit; font-size: 1.5rem; font-weight: 600;">DogWalkingSarajevo</a>
   </header>
+  <main class="auth-card">
+    <h2>Registracija</h2>
+    <p class="sub">Email, telefon i adresa su obavezni.</p>
 
-  <main class="container" style="padding:40px 0;">
-    <h1 id="rev-title">Recenzije</h1>
+    <!-- Bez action/onsubmit; koristimo JS; gasimo native validation -->
+    <form id="registerForm" novalidate>
+      <div class="auth-grid">
 
-    <section id="review-form" onsubmit="return false;" style="max-width:560px;margin-top:16px;">
-      <label id="lbl-rating">Ocjena</label>
-      <div id="paw-rating" class="paw-rating" aria-label="Ocjena 1 do 5" style="margin-top:6px;">
-        <button type="button" class="paw" data-value="1" aria-label="1 šapa">🐾</button>
-        <button type="button" class="paw" data-value="2" aria-label="2 šape">🐾</button>
-        <button type="button" class="paw" data-value="3" aria-label="3 šape">🐾</button>
-        <button type="button" class="paw" data-value="4" aria-label="4 šape">🐾</button>
-        <button type="button" class="paw" data-value="5" aria-label="5 šapa">🐾</button>
+        <div class="full">
+          <label for="reg-username">Korisničko ime</label>
+          <input id="reg-username" name="username" type="text" required minlength="3" />
+        </div>
+
+        <div>
+          <label for="reg-email">Email</label>
+          <input id="reg-email" name="email" type="email" required />
+        </div>
+
+        <div>
+          <label for="reg-phone">Telefon</label>
+          <input id="reg-phone" name="phone" type="tel" required
+                 pattern="^\+?[0-9 ()-]{7,20}$"
+                 title="Unesite važeći broj telefona (7–20 cifara)" />
+        </div>
+
+        <div class="full">
+          <label for="reg-address">Adresa stanovanja</label>
+          <input id="reg-address" name="address" type="text" required minlength="5" />
+        </div>
+
+        <div class="full">
+          <label for="reg-password">Lozinka (min 6)</label>
+          <input id="reg-password" name="password" type="password" required minlength="6" />
+        </div>
+
       </div>
-      <input type="hidden" id="rev-rating" value="5">
-      <br/>
-      <br/>
-      <label for="rev-content" id="lbl-content" style="display:block;margin-top:10px;">Sadržaj:</label>
-      <textarea id="rev-content" placeholder="Napišite iskustvo..."></textarea>
-      <button id="rev-submit" class="btn" type="button" style="margin-top:10px;">Pošalji recenziju</button>
 
-      
-      <small id="eligibility-hint" style="opacity:.8; display:block; margin-top:8px;">
-        Napomena: recenzije mogu ostaviti korisnici sa završenom rezervacijom.
-      </small>
-    </section>
+      <div style="margin-top:16px;">
+        <!-- Button NIJE submit; JS hendla klik -->
+        <button id="reg-btn" type="button">Kreiraj nalog</button>
+      </div>
 
-    <hr class="divider" />
+      <div class="auth-split">
+        <div class="line"></div><span>ili</span><div class="line"></div>
+      </div>
 
-    <section style="margin-top:18px;">
-      <h2 id="list-title" style="margin-bottom:10px;">Sve recenzije</h2>
-      <div id="reviews-list" aria-live="polite"></div>
-    </section>
+      <div class="auth-links">
+        <a href="login.html">Već imate nalog? Prijavite se</a>
+      </div>
+    </form>
   </main>
 
-  <!-- Skripte (redoslijed: prvo app, zatim i18n) -->
-  <script src="toast.js"></script>
-  <script src="reviews.js"></script>
-  <script src="i18n.js"></script>
+  <!-- Skripte moraju biti učitane! Redoslijed: TOAST pa REGISTER. -->
+  <script src="toast.js" defer></script>
+  <script src="register.js" defer></script>
 </body>
 </html>

@@ -20,7 +20,7 @@
         services_cards: {
           walk_h3: 'Šetnja pasa',
           walk_p: 'Dnevne šetnje osmišljene da vaš ljubimac ostane aktivan, zdrav i sretan.',
-          sit_h3: 'Čuvanje ljubimaca',
+          sit_h3: 'Kućna posjeta',
           sit_p: 'Udobna briga u vašem domu.',
           dropin_h3: 'Kratke posjete',
           dropin_p: 'Brze posjete za provjeru, hranjenje i druženje.'
@@ -99,14 +99,14 @@
         hero_title:'Happy pets, happy life',
         hero_sub:'Reliable walks. Loving care. Stress-free service. We keep your pet happy and active while you’re busy or away.',
         learn_more:'Reserve',
-        
+
         about_h2: 'About Us',
         about_p: 'Hi! We’re pet lovers who believe every wag, purr, and tail flick deserves attention. We offer fun walks, cozy sitting services, and lots of love to make sure your pets enjoy every moment while you’re away. Happy pets are what we do best!',
         services_h2:'Our Services',
         services_cards: {
           walk_h3: 'Pet Walking',
           walk_p: 'Daily walks designed to keep your pet active, healthy, and happy.',
-          sit_h3: 'Pet Sitting',
+          sit_h3: 'Home Visits',
           sit_p: 'Comfortable, stress-free care right at home.',
           dropin_h3: 'Drop-In Visits',
           dropin_p: 'Quick visits to check on your pet, provide food, and offer companionship.'

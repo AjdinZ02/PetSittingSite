@@ -152,7 +152,7 @@ app.get('/availability/range', async (req, res) => {
 });
 
 // ✅ Rezervacija: adresa/telefon obavezni (status = pending)
-app.post('/rezervacija', tryAuthenticate, async (req, res) => {
+app.post('/rezervacija', authenticate, async (req, res) => {
   try {
     const {
       ime_prezime, datum, vrijeme,
@@ -185,7 +185,7 @@ app.post('/rezervacija', tryAuthenticate, async (req, res) => {
       return res.status(400).json({ error: `Vrijeme mora biti unutar radnog vremena (${WORK_FROM}–${WORK_TO}).` });
     }
 
-    const userId = req.user?.userId ?? null;
+    const userId = req.user.userId;
 
     const result = await createReservation({
       ime_prezime, datum, vrijeme, trajanje_min,

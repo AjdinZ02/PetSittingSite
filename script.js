@@ -298,6 +298,14 @@ if (dateEl) {
 // Submit rezervacije — ✅ šalje adresa i telefon (status = pending)
 if (submitBtn) {
   submitBtn.addEventListener('click', function () {
+    // Provjera prijave
+    var auth = getAuth();
+    if (!auth || !auth.token) {
+      alert('Morate biti prijavljeni da biste rezervisali termin. Molimo prijavite se.');
+      window.location.href = 'login.html';
+      return;
+    }
+
     var payload = {
       ime_prezime: (nameEl && nameEl.value ? nameEl.value.trim() : ''),
       datum: (dateEl && dateEl.value ? dateEl.value : ''),
@@ -328,13 +336,12 @@ if (submitBtn) {
       return;
     }
 
-    var auth = getAuth();
     fetch(api('/rezervacija'), {
       method: 'POST',
-      headers: Object.assign(
-        { 'Content-Type': 'application/json' },
-        auth ? { 'Authorization': 'Bearer ' + auth.token } : {}
-      ),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + auth.token
+      },
       body: JSON.stringify(payload)
     })
       .then(function (r) {

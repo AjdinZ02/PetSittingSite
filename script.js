@@ -379,9 +379,47 @@ if (submitBtn) {
 function initGallery() {
   const tabBtns = document.querySelectorAll('.tab-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
+  const galleryGrid = document.querySelector('.gallery-grid');
+  const prevBtn = document.querySelector('.carousel-prev');
+  const nextBtn = document.querySelector('.carousel-next');
   
   if (tabBtns.length === 0 || galleryItems.length === 0) return;
   
+  let currentIndex = 0;
+  let itemsPerView = getItemsPerView();
+  
+  // Calculate how many items visible based on screen width
+  function getItemsPerView() {
+    const width = window.innerWidth;
+    if (width <= 480) return 1;
+    if (width <= 768) return 2;
+    if (width <= 1024) return 3;
+    return 4;
+  }
+  
+  // Update carousel position
+  function updateCarousel() {
+    if (!galleryGrid) return;
+    
+    const visibleItems = Array.from(galleryItems).filter(item => !item.classList.contains('hidden'));
+    const maxIndex = Math.max(0, visibleItems.length - itemsPerView);
+    
+    // Clamp current index
+    currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+    
+    // Calculate item width + gap
+    const itemWidth = visibleItems.length > 0 ? visibleItems[0].offsetWidth : 320;
+    const gap = 24; // 1.5rem
+    const offset = currentIndex * (itemWidth + gap);
+    
+    galleryGrid.style.transform = `translateX(-${offset}px)`;
+    
+    // Update button states
+    if (prevBtn) prevBtn.disabled = currentIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+  }
+  
+  // Tab filtering
   tabBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
       const category = this.getAttribute('data-category');
@@ -402,7 +440,38 @@ function initGallery() {
           }
         }
       });
+      
+      // Reset carousel position when filtering
+      currentIndex = 0;
+      updateCarousel();
     });
+  });
+  
+  // Navigation buttons
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCarousel();
+      }
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+      currentIndex++;
+      updateCarousel();
+    });
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', function() {
+    const newItemsPerView = getItemsPerView();
+    if (newItemsPerView !== itemsPerView) {
+      itemsPerView = newItemsPerView;
+      currentIndex = 0;
+      updateCarousel();
+    }
   });
   
   // Add click handlers to gallery images for lightbox
@@ -416,6 +485,9 @@ function initGallery() {
       item.style.cursor = 'pointer';
     }
   });
+  
+  // Initial carousel setup
+  updateCarousel();
 }
 
 // ===== Lightbox Functions =====

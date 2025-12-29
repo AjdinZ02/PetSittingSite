@@ -1269,11 +1269,60 @@ footer p {
   border-color: transparent;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+.gallery-carousel {
+  position: relative;
   margin-top: 2rem;
+  padding: 0 60px;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--brand);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  color: var(--brand);
+}
+
+.carousel-btn:hover {
+  background: var(--brand);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carousel-prev {
+  left: 0;
+}
+
+.carousel-next {
+  right: 0;
+}
+
+.gallery-track-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.gallery-grid {
+  display: flex;
+  gap: 1.5rem;
+  transition: transform 0.4s ease;
+  padding: 1rem 0;
 }
 
 .gallery-item {
@@ -1283,7 +1332,8 @@ footer p {
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
   cursor: pointer;
-  display: block;
+  flex-shrink: 0;
+  width: 320px;
 }
 
 .gallery-item.hidden {
@@ -1293,7 +1343,7 @@ footer p {
 .gallery-item img {
   width: 100%;
   height: 280px;
-  object-fit: contain;
+  object-fit: cover;
   background: transparent;
   transition: transform 0.3s ease;
 }
@@ -1308,6 +1358,21 @@ footer p {
 }
 
 /* Responsive Gallery */
+@media (max-width: 1024px) {
+  .gallery-item {
+    width: 280px;
+  }
+  
+  .gallery-carousel {
+    padding: 0 50px;
+  }
+  
+  .carousel-btn {
+    width: 42px;
+    height: 42px;
+  }
+}
+
 @media (max-width: 768px) {
   .gallery-section {
     padding: 2rem 1rem;
@@ -1317,14 +1382,21 @@ footer p {
     font-size: 2rem;
   }
   
-  .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+  .gallery-carousel {
+    padding: 0 40px;
+  }
+  
+  .gallery-item {
+    width: 240px;
   }
   
   .gallery-item img {
-    height: 200px;
-    object-fit: contain;
+    height: 240px;
+  }
+  
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
   }
   
   .tab-btn {
@@ -1334,8 +1406,26 @@ footer p {
 }
 
 @media (max-width: 480px) {
-  .gallery-grid {
-    grid-template-columns: 1fr;
+  .gallery-carousel {
+    padding: 0 35px;
+  }
+  
+  .gallery-item {
+    width: calc(100vw - 120px);
+  }
+  
+  .gallery-item img {
+    height: 200px;
+  }
+  
+  .carousel-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .carousel-btn svg {
+    width: 18px;
+    height: 18px;
   }
   
   .gallery-tabs {

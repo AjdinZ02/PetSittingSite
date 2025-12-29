@@ -12,9 +12,8 @@
       index: {
         hero_title:'Sretni ljubimci, sretan život',
         hero_sub:'Pouzdane šetnje. Pažljiva briga. Bez stresa. Vaš ljubimac je sretan i aktivan dok ste zauzeti ili odsutni.',
-        learn_more:'Saznaj više',
+        learn_more:'Rezervacija',
 
-        // --- OVO JE NOVO: About + Services kartice ---
         about_h2: 'O nama',
         about_p: 'Zdravo! Mi smo ljubitelji ljubimaca koji vjeruju da svako mahanje repom, mijauk i mahanje šapom zaslužuje pažnju. Nudimo zabavne šetnje, udobne usluge čuvanja i mnogo ljubavi kako bi vaš ljubimac uživao dok ste vi zauzeti ili odsutni. Sretni ljubimci su ono što najbolje radimo!',
         services_h2:'Naše usluge',
@@ -99,9 +98,8 @@
       index: {
         hero_title:'Happy pets, happy life',
         hero_sub:'Reliable walks. Loving care. Stress-free service. We keep your pet happy and active while you’re busy or away.',
-        learn_more:'Learn More',
-
-        // --- NEW: About + Services cards ---
+        learn_more:'Reserve',
+        
         about_h2: 'About Us',
         about_p: 'Hi! We’re pet lovers who believe every wag, purr, and tail flick deserves attention. We offer fun walks, cozy sitting services, and lots of love to make sure your pets enjoy every moment while you’re away. Happy pets are what we do best!',
         services_h2:'Our Services',

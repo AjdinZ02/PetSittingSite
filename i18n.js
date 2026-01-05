@@ -1,5 +1,3 @@
-
-// i18n.js — minimalni client-side prevod (BS/EN) sa flagovima
 (function () {
   const LANG_KEY = 'lang';
 
@@ -15,7 +13,6 @@
         learn_more:'Rezervacija',
         hero_home_visits:'Kućna posjeta',
         hero_pet_walking:'Šetnja',
-
         about_h2: 'O nama',
         about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu.Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji.Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
         services_h2:'Naše usluge',
@@ -43,7 +40,7 @@
       reservation: {
         back:'← Nazad na početnu',
         title:'Rezervišite termin',
-        sub:'Odaberite datum, recite nam više o ljubimcu i pošaljite zahtjev. Javićemo vam se uskoro.',
+        sub:'Odaberite datum, recite nam više o ljubimcu i pošaljite zahtjev. Rezervacija postaje važeća tek nakon našeg odobrenja.',
         legend_full:'Zauzeto (100%)', legend_free:'Slobodno', legend_partial:'Djelimično zauzeto',
         labels:{
           date:'Datum',
@@ -128,7 +125,7 @@
       reservation: {
         back:'← Back to Home',
         title:'Reserve your appointment',
-        sub:'Select a date, tell us more about your pet and send us a request. We will get back to you as soon as possible.',
+        sub:'Select a date, tell us more about your pet and send us a request. The reservation becomes valid only after our approval.',
         legend_full:'Fully booked (100%)', legend_free:'Available', legend_partial:'Partially booked',
         labels:{
           date:'Date',

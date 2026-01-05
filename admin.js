@@ -247,14 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredData = allReservations;
     
     if (currentFilter) {
+      console.log('Filtering by:', currentFilter);
       filteredData = allReservations.filter(res => {
         // Normalize date to YYYY-MM-DD format
         const resDate = res.datum ? res.datum.split('T')[0] : '';
+        console.log('Comparing:', resDate, '===', currentFilter, '?', resDate === currentFilter);
         return resDate === currentFilter;
       });
+      console.log('Filtered results:', filteredData.length);
       if (filterLabel) {
         const date = new Date(currentFilter + 'T00:00:00');
-        filterLabel.textContent = `Filtrirano: ${date.toLocaleDateString('bs-BA', { day: 'numeric', month: 'long', year: 'numeric' })} (${filteredData.length})`;
+        filterLabel.textContent = `Filtrirano: ${currentFilter} (${filteredData.length} rezervacija)`;
       }
     } else {
       if (filterLabel) filterLabel.textContent = '';

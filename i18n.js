@@ -5,7 +5,7 @@
     bs: {
       logo: 'Šetnja pasa | Kućne posjete',
       nav: {
-        home:'Početna', about:'O nama', services:'Usluge', contact:'Kontakt',
+        home:'Početna', about:'O nama', services:'Usluge', gallery:'Galerija', contact:'Kontakt',
         reserve:'Rezervacija', reviews:'Recenzije', login:'Prijava', logout:'Odjava', admin:'Admin'
       },
       index: {
@@ -108,7 +108,7 @@
     en: {
       logo: 'Dog walking | House visits',
       nav: {
-        home:'Home', about:'About', services:'Services', contact:'Contact',
+        home:'Home', about:'About', services:'Services', gallery:'Gallery', contact:'Contact',
         reserve:'Reserve', reviews:'Reviews', login:'Login', logout:'Logout', admin:'Admin'
       },
       index: {
@@ -222,6 +222,7 @@
     setText('a[href="#home"]', t.nav.home);
     setText('a[href="#about"]', t.nav.about);
     setText('a[href="#services"]', t.nav.services);
+    setText('a[href="#gallery"]', t.nav.gallery);
     setText('a[href="#contact"]', t.nav.contact);
     setText('a[href="reservation.html"]', t.nav.reserve);
     setText('a[href="reviews.html"]', t.nav.reviews);

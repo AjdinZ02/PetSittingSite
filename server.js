@@ -158,7 +158,8 @@ app.post('/rezervacija', authenticate, async (req, res) => {
       ime_prezime, datum, vrijeme,
       trajanje_min = SLOT_STEP_MIN,
       ime_zivotinje, vrsta_zivotinje, napomena,
-      adresa, telefon
+      adresa, telefon,
+      parking, males, females, leash, runaway, fears, mobility, vaccinated
     } = req.body;
 
     if (!ime_prezime || !datum || !vrijeme || !ime_zivotinje || !vrsta_zivotinje) {
@@ -191,6 +192,7 @@ app.post('/rezervacija', authenticate, async (req, res) => {
       ime_prezime, datum, vrijeme, trajanje_min,
       ime_zivotinje, vrsta_zivotinje, napomena,
       adresa, telefon,
+      parking, males, females, leash, runaway, fears, mobility, vaccinated,
       user_id: userId
     });
 

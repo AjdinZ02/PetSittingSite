@@ -58,6 +58,14 @@ const ready = (async () => {
         napomena TEXT,
         adresa TEXT NOT NULL DEFAULT '',
         telefon TEXT NOT NULL DEFAULT '',
+        parking TEXT,
+        males TEXT,
+        females TEXT,
+        leash TEXT,
+        runaway TEXT,
+        fears TEXT,
+        mobility TEXT,
+        vaccinated TEXT,
         status TEXT NOT NULL DEFAULT 'pending',
         user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -338,6 +346,7 @@ function createReservation({
   ime_prezime, datum, vrijeme, trajanje_min = 60,
   ime_zivotinje, vrsta_zivotinje, napomena,
   adresa, telefon,
+  parking, males, females, leash, runaway, fears, mobility, vaccinated,
   user_id = null
 }) {
   return new Promise(async (resolve, reject) => {
@@ -350,12 +359,17 @@ function createReservation({
         `INSERT INTO rezervacije
           (datum, start_minutes, end_minutes, trajanje_min,
            ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
-           adresa, telefon, user_id, status)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING id`,
+           adresa, telefon,
+           parking, males, females, leash, runaway, fears, mobility, vaccinated,
+           user_id, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20) RETURNING id`,
         [
           datum, start, end, trajanje_min,
           ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena ?? '',
-          adresa ?? '', telefon ?? '', user_id ?? null,
+          adresa ?? '', telefon ?? '',
+          parking ?? null, males ?? null, females ?? null, leash ?? null,
+          runaway ?? null, fears ?? null, mobility ?? null, vaccinated ?? null,
+          user_id ?? null,
           'pending'
         ]
       );

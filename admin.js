@@ -47,24 +47,29 @@ function renderTable(rows) {
   body.innerHTML = '';
 
   if (!rows || rows.length === 0) {
-    body.innerHTML = '<tr><td colspan="13" style="padding:10px;">Nema rezervacija.</td></tr>';
+    body.innerHTML = '<tr><td colspan="18" style="padding:10px;">Nema rezervacija.</td></tr>';
     return;
   }
 
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td data-label="ID">${r.id}</td>
       <td data-label="Datum">${formatDate(r.datum)}</td>
       <td data-label="Početak">${r.vrijeme ?? ''}</td>
-      <td data-label="Kraj">${r.kraj ?? ''}</td>
-      <td data-label="Trajanje">${r.trajanje_min} min</td>
       <td data-label="Ime i prezime">${r.ime_prezime}</td>
       <td data-label="Životinja">${r.ime_zivotinje}</td>
       <td data-label="Vrsta">${r.vrsta_zivotinje}</td>
       <td data-label="Adresa">${r.adresa ?? ''}</td>
       <td data-label="Telefon">${r.telefon ?? ''}</td>
       <td data-label="Napomena">${r.napomena ?? ''}</td>
+      <td data-label="Parking">${r.parking ?? '-'}</td>
+      <td data-label="Sa mužjacima">${r.males ?? '-'}</td>
+      <td data-label="Sa ženkama">${r.females ?? '-'}</td>
+      <td data-label="Povodac">${r.leash ?? '-'}</td>
+      <td data-label="Bježi">${r.runaway ?? '-'}</td>
+      <td data-label="Strahovi">${r.fears ?? '-'}</td>
+      <td data-label="Kretanje">${r.mobility ?? '-'}</td>
+      <td data-label="Vakcinisan">${r.vaccinated ?? '-'}</td>
       <td data-label="Status"><span class="admin-pill">${r.status}</span></td>
       <td data-label="Akcije" class="admin-actions">
         <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>

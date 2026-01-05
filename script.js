@@ -324,7 +324,15 @@ if (submitBtn) {
       vrsta_zivotinje: (petTypeEl && petTypeEl.value ? petTypeEl.value : ''),
       napomena: (notesEl && notesEl.value ? notesEl.value.trim() : ''),
       adresa: (addressEl && addressEl.value ? addressEl.value.trim() : ''),
-      telefon: (phoneEl && phoneEl.value ? phoneEl.value.trim() : '')
+      telefon: (phoneEl && phoneEl.value ? phoneEl.value.trim() : ''),
+      parking: document.querySelector('input[name="parking"]:checked')?.value || null,
+      males: document.querySelector('input[name="males"]:checked')?.value || null,
+      females: document.querySelector('input[name="females"]:checked')?.value || null,
+      leash: document.querySelector('input[name="leash"]:checked')?.value || null,
+      runaway: document.querySelector('input[name="runaway"]:checked')?.value || null,
+      fears: document.querySelector('input[name="fears"]:checked')?.value || null,
+      mobility: document.querySelector('input[name="mobility"]:checked')?.value || null,
+      vaccinated: document.querySelector('input[name="vaccinated"]:checked')?.value || null
     };
 
     if (!payload.datum || !payload.vrijeme) {

@@ -39,9 +39,12 @@
 
     <!-- Poruka o grešci -->
     <div id="admin-error" class="admin-error">Greška</div>
-    <div class="admin-actions" style="margin:10px 0;">
+    <div class="admin-actions" style="margin:10px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
       <span class="admin-pill" id="admin-user-pill">👤</span>
       <button id="reload-btn" class="btn" type="button">Osvježi</button>
+      <button id="show-all-btn" class="btn" type="button" style="background:#6c757d;">Prikaži sve</button>
+      <input type="date" id="filter-date" class="btn" style="padding:8px; cursor:pointer;" placeholder="Filtriraj po datumu">
+      <span id="filter-label" style="font-size:14px; color:#666;"></span>
     </div>
 
    

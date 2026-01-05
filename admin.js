@@ -179,4 +179,100 @@ document.addEventListener('DOMContentLoaded', () => {
   loadReservations();
   const reloadBtn = byId('reload-btn');
   if (reloadBtn) reloadBtn.addEventListener('click', loadReservations);
+
+  // Filter by date
+  const filterDateInput = byId('filter-date');
+  const showAllBtn = byId('show-all-btn');
+  const filterLabel = byId('filter-label');
+  
+  let allReservations = [];
+  let currentFilter = null;
+
+  // Override loadReservations to store all data
+  const originalLoadReservations = loadReservations;
+  window.loadReservations = loadReservations = async function() {
+    const token = localStorage.getItem('auth_token');
+    const userStr = localStorage.getItem('auth_user');
+    const user = userStr ? JSON.parse(userStr) : null;
+
+    renderUserPill();
+    showDebug({ tokenExists: !!token, user });
+
+    if (!token || !user) {
+      renderError('Niste prijavljeni. Molimo ulogujte se.');
+      setTimeout(() => { location.href = 'login.html'; }, 800);
+      return;
+    }
+    if (user.role !== 'admin') {
+      renderError('Pristup samo za admin.');
+      setTimeout(() => { location.href = 'index.html'; }, 1200);
+      return;
+    }
+
+    try {
+      const r = await fetch(`${API}/rezervacije`, {
+        method: 'GET',
+        headers: { ...authHeaders() }
+      });
+
+      showDebug({ status: r.status, ok: r.ok, url: r.url });
+
+      if (r.status === 401) {
+        renderError('Sesija istekla ili nevažeća (401). Prijavite se ponovo.');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        setTimeout(() => (location.href = 'login.html'), 800);
+        return;
+      }
+      if (r.status === 403) {
+        renderError('Nedovoljna ovlaštenja (403).');
+        setTimeout(() => (location.href = 'index.html'), 1200);
+        return;
+      }
+      if (!r.ok) {
+        const j = await r.json().catch(() => ({}));
+        renderError(j.error || 'Greška pri učitavanju rezervacija.');
+        return;
+      }
+
+      allReservations = await r.json();
+      applyFilter();
+    } catch (e) {
+      console.error(e);
+      renderError('Mrežna greška ili server ne radi.');
+    }
+  };
+
+  function applyFilter() {
+    let filteredData = allReservations;
+    
+    if (currentFilter) {
+      filteredData = allReservations.filter(res => res.datum === currentFilter);
+      if (filterLabel) {
+        const date = new Date(currentFilter + 'T00:00:00');
+        filterLabel.textContent = `Filtrirano: ${date.toLocaleDateString('bs-BA', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      }
+    } else {
+      if (filterLabel) filterLabel.textContent = '';
+    }
+    
+    renderTable(filteredData);
+  }
+
+  if (filterDateInput) {
+    filterDateInput.addEventListener('change', function() {
+      if (this.value) {
+        currentFilter = this.value;
+        applyFilter();
+      }
+    });
+  }
+
+  if (showAllBtn) {
+    showAllBtn.addEventListener('click', function() {
+      currentFilter = null;
+      if (filterDateInput) filterDateInput.value = '';
+      applyFilter();
+    });
+  }
 });

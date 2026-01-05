@@ -78,7 +78,7 @@ function renderTable(rows) {
       <td data-label="Strahovi">${formatYesNo(r.fears)}</td>
       <td data-label="Kretanje">${formatYesNo(r.mobility)}</td>
       <td data-label="Vakcinisan">${formatYesNo(r.vaccinated)}</td>
-      <td data-label="Status"><span class="admin-pill">${r.status}</span></td>
+      <td data-label="Status"><span class="admin-pill status-${r.status}">${r.status}</span></td>
       <td data-label="Akcije" class="admin-actions">
         <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
         <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>

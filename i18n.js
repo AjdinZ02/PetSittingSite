@@ -3,6 +3,7 @@
 
   const DICT = {
     bs: {
+      logo: 'Šetnja pasa | Kućne posjete',
       nav: {
         home:'Početna', about:'O nama', services:'Usluge', contact:'Kontakt',
         reserve:'Rezervacija', reviews:'Recenzije', login:'Prijava', logout:'Odjava', admin:'Admin'
@@ -100,6 +101,7 @@
     },
 
     en: {
+      logo: 'Dog walking | House visits',
       nav: {
         home:'Home', about:'About', services:'Services', contact:'Contact',
         reserve:'Reserve', reviews:'Reviews', login:'Login', logout:'Logout', admin:'Admin'

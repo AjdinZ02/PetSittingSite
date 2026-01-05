@@ -17,6 +17,8 @@
         about_h2: 'O nama',
         about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu.Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji.Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
         services_h2:'Naše usluge',
+        price_note: 'Cijena usluga šetnje/posjete je 20KM',
+        price_variable: 'Cijena može varirati u zavisnosti od više faktora, kao što su udaljenost, poslušnost psa, posebni zahtjevi i dodatne usluge.',
         services_cards: {
           walk_h3: 'Grupne šetnje',
           walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca. Trajanje: 30 minuta.',
@@ -117,6 +119,8 @@
         about_h2: 'About Us',
         about_p: 'We are Lejla and Mia, students and long-time dog owners who have turned our love for animals into a professional and reliable pet care service in Sarajevo.We both have our own dogs and work daily with different breeds and temperaments, including working dogs. We also have basic knowledge of dog training and canine behavior. We understand dogs’ needs, routines, signals, and boundaries, which allows us to handle every situation safely, calmly, and responsibly.We provide dog walking and home visit services for pets, and we take the trust our clients place in us very seriously. For this reason, we cooperate with several embassies in Sarajevo and have successfully passed security clearance, confirming that we are approved to work with diplomatic institutions.Our work is based on knowledge, experience, and responsibility, as well as genuine dedication and love for animals.',
         services_h2:'Our Services',
+        price_note: 'The price for walking/visit services is 20KM',
+        price_variable: 'The price may vary depending on several factors, such as distance, dog obedience, special requirements and additional services.',
         services_cards: {
           walk_h3: 'Group Walks',
           walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet. Duration: 30 minutes.',
@@ -261,6 +265,10 @@
       if (dropH3) dropH3.textContent = t.index.services_cards.dropin_h3;
       if (dropP)  dropP.textContent  = t.index.services_cards.dropin_p;
     }
+
+    // Price notes
+    setText('#price-note', t.index.price_note);
+    setText('#price-variable', t.index.price_variable);
 
     // CONTACT
     setText('#contact h2', t.index.contact_h2);

@@ -269,6 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (filterDateInput) {
     filterDateInput.addEventListener('change', function() {
+      console.log('Date input changed to:', this.value);
+      console.log('All reservations count:', allReservations.length);
+      if (allReservations.length > 0) {
+        console.log('Sample reservation datum:', allReservations[0].datum);
+      }
       if (this.value) {
         currentFilter = this.value;
         applyFilter();

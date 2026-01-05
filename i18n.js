@@ -28,7 +28,8 @@
 
         contact_h2:'Kontakt',
         contact_p1:'Možete nas kontaktirati putem instagrama',
-        contact_p4:'Instagram: @setnja_pasa_sarajevo',
+        contact_instagram_label:'Instagram :',
+        contact_instagram_handle:'@setnja_pasa_sarajevo',
         contact_p5:'Radno vrijeme: fleksibilno prema potrebama klijenata',
         cta_h2:'Spremni za rezervaciju?',
         cta_p:'Osigurajte šetnju ili brigu – rezervacija je samo jedan klik daleko.',
@@ -77,6 +78,7 @@
         description: 'Podijelite svoje iskustvo - vaša ocjena i komentar pomažu drugima i nama da rastemo',
         form_title: 'Nova recenzija',
         rating: 'Ocjena',
+        rating_legend: '1 🐾 = nezadovoljan | 5 🐾 = odličan',
         content: 'Sadržaj',
         placeholder: 'Napišite dojmove...',
         submit: 'Pošalji recenziju',
@@ -126,7 +128,8 @@
 
         contact_h2:'Contact Us',
         contact_p1:'You can contact us via instagram',
-        contact_p4:'Instagram: @setnja_pasa_sarajevo',
+        contact_instagram_label:'Instagram :',
+        contact_instagram_handle:'@setnja_pasa_sarajevo',
         contact_p5:'Working hours: Flexible according to customer needs',
         cta_h2:'Ready for a reservation?',
         cta_p:'Ensure a walk or care – a reservation is just one click away.',
@@ -175,6 +178,7 @@
         description: 'Share your experience - your rating and feedback help others and help us grow',
         form_title: 'New review',
         rating: 'Rating',
+        rating_legend: '1 🐾 = dissatisfied | 5 🐾 = excellent',
         content: 'Content',
         placeholder: 'Write your experience...',
         submit: 'Submit review',
@@ -224,6 +228,7 @@
     if (heroH1) {
       heroH1.textContent = t.index.hero_title;
       heroH1.style.whiteSpace = 'pre-line';
+      heroH1.style.textAlign = 'center';
     }
     setText('#home .hero-text p', t.index.hero_sub);
     setText('#home .hero-text .btn', t.index.learn_more);
@@ -260,8 +265,14 @@
     // CONTACT
     setText('#contact h2', t.index.contact_h2);
     const contactPs = document.querySelectorAll('#contact p');
-    const lines = [t.index.contact_p1, t.index.contact_p2, t.index.contact_p3, t.index.contact_p4, t.index.contact_p5];
-    lines.forEach((ln, i) => { if (contactPs[i]) contactPs[i].textContent = ln; });
+    if (contactPs[0]) contactPs[0].textContent = t.index.contact_p1;
+    // Instagram link
+    if (contactPs[1]) {
+      const instagramLink = contactPs[1].querySelector('a');
+      contactPs[1].childNodes[0].textContent = t.index.contact_instagram_label;
+      if (instagramLink) instagramLink.textContent = t.index.contact_instagram_handle;
+    }
+    if (contactPs[2]) contactPs[2].textContent = t.index.contact_p5;
 
     // CTA + footer
     setText('#cta h2', t.index.cta_h2);
@@ -374,6 +385,7 @@
     set('#rev-description', t.description);
     set('#form-title', t.form_title);
     set('#lbl-rating', t.rating);
+    set('#rating-legend', t.rating_legend);
     set('#lbl-content', t.content);
     const ta = document.getElementById('rev-content');
     if (ta && ta.placeholder) ta.placeholder = t.placeholder;

@@ -384,13 +384,12 @@ if (submitBtn) {
 
 // ===== Gallery Tab Functionality =====
 function initGallery() {
-  const tabBtns = document.querySelectorAll('.tab-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
   const galleryGrid = document.querySelector('.gallery-grid');
   const prevBtn = document.querySelector('.carousel-prev');
   const nextBtn = document.querySelector('.carousel-next');
   
-  if (tabBtns.length === 0 || galleryItems.length === 0) return;
+  if (galleryItems.length === 0) return;
   
   let currentIndex = 0;
   let itemsPerView = getItemsPerView();
@@ -425,34 +424,6 @@ function initGallery() {
     if (prevBtn) prevBtn.disabled = currentIndex === 0;
     if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
   }
-  
-  // Tab filtering
-  tabBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      const category = this.getAttribute('data-category');
-      
-      // Update active tab
-      tabBtns.forEach(function(b) { b.classList.remove('active'); });
-      this.classList.add('active');
-      
-      // Filter gallery items
-      galleryItems.forEach(function(item) {
-        if (category === 'all') {
-          item.classList.remove('hidden');
-        } else {
-          if (item.getAttribute('data-category') === category) {
-            item.classList.remove('hidden');
-          } else {
-            item.classList.add('hidden');
-          }
-        }
-      });
-      
-      // Reset carousel position when filtering
-      currentIndex = 0;
-      updateCarousel();
-    });
-  });
   
   // Navigation buttons
   if (prevBtn) {

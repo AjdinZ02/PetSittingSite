@@ -1,6 +1,15 @@
 
 // script.js
 
+// === Logo refresh ===
+const logo = document.querySelector('.logo');
+if (logo) {
+  logo.style.cursor = 'pointer';
+  logo.addEventListener('click', () => {
+    window.location.reload();
+  });
+}
+
 // === Hamburger (nav) ===
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');

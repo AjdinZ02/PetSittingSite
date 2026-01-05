@@ -17,7 +17,7 @@
         about_h2: 'O nama',
         about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu.Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji.Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
         services_h2:'Naše usluge',
-        price_note: 'Cijena usluga šetnje/posjete je 20KM',
+        price_note: 'Cijena šetnje/posjete je 20KM',
         price_variable: 'Cijena može varirati u zavisnosti od više faktora, kao što su udaljenost, poslušnost psa, posebni zahtjevi i dodatne usluge.',
         services_cards: {
           walk_h3: 'Grupne šetnje',

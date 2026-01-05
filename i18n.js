@@ -10,7 +10,7 @@
         reserve:'Rezervacija', reviews:'Recenzije', login:'Prijava', logout:'Odjava', admin:'Admin'
       },
       index: {
-        hero_title:'Sretni ljubimci, sretan život',
+        hero_title:'Sretan ljubimac = sretan vlasnik',
         hero_sub:'Pouzdane šetnje. Pažljiva briga. Bez stresa. Vaš ljubimac je sretan i aktivan dok ste zauzeti ili odsutni.',
         learn_more:'Rezervacija',
         hero_home_visits:'Kućna posjeta',
@@ -97,7 +97,7 @@
         reserve:'Reserve', reviews:'Reviews', login:'Login', logout:'Logout', admin:'Admin'
       },
       index: {
-        hero_title:'Happy pets, happy life',
+        hero_title:'Happy pet = happy owner',
         hero_sub:'Reliable walks. Loving care. Stress-free service. We keep your pet happy and active while you’re busy or away.',
         learn_more:'Reserve',        hero_home_visits:'Home Visits',
         hero_pet_walking:'Pet Walking',

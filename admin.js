@@ -247,10 +247,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredData = allReservations;
     
     if (currentFilter) {
-      filteredData = allReservations.filter(res => res.datum === currentFilter);
+      filteredData = allReservations.filter(res => {
+        // Normalize date to YYYY-MM-DD format
+        const resDate = res.datum ? res.datum.split('T')[0] : '';
+        return resDate === currentFilter;
+      });
       if (filterLabel) {
         const date = new Date(currentFilter + 'T00:00:00');
-        filterLabel.textContent = `Filtrirano: ${date.toLocaleDateString('bs-BA', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+        filterLabel.textContent = `Filtrirano: ${date.toLocaleDateString('bs-BA', { day: 'numeric', month: 'long', year: 'numeric' })} (${filteredData.length})`;
       }
     } else {
       if (filterLabel) filterLabel.textContent = '';

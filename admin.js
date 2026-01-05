@@ -88,6 +88,9 @@ function renderTable(rows) {
   });
 }
 
+let allReservations = [];
+let currentFilter = null;
+
 async function loadReservations() {
   const token = localStorage.getItem('auth_token');
   const userStr = localStorage.getItem('auth_user');
@@ -133,15 +136,40 @@ async function loadReservations() {
       return;
     }
 
-    const data = await r.json();
-    showDebug({ rows: Array.isArray(data) ? data.length : 0 });
-    renderTable(data);
+    allReservations = await r.json();
+    console.log('Loaded reservations:', allReservations.length, allReservations);
+    showDebug({ rows: Array.isArray(allReservations) ? allReservations.length : 0 });
+    applyFilter();
     window.toast?.success?.('Rezervacije učitane.');
   } catch (e) {
     console.error(e);
     renderError('Greška u mreži. Provjerite da backend radi na http://localhost:3000.');
     showDebug(String(e));
   }
+}
+
+function applyFilter() {
+  let filteredData = allReservations;
+  
+  if (currentFilter) {
+    console.log('Filtering by:', currentFilter);
+    filteredData = allReservations.filter(res => {
+      // Normalize date to YYYY-MM-DD format
+      const resDate = res.datum ? res.datum.split('T')[0] : '';
+      console.log('Comparing:', resDate, '===', currentFilter, '?', resDate === currentFilter);
+      return resDate === currentFilter;
+    });
+    console.log('Filtered results:', filteredData.length);
+    const filterLabel = byId('filter-label');
+    if (filterLabel) {
+      filterLabel.textContent = `Filtrirano: ${currentFilter} (${filteredData.length} rezervacija)`;
+    }
+  } else {
+    const filterLabel = byId('filter-label');
+    if (filterLabel) filterLabel.textContent = '';
+  }
+  
+  renderTable(filteredData);
 }
 
 // Delegirani klikovi na dugmad Odobri/Odbij
@@ -183,89 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Filter by date
   const filterDateInput = byId('filter-date');
   const showAllBtn = byId('show-all-btn');
-  const filterLabel = byId('filter-label');
-  
-  let allReservations = [];
-  let currentFilter = null;
-
-  // Override loadReservations to store all data
-  const originalLoadReservations = loadReservations;
-  window.loadReservations = loadReservations = async function() {
-    const token = localStorage.getItem('auth_token');
-    const userStr = localStorage.getItem('auth_user');
-    const user = userStr ? JSON.parse(userStr) : null;
-
-    renderUserPill();
-    showDebug({ tokenExists: !!token, user });
-
-    if (!token || !user) {
-      renderError('Niste prijavljeni. Molimo ulogujte se.');
-      setTimeout(() => { location.href = 'login.html'; }, 800);
-      return;
-    }
-    if (user.role !== 'admin') {
-      renderError('Pristup samo za admin.');
-      setTimeout(() => { location.href = 'index.html'; }, 1200);
-      return;
-    }
-
-    try {
-      const r = await fetch(`${API}/rezervacije`, {
-        method: 'GET',
-        headers: { ...authHeaders() }
-      });
-
-      showDebug({ status: r.status, ok: r.ok, url: r.url });
-
-      if (r.status === 401) {
-        renderError('Sesija istekla ili nevažeća (401). Prijavite se ponovo.');
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_user');
-        setTimeout(() => (location.href = 'login.html'), 800);
-        return;
-      }
-      if (r.status === 403) {
-        renderError('Nedovoljna ovlaštenja (403).');
-        setTimeout(() => (location.href = 'index.html'), 1200);
-        return;
-      }
-      if (!r.ok) {
-        const j = await r.json().catch(() => ({}));
-        renderError(j.error || 'Greška pri učitavanju rezervacija.');
-        return;
-      }
-
-      allReservations = await r.json();
-      console.log('Loaded reservations:', allReservations.length, allReservations);
-      applyFilter();
-    } catch (e) {
-      console.error(e);
-      renderError('Mrežna greška ili server ne radi.');
-    }
-  };
-
-  function applyFilter() {
-    let filteredData = allReservations;
-    
-    if (currentFilter) {
-      console.log('Filtering by:', currentFilter);
-      filteredData = allReservations.filter(res => {
-        // Normalize date to YYYY-MM-DD format
-        const resDate = res.datum ? res.datum.split('T')[0] : '';
-        console.log('Comparing:', resDate, '===', currentFilter, '?', resDate === currentFilter);
-        return resDate === currentFilter;
-      });
-      console.log('Filtered results:', filteredData.length);
-      if (filterLabel) {
-        const date = new Date(currentFilter + 'T00:00:00');
-        filterLabel.textContent = `Filtrirano: ${currentFilter} (${filteredData.length} rezervacija)`;
-      }
-    } else {
-      if (filterLabel) filterLabel.textContent = '';
-    }
-    
-    renderTable(filteredData);
-  }
 
   if (filterDateInput) {
     filterDateInput.addEventListener('change', function() {

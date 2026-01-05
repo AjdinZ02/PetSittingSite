@@ -3,7 +3,8 @@
 body.reservation-page {
   min-height: 100vh;
   background-color: transparent !important;
-  background-image: url('Images/homevisit.png');
+  background-image: linear-gradient(rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7), rgba(240, 147, 251, 0.7)),
+                    url('PetSittingImages/background.jpg');
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat;

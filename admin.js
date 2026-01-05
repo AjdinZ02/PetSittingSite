@@ -51,6 +51,14 @@ function renderTable(rows) {
     return;
   }
 
+  // Helper function to format yes/no answers
+  function formatYesNo(value) {
+    if (!value) return '-';
+    if (value === 'yes') return 'Da';
+    if (value === 'no') return 'Ne';
+    return value;
+  }
+
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -62,14 +70,14 @@ function renderTable(rows) {
       <td data-label="Adresa">${r.adresa ?? ''}</td>
       <td data-label="Telefon">${r.telefon ?? ''}</td>
       <td data-label="Napomena">${r.napomena ?? ''}</td>
-      <td data-label="Parking">${r.parking ?? '-'}</td>
-      <td data-label="Sa mužjacima">${r.males ?? '-'}</td>
-      <td data-label="Sa ženkama">${r.females ?? '-'}</td>
-      <td data-label="Povodac">${r.leash ?? '-'}</td>
-      <td data-label="Bježi">${r.runaway ?? '-'}</td>
-      <td data-label="Strahovi">${r.fears ?? '-'}</td>
-      <td data-label="Kretanje">${r.mobility ?? '-'}</td>
-      <td data-label="Vakcinisan">${r.vaccinated ?? '-'}</td>
+      <td data-label="Parking">${formatYesNo(r.parking)}</td>
+      <td data-label="Sa mužjacima">${formatYesNo(r.males)}</td>
+      <td data-label="Sa ženkama">${formatYesNo(r.females)}</td>
+      <td data-label="Povodac">${formatYesNo(r.leash)}</td>
+      <td data-label="Bježi">${formatYesNo(r.runaway)}</td>
+      <td data-label="Strahovi">${formatYesNo(r.fears)}</td>
+      <td data-label="Kretanje">${formatYesNo(r.mobility)}</td>
+      <td data-label="Vakcinisan">${formatYesNo(r.vaccinated)}</td>
       <td data-label="Status"><span class="admin-pill">${r.status}</span></td>
       <td data-label="Akcije" class="admin-actions">
         <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>

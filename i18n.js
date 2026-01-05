@@ -15,17 +15,18 @@
         hero_home_visits:'Kućna posjeta',
         hero_pet_walking:'Šetnja',
         about_h2: 'O nama',
-        about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu.Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji.Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
+        about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu. Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji. Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
         services_h2:'Naše usluge',
         price_note: 'Cijena šetnje/posjete je 20KM',
         price_variable: 'Cijena može varirati u zavisnosti od više faktora, kao što su udaljenost, poslušnost psa, posebni zahtjevi i dodatne usluge.',
+        price_weekend: 'Zbog prilagođenog rasporeda rada, usluge vikendom i praznicima se naplaćuju više.',
         services_cards: {
           walk_h3: 'Grupne šetnje',
           walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca. Trajanje: 30 minuta.',
           sit_h3: 'Individualne šetnje',
           sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom. Trajanje: 30 minuta.',
           dropin_h3: 'Kućne posjete',
-          dropin_p: 'Znamo da je dom tamo gdje se vaš pas ili mačka osjećaju najsigurnije. Naše kućne posjete su osmišljeni da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne voli promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
+          dropin_p: 'Znamo da je dom tamo gdje se vaš pas ili mačka osjećaju najsigurnije. Naše kućne posjete su osmišljene da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne vole promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
         },
 
         contact_h2:'Kontakt',
@@ -121,6 +122,7 @@
         services_h2:'Our Services',
         price_note: 'The price for walking/visit services is 20KM',
         price_variable: 'The price may vary depending on several factors, such as distance, dog obedience, special requirements and additional services.',
+        price_weekend: 'Due to adjusted work schedule, services on weekends and holidays are charged more.',
         services_cards: {
           walk_h3: 'Group Walks',
           walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet. Duration: 30 minutes.',
@@ -269,6 +271,7 @@
     // Price notes
     setText('#price-note', t.index.price_note);
     setText('#price-variable', t.index.price_variable);
+    setText('#price-weekend', t.index.price_weekend);
 
     // CONTACT
     setText('#contact h2', t.index.contact_h2);

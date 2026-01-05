@@ -858,10 +858,9 @@ footer p {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: var(--dark);
-  background: linear-gradient(135deg, var(--brand), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, var(--brand), var(--accent)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   background-clip: text;
   font-weight: 700;
 }

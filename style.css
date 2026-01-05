@@ -940,6 +940,28 @@ footer p {
   transform: translateY(-2px);
 }
 
+#reviews-list .card .rating {
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#reviews-list .card .stars {
+  color: #f39c12;
+}
+
+#reviews-list .card .content {
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+#reviews-list .card .muted {
+  color: #999;
+}
+
 .reviews-list-section {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);

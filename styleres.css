@@ -3,13 +3,13 @@
 body.reservation-page {
   min-height: 100vh;
   background-color: transparent !important;
-  background-image: linear-gradient(rgba(255, 150, 100, 0.4), rgba(255, 100, 150, 0.4), rgba(255, 180, 120, 0.4)),
-                    url('PetSittingImages/background.jpg');
+  background: linear-gradient(rgba(255, 150, 100, 0.4), rgba(255, 100, 150, 0.4), rgba(255, 180, 120, 0.4)),
+              url('PetSittingImages/background.jpg') !important;
   background-size: cover !important;
   background-position: center !important;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-blend-mode: normal !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
 }
 .reservation-nav {
   background: transparent;

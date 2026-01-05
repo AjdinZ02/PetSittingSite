@@ -17,20 +17,19 @@
         hero_pet_walking:'Šetnja',
 
         about_h2: 'O nama',
-        about_p: 'Zdravo! Mi smo ljubitelji ljubimaca koji vjeruju da svako mahanje repom, mijauk i mahanje šapom zaslužuje pažnju. Nudimo zabavne šetnje, udobne usluge čuvanja i mnogo ljubavi kako bi vaš ljubimac uživao dok ste vi zauzeti ili odsutni. Sretni ljubimci su ono što najbolje radimo!',
+        about_p: 'Mi smo Lejla i Mia, studentice i dugogodišnje vlasnice pasa, koje su svoju ljubav prema životinjama pretvorile u profesionalnu i pouzdanu uslugu za kućne ljubimce u Sarajevu.Obje imamo vlastite pse, svakodnevno radimo sa različitim pasminama i temperamentima, uključujući i radne pse, te posjedujemo osnovna znanja iz dresure i ponašanja pasa. Razumijemo potrebe pasa, njihove navike, signale i granice, što nam omogućava sigurno, smireno i odgovorno rukovanje u svakoj situaciji.Pružamo usluge šetnje pasa i kućnih obilazaka za kućne ljubimce, a povjerenje koje nam klijenti ukazuju shvatamo izuzetno ozbiljno. Upravo zbog toga sarađujemo s brojnim ambasadama u Sarajevu te smo prošle sigurnosnu provjeru što potvrđuje da smo odobrene za rad s diplomatskim institucijama. Naš rad je zasnovan na znanju, iskustvu i odgovornosti, ali i na iskrenoj posvećenosti i ljubavi prema životinjama.',
         services_h2:'Naše usluge',
         services_cards: {
-          walk_h3: 'Šetnja pasa',
-          walk_p: 'Dnevne šetnje osmišljene da vaš ljubimac ostane aktivan, zdrav i sretan.',
-          sit_h3: 'Kućna posjeta',
-          sit_p: 'Udobna briga u vašem domu.',
-          dropin_h3: 'Kratke posjete',
-          dropin_p: 'Brze posjete za provjeru, hranjenje i druženje.'
+          walk_h3: 'Grupne šetnje',
+          walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca.',
+          sit_h3: 'Individualne šetnje',
+          sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom.',
+          dropin_h3: 'Kućne posjete',
+          dropin_p: 'Znamo da je dom tamo gdje se vaš pas ili mačka osjećaju najsigurnije. Naše kućne posjete su osmišljeni da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne voli promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
         },
 
         contact_h2:'Kontakt',
-        contact_p1:'Možete nas kontaktirati emailom ili telefonom.',
-        contact_p2:'Email: petsittingsarajevo@gmail.com',
+        contact_p1:'Možete nas kontaktirati putem instagrama ili telefona.',
         contact_p3:'Telefon: +387 62/096-295',
         contact_p4:'Instagram: @setnja_pasa_sarajevo',
         contact_p5:'Radno vrijeme: fleksibilno prema potrebama klijenata',
@@ -103,20 +102,19 @@
         learn_more:'Reserve',        hero_home_visits:'Home Visits',
         hero_pet_walking:'Pet Walking',
         about_h2: 'About Us',
-        about_p: 'Hi! We’re pet lovers who believe every wag, purr, and tail flick deserves attention. We offer fun walks, cozy sitting services, and lots of love to make sure your pets enjoy every moment while you’re away. Happy pets are what we do best!',
+        about_p: 'We are Lejla and Mia, students and long-time dog owners who have turned our love for animals into a professional and reliable pet care service in Sarajevo.We both have our own dogs and work daily with different breeds and temperaments, including working dogs. We also have basic knowledge of dog training and canine behavior. We understand dogs’ needs, routines, signals, and boundaries, which allows us to handle every situation safely, calmly, and responsibly.We provide dog walking and home visit services for pets, and we take the trust our clients place in us very seriously. For this reason, we cooperate with several embassies in Sarajevo and have successfully passed security clearance, confirming that we are approved to work with diplomatic institutions.Our work is based on knowledge, experience, and responsibility, as well as genuine dedication and love for animals.',
         services_h2:'Our Services',
         services_cards: {
-          walk_h3: 'Pet Walking',
-          walk_p: 'Daily walks designed to keep your pet active, healthy, and happy.',
-          sit_h3: 'Home Visits',
-          sit_p: 'Comfortable, stress-free care right at home.',
-          dropin_h3: 'Drop-In Visits',
-          dropin_p: 'Quick visits to check on your pet, provide food, and offer companionship.'
+          walk_h3: 'Group Walks',
+          walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet.',
+          sit_h3: 'Individual Walks',
+          sit_p: 'We understand that every dog has a unique personality. Our individual walks are specially designed for dogs who may not feel comfortable around other dogs. We adapt to your dog’s pace, avoid known triggers, and make every outdoor experience calm, positive, and enjoyable.',
+          dropin_h3: 'Home Visits',
+          dropin_p: 'We know that home is where your dog or cat feels the safest. Our home visit service is designed to provide everything your pet needs while you are away — from fresh water and meals to walks, playtime, and cuddles. This is an ideal option for pets who don’t like changes in their environment, senior dogs, or cats who enjoy the peace and comfort of their own space.'
         },
 
         contact_h2:'Contact Us',
-        contact_p1:'You can contact us via email or phone.',
-        contact_p2:'Email: petsittingsarajevo@gmail.com',
+        contact_p1:'You can contact us via instagram or phone.',
         contact_p4:'Instagram: @setnja_pasa_sarajevo',
         contact_p3:'Phone: +387 62/096-295',
         contact_p5:'Working hours: Flexible according to customer needs',

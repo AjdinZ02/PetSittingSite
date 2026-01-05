@@ -149,6 +149,56 @@
           <label for="res-notes">Special notes (posebna napomena)</label>
           <textarea id="res-notes" placeholder="Npr. temperament, posebne potrebe..."></textarea>
 
+          <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark);">Additional Information (Dodatne informacije)</h3>
+
+          <label>Is there parking near the address? (Da li postoji parking u blizini adrese?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="parking" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="parking" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Does the dog get along with other males? (Da li se pas slaže sa drugim mužjacima?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="males" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="males" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Does the dog get along with other females? (Da li se pas slaže sa drugim ženkama?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="females" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="females" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Is the dog used to a leash? (Da li je naviknut na povodac?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="leash" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="leash" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Does the dog tend to run away or pull on the leash? (Da li pas ima tendenciju da bježi ili se otima sa povodca?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="runaway" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="runaway" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Does the dog have fears (sounds, children, vehicles)? (Da li pas ima strahove (zvukovi, djeca, vozila)?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="fears" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="fears" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Does the dog have mobility restrictions? (Da li pas ima ograničenja u kretanju?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="mobility" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="mobility" value="no"> No (Ne)</label>
+          </div>
+
+          <label>Is the dog regularly vaccinated? (Da li je pas redovno vakcinisan?)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="vaccinated" value="yes" required> Yes (Da)</label>
+            <label><input type="radio" name="vaccinated" value="no"> No (Ne)</label>
+          </div>
+
           <button id="submit-res" type="button" class="btn">
             Send request (pošalji zahtjev)
           </button>

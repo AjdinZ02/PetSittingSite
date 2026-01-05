@@ -41,6 +41,28 @@ body.reservation-page {
 .reservation-form label { display: block; font-weight: 600; margin-bottom: 8px; color: #444; }
 .reservation-form button { align-self: flex-start; }
 .reservation-form textarea { min-height: 120px; }
+
+/* Radio button groups */
+.radio-group {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
 .btn:hover { cursor: pointer; }
 footer { background: #333; color: #fff; text-align: center; padding: 20px; }
 .socials a { color: #fff; margin: 0 10px; text-decoration: none; }

@@ -51,7 +51,18 @@
           phone_hint:'Dozvoljeni su brojevi, razmaci, crtice i zagrade (npr. +387 61 123 456).',
           pet_type:'Vrsta životinje',
           pet_name:'Ime životinje',
-          notes:'Posebna napomena'
+          notes:'Posebna napomena',
+          additional_info:'Dodatne informacije',
+          parking:'Da li postoji parking u blizini adrese?',
+          males:'Da li se pas slaže sa drugim mužjacima?',
+          females:'Da li se pas slaže sa drugim ženkama?',
+          leash:'Da li je naviknut na povodac?',
+          runaway:'Da li pas ima tendenciju da bježi ili se otima sa povodca?',
+          fears:'Da li pas ima strahove (zvukovi, djeca, vozila)?',
+          mobility:'Da li pas ima ograničenja u kretanju?',
+          vaccinated:'Da li je pas redovno vakcinisan?',
+          yes:'Da',
+          no:'Ne'
         },
         options:{ walk:'Šetnja pasa', visit:'Kućna posjeta', dog:'Pas', cat:'Mačka', other:'Drugo' },
         send:'Pošalji zahtjev',
@@ -136,7 +147,18 @@
           phone_hint:'Numbers, spaces, dashes and brackets are allowed (e.g. +387 61 123 456).',
           pet_type:'Pet type',
           pet_name:'Pet name',
-          notes:'Special notes'
+          notes:'Special notes',
+          additional_info:'Additional Information',
+          parking:'Is there parking near the address?',
+          males:'Does the dog get along with other males?',
+          females:'Does the dog get along with other females?',
+          leash:'Is the dog used to a leash?',
+          runaway:'Does the dog tend to run away or pull on the leash?',
+          fears:'Does the dog have fears (sounds, children, vehicles)?',
+          mobility:'Does the dog have mobility restrictions?',
+          vaccinated:'Is the dog regularly vaccinated?',
+          yes:'Yes',
+          no:'No'
         },
         options:{ walk:'Pet Walking', visit:'Home Visit', dog:'Dog', cat:'Cat', other:'Other' },
         send:'Send request',
@@ -264,6 +286,37 @@
     setText('label[for="res-pet-type"]', t.labels.pet_type);
     setText('label[for="res-pet-name"]', t.labels.pet_name);
     setText('label[for="res-notes"]', t.labels.notes);
+    
+    // Additional questions
+    const additionalHeading = document.querySelector('.reservation-form h3');
+    if (additionalHeading) additionalHeading.textContent = t.labels.additional_info;
+    
+    const allLabels = document.querySelectorAll('.reservation-form > label');
+    const questionLabels = Array.from(allLabels).filter(label => !label.hasAttribute('for'));
+    
+    if (questionLabels.length >= 8) {
+      questionLabels[0].textContent = t.labels.parking;
+      questionLabels[1].textContent = t.labels.males;
+      questionLabels[2].textContent = t.labels.females;
+      questionLabels[3].textContent = t.labels.leash;
+      questionLabels[4].textContent = t.labels.runaway;
+      questionLabels[5].textContent = t.labels.fears;
+      questionLabels[6].textContent = t.labels.mobility;
+      questionLabels[7].textContent = t.labels.vaccinated;
+    }
+    
+    // Yes/No radio buttons
+    document.querySelectorAll('.radio-group label').forEach(label => {
+      const radio = label.querySelector('input[type="radio"]');
+      if (radio && radio.value === 'yes') {
+        const textNode = Array.from(label.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+        if (textNode) textNode.textContent = ` ${t.labels.yes}`;
+      } else if (radio && radio.value === 'no') {
+        const textNode = Array.from(label.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+        if (textNode) textNode.textContent = ` ${t.labels.no}`;
+      }
+    });
+    
     // opcije
     setText('#res-service option[value="Pet Walking"]', t.options.walk);
     setText('#res-service option[value="Home Visit"]', t.options.visit);

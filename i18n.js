@@ -205,6 +205,8 @@
 
   function applyIndex(lang) {
     const t = DICT[lang];
+    // logo
+    setText('.logo', t.logo);
     // nav
     setText('a[href="#home"]', t.nav.home);
     setText('a[href="#about"]', t.nav.about);

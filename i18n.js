@@ -9,7 +9,7 @@
         reserve:'Rezervacija', reviews:'Recenzije', login:'Prijava', logout:'Odjava', admin:'Admin'
       },
       index: {
-        hero_title:'Sretan ljubimac = sretan vlasnik',
+        hero_title:'Sretan ljubimac\n=\nsretan vlasnik',
         hero_sub:'Pouzdane šetnje. Pažljiva briga. Bez stresa. Vaš ljubimac je sretan i aktivan dok ste zauzeti ili odsutni.',
         learn_more:'Rezervacija',
         hero_home_visits:'Kućna posjeta',
@@ -107,9 +107,10 @@
         reserve:'Reserve', reviews:'Reviews', login:'Login', logout:'Logout', admin:'Admin'
       },
       index: {
-        hero_title:'Happy pet = happy owner',
+        hero_title:'Happy pet\n=\nhappy owner',
         hero_sub:'Reliable walks. Loving care. Stress-free service. We keep your pet happy and active while you’re busy or away.',
-        learn_more:'Reserve',        hero_home_visits:'Home Visits',
+        learn_more:'Reserve',        
+        hero_home_visits:'Home Visits',
         hero_pet_walking:'Pet Walking',
         about_h2: 'About Us',
         about_p: 'We are Lejla and Mia, students and long-time dog owners who have turned our love for animals into a professional and reliable pet care service in Sarajevo.We both have our own dogs and work daily with different breeds and temperaments, including working dogs. We also have basic knowledge of dog training and canine behavior. We understand dogs’ needs, routines, signals, and boundaries, which allows us to handle every situation safely, calmly, and responsibly.We provide dog walking and home visit services for pets, and we take the trust our clients place in us very seriously. For this reason, we cooperate with several embassies in Sarajevo and have successfully passed security clearance, confirming that we are approved to work with diplomatic institutions.Our work is based on knowledge, experience, and responsibility, as well as genuine dedication and love for animals.',
@@ -219,7 +220,11 @@
     setText('#navAdmin', t.nav.admin);
 
     // hero
-    setText('#home .hero-text h1', t.index.hero_title);
+    const heroH1 = qs('#home .hero-text h1');
+    if (heroH1) {
+      heroH1.textContent = t.index.hero_title;
+      heroH1.style.whiteSpace = 'pre-line';
+    }
     setText('#home .hero-text p', t.index.hero_sub);
     setText('#home .hero-text .btn', t.index.learn_more);
     setText('#hero-home-visits', t.index.hero_home_visits);

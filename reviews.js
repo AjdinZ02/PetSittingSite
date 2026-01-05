@@ -1,5 +1,3 @@
-
-// reviews.js — render i CRUD za recenzije, sa i18n hookovima
 (function() {
   'use strict';
   
@@ -40,7 +38,7 @@
     return token ? { Authorization: 'Bearer ' + token } : {};
   }
 
-  // === i18n helpers ===
+  //  i18n helpers 
   function T(k, fallback) {
     const pack = window.__i18n_reviews__;
     if (!pack) return fallback;
@@ -192,7 +190,7 @@
     loadReviews();
   };
 
-  // expose user global (ako želiš ga koristiti u templatu)
+  // expose user global 
   window.user = user;
 
 })();

@@ -1,7 +1,4 @@
-
-// script.js
-
-// === Logo refresh ===
+// Logo refresh 
 const logo = document.querySelector('.logo');
 if (logo) {
   logo.style.cursor = 'pointer';
@@ -10,7 +7,7 @@ if (logo) {
   });
 }
 
-// === Hamburger (nav) ===
+//  Hamburger 
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 if (hamburger) {
@@ -40,7 +37,7 @@ if (hamburger) {
   }
 }
 
-// ===== Auth helperi (localStorage) =====
+//Auth helperi 
 var AUTH_TOKEN_KEY = 'auth_token';
 var AUTH_USER_KEY = 'auth_user';
 
@@ -108,10 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
   wireLogout();
 });
 
-// ===== API helper =====
+// API helper
 function api(path) { return (path.charAt(0) === '/' ? path : '/' + path); }
 
-// ===== Kalendar/rezervacije =====
+//  Kalendar/rezervacije 
 var SLOT_STEP_MIN = 60;
 var WORK_FROM = '08:00';
 var WORK_TO = '22:00';
@@ -124,7 +121,6 @@ var petTypeEl  = document.getElementById('res-pet-type');
 var petNameEl  = document.getElementById('res-pet-name');
 var notesEl    = document.getElementById('res-notes');
 var submitBtn  = document.getElementById('submit-res');
-// ✅ NOVO:
 var addressEl  = document.getElementById('res-address');
 var phoneEl    = document.getElementById('res-phone');
 
@@ -304,7 +300,7 @@ if (dateEl) {
   });
 }
 
-// Submit rezervacije — ✅ šalje adresa i telefon (status = pending)
+// Submit rezervacije 
 if (submitBtn) {
   submitBtn.addEventListener('click', function () {
     // Provjera prijave
@@ -399,7 +395,7 @@ if (submitBtn) {
   initGallery();
 })();
 
-// ===== Gallery Tab Functionality =====
+// Gallery Tab Functionality 
 function initGallery() {
   const galleryItems = document.querySelectorAll('.gallery-item');
   const galleryGrid = document.querySelector('.gallery-grid');
@@ -432,7 +428,7 @@ function initGallery() {
     
     // Calculate item width + gap
     const itemWidth = visibleItems.length > 0 ? visibleItems[0].offsetWidth : 320;
-    const gap = 24; // 1.5rem
+    const gap = 24; 
     const offset = currentIndex * (itemWidth + gap);
     
     galleryGrid.style.transform = `translateX(-${offset}px)`;
@@ -476,7 +472,6 @@ function initGallery() {
       item.addEventListener('click', function() {
         openLightbox(img.src, img.alt);
       });
-      // Make it clear it's clickable
       item.style.cursor = 'pointer';
     }
   });
@@ -485,7 +480,7 @@ function initGallery() {
   updateCarousel();
 }
 
-// ===== Lightbox Functions =====
+//  Lightbox Functions 
 function openLightbox(src, alt) {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');

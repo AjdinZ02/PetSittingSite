@@ -1,7 +1,4 @@
-
-// admin.js
-
-const API = ''; // isti origin (http://localhost:3000)
+const API = '';
 const byId = (id) => document.getElementById(id);
 
 function formatDate(dateStr) {

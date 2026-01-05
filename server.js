@@ -151,7 +151,7 @@ app.get('/availability/range', async (req, res) => {
   }
 });
 
-// ✅ Rezervacija: adresa/telefon obavezni (status = pending)
+// Rezervacija: adresa/telefon obavezni (status = pending)
 app.post('/rezervacija', authenticate, async (req, res) => {
   try {
     const {

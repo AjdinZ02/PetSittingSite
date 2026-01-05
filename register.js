@@ -1,8 +1,3 @@
-
-// ===========================
-// register.js (robustna + debug)
-// ===========================
-
 const API = '';
 
 // Sigurni toast
@@ -120,12 +115,10 @@ try {
 
   // 2) Mali delay da se eventualni toast prikaže pa navigacija krene sigurno
   setTimeout(() => {
-    // .replace() da izbjegnemo "back" na register.html
     window.location.replace(target);
   }, 50);
 } catch (navErr) {
   console.error('[register.js] Navigation error', navErr);
-  // Fallback – pokušaj još jednom sa origin + root
   window.location.replace(window.location.origin + '/index.html');
 }
 

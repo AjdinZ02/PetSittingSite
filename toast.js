@@ -1,5 +1,3 @@
-
-// toast.js (robustna verzija bez grešaka i bez ikakvog vanjskog oslanjanja)
 (function () {
   const ROOT_ID = 'toast-root';
 

@@ -11,8 +11,6 @@
   <main class="auth-card">
     <h2>Registracija</h2>
     <p class="sub">Email, telefon i adresa su obavezni.</p>
-
-    <!-- Bez action/onsubmit; koristimo JS; gasimo native validation -->
     <form id="registerForm" novalidate>
       <div class="auth-grid">
 
@@ -46,7 +44,6 @@
       </div>
 
       <div style="margin-top:16px;">
-        <!-- Button NIJE submit; JS hendla klik -->
         <button id="reg-btn" type="button">Kreiraj nalog</button>
       </div>
 
@@ -60,7 +57,7 @@
     </form>
   </main>
 
-  <!-- Skripte moraju biti učitane! Redoslijed: TOAST pa REGISTER. -->
+  
   <script src="toast.js" defer></script>
   <script src="register.js" defer></script>
 </body>

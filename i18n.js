@@ -391,7 +391,7 @@
     if (path.endsWith('/index.html') || path === '/' || path === '') applyIndex(lang);
     else if (path.endsWith('/reservation.html')) applyReservation(lang);
     else if (path.endsWith('/reviews.html')) applyReviews(lang);
-    // (po potrebi dodaj kasnije: login/register/admin)
+    
   }
 
   function init() {

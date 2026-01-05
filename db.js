@@ -8,9 +8,8 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// =====================
 // Password hashing
-// =====================
+
 const HASH_ITER = 120000;
 const HASH_LEN = 64;
 const HASH_DIGEST = 'sha512';
@@ -23,10 +22,8 @@ function verifyPassword(password, salt, hash) {
   const h = crypto.pbkdf2Sync(password, salt, HASH_ITER, HASH_LEN, HASH_DIGEST).toString('hex');
   return crypto.timingSafeEqual(Buffer.from(h, 'hex'), Buffer.from(hash, 'hex'));
 }
-
-// =====================
 // Init & migracije
-// =====================
+
 const ready = (async () => {
   const client = await pool.connect();
   try {
@@ -82,37 +79,6 @@ const ready = (async () => {
       CREATE INDEX IF NOT EXISTS idx_rezervacije_status ON rezervacije(status)
     `);
 
-    // Dodaj nove kolone ako ne postoje
-    await client.query(`
-      DO $$ 
-      BEGIN
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='parking') THEN
-          ALTER TABLE rezervacije ADD COLUMN parking TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='males') THEN
-          ALTER TABLE rezervacije ADD COLUMN males TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='females') THEN
-          ALTER TABLE rezervacije ADD COLUMN females TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='leash') THEN
-          ALTER TABLE rezervacije ADD COLUMN leash TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='runaway') THEN
-          ALTER TABLE rezervacije ADD COLUMN runaway TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='fears') THEN
-          ALTER TABLE rezervacije ADD COLUMN fears TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='mobility') THEN
-          ALTER TABLE rezervacije ADD COLUMN mobility TEXT;
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='vaccinated') THEN
-          ALTER TABLE rezervacije ADD COLUMN vaccinated TEXT;
-        END IF;
-      END $$;
-    `);
-
     await client.query(`
       CREATE TABLE IF NOT EXISTS reviews (
         id SERIAL PRIMARY KEY,
@@ -163,9 +129,9 @@ function seedAdmin(client) {
   });
 }
 
-// =====================
+
 // Users helpers
-// =====================
+
 function createUser({ username, password, email, phone, address, role = 'user' }) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -213,9 +179,9 @@ function verifyUser(username, password) {
   });
 }
 
-// =====================
+
 // Reviews helpers
-// =====================
+
 function listReviews() {
   return new Promise(async (resolve, reject) => {
     try {
@@ -302,9 +268,8 @@ function deleteReview(reviewId) {
   });
 }
 
-// =====================
 // Rezervacije helpers
-// =====================
+
 function toMinutes(hhmm) {
   const [h, m] = String(hhmm).split(':').map(Number);
   if (Number.isNaN(h) || Number.isNaN(m)) return null;
@@ -347,7 +312,7 @@ async function getTakenSlots(date, slotStepMin, workFromHHMM, workToHHMM) {
   return taken;
 }
 
-// Korisnik ima li makar jednu (po defaultu: prošlu) ODOBRENU rezervaciju?
+// Korisnik ima li makar jednu  ODOBRENU rezervaciju?
 function hasUserReservation(userId, requirePast = false) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -434,8 +399,7 @@ function listReservationsAdmin() {
       const result = await pool.query(
         `SELECT id, datum, start_minutes, end_minutes, trajanje_min,
                 ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
-                adresa, telefon, status, user_id,
-                parking, males, females, leash, runaway, fears, mobility, vaccinated
+                adresa, telefon, status, user_id
            FROM rezervacije
        ORDER BY datum ASC, start_minutes ASC`
       );
@@ -446,9 +410,9 @@ function listReservationsAdmin() {
   });
 }
 
-// =====================
+
 // Exports
-// =====================
+
 module.exports = {
   db: pool, ready,
   // auth

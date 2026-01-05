@@ -1,5 +1,3 @@
-
-// login.js
 const API = '';
 
 document.getElementById('login-btn').addEventListener('click', async () => {

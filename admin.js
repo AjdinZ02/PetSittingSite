@@ -236,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       allReservations = await r.json();
+      console.log('Loaded reservations:', allReservations.length, allReservations);
       applyFilter();
     } catch (e) {
       console.error(e);

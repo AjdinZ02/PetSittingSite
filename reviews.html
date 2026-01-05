@@ -19,6 +19,10 @@
       font-weight: 700; font-size: 14px; cursor: pointer; line-height: 1;
     }
     #lang-switch .lang-btn.active { outline: 2px solid var(--brand, #d535d0); outline-offset: 2px; }
+    
+    /* Spacing for paw rating buttons */
+    .paw-rating { display: flex; gap: 12px; }
+    .paw-rating .paw { font-size: 1.8rem; }
   </style>
 </head>
 <body>
@@ -53,6 +57,7 @@
   <main class="reviews-main">
     <div class="reviews-container">
       <h1 id="rev-title" class="page-title">Recenzije</h1>
+      <p id="rev-description" style="text-align: center; font-size: 1.1rem; color: #555; margin: 0.5rem auto 2rem; max-width: 700px;">Podijelite svoje iskustvo - vaša ocjena i komentar pomažu drugima i nama da rastemo</p>
 
       <!-- Review Form Section -->
       <section class="review-form-section">

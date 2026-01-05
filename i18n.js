@@ -27,8 +27,7 @@
         },
 
         contact_h2:'Kontakt',
-        contact_p1:'Možete nas kontaktirati putem instagrama ili telefona.',
-        contact_p3:'Telefon: +387 62/096-295',
+        contact_p1:'Možete nas kontaktirati putem instagrama',
         contact_p4:'Instagram: @setnja_pasa_sarajevo',
         contact_p5:'Radno vrijeme: fleksibilno prema potrebama klijenata',
         cta_h2:'Spremni za rezervaciju?',
@@ -75,6 +74,7 @@
         back: '← Nazad na početnu',
         title: 'Recenzije',
         sub: 'Prijavite se za dodavanje/uređivanje.',
+        description: 'Podijelite svoje iskustvo - vaša ocjena i komentar pomažu drugima i nama da rastemo',
         form_title: 'Nova recenzija',
         rating: 'Ocjena',
         content: 'Sadržaj',
@@ -124,9 +124,8 @@
         },
 
         contact_h2:'Contact Us',
-        contact_p1:'You can contact us via instagram or phone.',
+        contact_p1:'You can contact us via instagram',
         contact_p4:'Instagram: @setnja_pasa_sarajevo',
-        contact_p3:'Phone: +387 62/096-295',
         contact_p5:'Working hours: Flexible according to customer needs',
         cta_h2:'Ready for a reservation?',
         cta_p:'Ensure a walk or care – a reservation is just one click away.',
@@ -172,6 +171,7 @@
         back: '← Back to Home',
         title: 'Reviews',
         sub: 'Sign in to add/edit your review.',
+        description: 'Share your experience - your rating and feedback help others and help us grow',
         form_title: 'New review',
         rating: 'Rating',
         content: 'Content',
@@ -366,6 +366,7 @@
     const set = (sel, txt) => { const el = document.querySelector(sel); if (el && typeof txt === 'string') el.textContent = txt; };
     set('#rev-title', t.title);
     set('#rev-sub', t.sub);
+    set('#rev-description', t.description);
     set('#form-title', t.form_title);
     set('#lbl-rating', t.rating);
     set('#lbl-content', t.content);

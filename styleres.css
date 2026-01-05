@@ -9,8 +9,19 @@ body.reservation-page {
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-attachment: fixed !important;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
+
+/* Gagalin font za naslove na reservation stranici */
+.reservation-page h1,
+.reservation-page h2,
+.reservation-page h3,
+.reservation-page h4,
+.reservation-page h5,
+.reservation-page h6 {
+  font-family: 'Gagalin', 'Montserrat', sans-serif !important;
 }
+
 .reservation-nav {
   background: transparent;
   display: flex;

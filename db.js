@@ -82,6 +82,37 @@ const ready = (async () => {
       CREATE INDEX IF NOT EXISTS idx_rezervacije_status ON rezervacije(status)
     `);
 
+    // Dodaj nove kolone ako ne postoje
+    await client.query(`
+      DO $$ 
+      BEGIN
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='parking') THEN
+          ALTER TABLE rezervacije ADD COLUMN parking TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='males') THEN
+          ALTER TABLE rezervacije ADD COLUMN males TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='females') THEN
+          ALTER TABLE rezervacije ADD COLUMN females TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='leash') THEN
+          ALTER TABLE rezervacije ADD COLUMN leash TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='runaway') THEN
+          ALTER TABLE rezervacije ADD COLUMN runaway TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='fears') THEN
+          ALTER TABLE rezervacije ADD COLUMN fears TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='mobility') THEN
+          ALTER TABLE rezervacije ADD COLUMN mobility TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='rezervacije' AND column_name='vaccinated') THEN
+          ALTER TABLE rezervacije ADD COLUMN vaccinated TEXT;
+        END IF;
+      END $$;
+    `);
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS reviews (
         id SERIAL PRIMARY KEY,

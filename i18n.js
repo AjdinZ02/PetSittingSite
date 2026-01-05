@@ -21,9 +21,9 @@
         services_h2:'Naše usluge',
         services_cards: {
           walk_h3: 'Grupne šetnje',
-          walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca. <strong>Trajanje: 30 minuta.</strong>',
+          walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca. Trajanje: 30 minuta.',
           sit_h3: 'Individualne šetnje',
-          sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom. <strong>Trajanje: 30 minuta.</strong>',
+          sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom. Trajanje: 30 minuta.',
           dropin_h3: 'Kućne posjete',
           dropin_p: 'Znamo da je dom tamo gdje se vaš pas ili mačka osjećaju najsigurnije. Naše kućne posjete su osmišljeni da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne voli promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
         },
@@ -106,9 +106,9 @@
         services_h2:'Our Services',
         services_cards: {
           walk_h3: 'Group Walks',
-          walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet. <strong>Duration: 30 minutes.</strong>',
+          walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet. Duration: 30 minutes.',
           sit_h3: 'Individual Walks',
-          sit_p: 'We understand that every dog has a unique personality. Our individual walks are specially designed for dogs who may not feel comfortable around other dogs. We adapt to your dogs pace, avoid known triggers, and make every outdoor experience calm, positive, and enjoyable. <strong>Duration: 30 minutes.</strong>',
+          sit_p: 'We understand that every dog has a unique personality. Our individual walks are specially designed for dogs who may not feel comfortable around other dogs. We adapt to your dogs pace, avoid known triggers, and make every outdoor experience calm, positive, and enjoyable. Duration: 30 minutes.',
           dropin_h3: 'Home Visits',
           dropin_p: 'We know that home is where your dog or cat feels the safest. Our home visit service is designed to provide everything your pet needs while you are away — from fresh water and meals to walks, playtime, and cuddles. This is an ideal option for pets who don’t like changes in their environment, senior dogs, or cats who enjoy the peace and comfort of their own space.'
         },

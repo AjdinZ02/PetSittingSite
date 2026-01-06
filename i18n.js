@@ -26,7 +26,7 @@
           sit_h3: 'Individualne šetnje',
           sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom. Trajanje: 30 minuta.',
           dropin_h3: 'Kućne posjete',
-          dropin_p: 'Znamo da je dom tamo gdje se vaš pas ili mačka osjećaju najsigurnije. Naše kućne posjete su osmišljene da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne vole promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
+          dropin_p: 'Znamo da je dom tamo gdje se vaš pas, mačka, papagaj ili drugi kućni ljubimac osjeća najsigurnije. Naše kućne posjete su osmišljene da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do šetnje, igranja i maženja. Ovo je savršena opcija za ljubimce koji ne vole promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. '
         },
 
         contact_h2:'Kontakt',
@@ -129,7 +129,7 @@
           sit_h3: 'Individual Walks',
           sit_p: 'We understand that every dog has a unique personality. Our individual walks are specially designed for dogs who may not feel comfortable around other dogs. We adapt to your dogs pace, avoid known triggers, and make every outdoor experience calm, positive, and enjoyable. Duration: 30 minutes.',
           dropin_h3: 'Home Visits',
-          dropin_p: 'We know that home is where your dog or cat feels the safest. Our home visit service is designed to provide everything your pet needs while you are away — from fresh water and meals to walks, playtime, and cuddles. This is an ideal option for pets who don’t like changes in their environment, senior dogs, or cats who enjoy the peace and comfort of their own space.'
+          dropin_p: 'We know that home is where your dog, cat, parrot or other pet feels the safest. Our home visit service is designed to provide everything your pet needs while you are away — from fresh water and meals to walks, playtime, and cuddles. This is an ideal option for pets who dont like changes in their environment, senior dogs, or cats who enjoy the peace and comfort of their own space.'
         },
 
         contact_h2:'Contact Us',

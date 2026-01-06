@@ -399,7 +399,8 @@ function listReservationsAdmin() {
       const result = await pool.query(
         `SELECT id, datum, start_minutes, end_minutes, trajanje_min,
                 ime_prezime, ime_zivotinje, vrsta_zivotinje, napomena,
-                adresa, telefon, status, user_id
+                adresa, telefon, status, user_id,
+                parking, males, females, leash, runaway, fears, mobility, vaccinated
            FROM rezervacije
        ORDER BY datum ASC, start_minutes ASC`
       );

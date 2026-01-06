@@ -1,4 +1,3 @@
-
 /* Background i postojeći stilovi */
 body.reservation-page {
   min-height: 100vh;
@@ -384,7 +383,7 @@ body.reservation-page::before {
 /* Ugasimo globalni overlay samo na reservation stranici (ako postoji u style.css) */
 body.reservation-page::before { display: none !important; }
 
-/* Neutralna podloga iza slike (po želji #000 / #111) */
+/* Neutralna podloga iza slike  */
 body.reservation-page {
   background: #000;
   background-blend-mode: normal !important;
@@ -396,11 +395,11 @@ body.reservation-page {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;          /* popuni ekran u potpunosti */
+  object-fit: cover;          
   object-position: center;
-  filter: blur(28px);         /* jačina blur-a (podesivo) */
-  transform: scale(1.08);     /* da ivice ostanu “pune” i nakon blur-a */
-  z-index: -1;                /* iza sadržaja */
-  pointer-events: none;       /* ne hvata klikove */
-  opacity: 1;                 /* po potrebi smanji ako želiš “svjetlije” */
+  filter: blur(28px);         
+  transform: scale(1.08);     
+  z-index: -1;                
+  pointer-events: none;       
+  opacity: 1;                 
 }

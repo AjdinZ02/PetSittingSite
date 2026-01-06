@@ -1,7 +1,3 @@
-/* ========================================
-   MODERN PET SITTING APP - RESPONSIVE DESIGN
-   ======================================== */
-
 * {
   margin: 0;
   padding: 0;
@@ -65,9 +61,7 @@ h1, h2, h3, h4, h5, h6, .logo, .navbar {
   font-family: 'Gagalin', 'Montserrat', sans-serif;
 }
 
-/* ========================================
-   HEADER & NAVIGATION
-   ======================================== */
+/* HEADER & NAVIGATION */
 
 header {
   position: sticky;
@@ -206,9 +200,7 @@ header {
   transition: all 0.3s ease;
 }
 
-/* ========================================
-   MOBILE RESPONSIVE
-   ======================================== */
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 992px) {
   .navbar {
@@ -275,9 +267,7 @@ header {
   }
 }
 
-/* ========================================
-   HERO SECTION
-   ======================================== */
+/* HERO SECTION */
 
 .hero {
   min-height: 90vh;
@@ -367,9 +357,7 @@ header {
   background: linear-gradient(to right, rgba(255, 107, 157, 0.05), rgba(78, 205, 196, 0.05));
 }
 
-/* ========================================
-   BUTTONS
-   ======================================== */
+/* BUTTONS */
 
 .btn {
   display: inline-block;
@@ -397,9 +385,7 @@ header {
   border: 2px solid var(--brand);
 }
 
-/* ========================================
-   SECTIONS
-   ======================================== */
+/* SECTIONS */
 
 .about, .services, .contact, .cta {
   background: rgba(255, 255, 255, 0.95);
@@ -478,9 +464,7 @@ header {
   margin: 0;
 }
 
-/* ========================================
-   MOBILE RESPONSIVE - HERO & SECTIONS
-   ======================================== */
+/* MOBILE RESPONSIVE - HERO & SECTIONS */
 
 @media (max-width: 992px) {
   .hero-container {
@@ -535,9 +519,7 @@ header {
   }
 }
 
-/* ========================================
-   FOOTER
-   ======================================== */
+/* FOOTER */
 
 footer {
   background: rgba(255, 255, 255, 0.95);
@@ -552,9 +534,7 @@ footer p {
   font-size: 0.8rem;
 }
 
-/* ========================================
-   AUTH PAGES (LOGIN, REGISTER)
-   ======================================== */
+/* AUTH PAGES (LOGIN, REGISTER) */
 
 .auth-page {
   min-height: 100vh;
@@ -702,9 +682,7 @@ footer p {
   }
 }
 
-/* ========================================
-   REVIEWS PAGE
-   ======================================== */
+/* REVIEWS PAGE */
 
 #review-form {
   background: white;
@@ -1111,9 +1089,7 @@ footer p {
   color: var(--gray);
 }
 
-/* ========================================
-   ADMIN PANEL RESPONSIVE
-   ======================================== */
+/* ADMIN PANEL RESPONSIVE */
 
 .admin-wrap {
   background: white;
@@ -1257,7 +1233,7 @@ footer p {
   }
 }
 
-/* Ensure hamburger stays fixed on scroll */
+/*hamburger stays fixed on scroll */
 @media (max-width: 768px) {
   .hamburger {
     position: fixed;
@@ -1274,9 +1250,7 @@ footer p {
   }
 }
 
-/* ========================================
-   UTILITY CLASSES
-   ======================================== */
+/* UTILITY CLASSES */
 
 .text-center {
   text-align: center;
@@ -1287,9 +1261,7 @@ footer p {
 .mb-1 { margin-bottom: 1rem; }
 .mb-2 { margin-bottom: 2rem; }
 
-/* ========================================
-   GALLERY SECTION
-   ======================================== */
+/* GALLERY SECTION */
 
 .gallery-section {
   padding: 4rem 2rem;

@@ -152,6 +152,7 @@ app.get('/availability/range', async (req, res) => {
 });
 
 // Rezervacija: adresa/telefon obavezni (status = pending)
+// Admin može rezervisati bez validacije adrese i telefona
 app.post('/rezervacija', authenticate, async (req, res) => {
   try {
     const {
@@ -165,13 +166,19 @@ app.post('/rezervacija', authenticate, async (req, res) => {
     if (!ime_prezime || !datum || !vrijeme || !ime_zivotinje || !vrsta_zivotinje) {
       return res.status(400).json({ error: 'Popunite obavezna polja: ime_prezime, datum, vrijeme, ime_zivotinje, vrsta_zivotinje.' });
     }
-    if (!adresa || String(adresa).trim().length < 5) {
-      return res.status(400).json({ error: 'Adresa je obavezna (min 5 znakova).' });
-    }
-    const phone = String(telefon || '').trim();
-    const phoneRe = /^[+]?[\d\s\-()]{7,15}$/;
-    if (!phone || !phoneRe.test(phone)) {
-      return res.status(400).json({ error: 'Broj telefona je obavezan (npr. +387 61 123 456).' });
+    
+    // Admin može preskočiti validaciju adrese i telefona
+    const isAdmin = req.user && req.user.role === 'admin';
+    
+    if (!isAdmin) {
+      if (!adresa || String(adresa).trim().length < 5) {
+        return res.status(400).json({ error: 'Adresa je obavezna (min 5 znakova).' });
+      }
+      const phone = String(telefon || '').trim();
+      const phoneRe = /^[+]?[\d\s\-()]{7,15}$/;
+      if (!phone || !phoneRe.test(phone)) {
+        return res.status(400).json({ error: 'Broj telefona je obavezan (npr. +387 61 123 456).' });
+      }
     }
 
     const chosen = new Date(`${datum}T${vrijeme}:00`);

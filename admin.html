@@ -6,9 +6,10 @@
   <title>Admin — Rezervacije | PetSittingSarajevo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styleres.css" />
   <style>
     .admin-wrap { width: min(1140px, 92%); margin: 40px auto; }
-    .admin-title { font-weight: 800; letter-spacing: .2px; margin-bottom: 8px; color: var(--brand, #d535d0); }
+    .admin-title { font-weight: 800; letter-spacing: .2px; margin-bottom: 20px; color: var(--brand, #d535d0); }
     .admin-error { display:none; margin:12px 0; padding:10px; border-radius:10px; background:#fdecea; color:#b91c1c; font-weight:600; }
     .admin-debug { display:none; padding:10px; background:#f3f4f6; border-radius:10px; overflow:auto; }
     .admin-table { width:100%; border-collapse:collapse; margin-top:12px; background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:12px; }
@@ -20,6 +21,66 @@
     .status-approved { background:#10b981 !important; color:#fff !important; font-weight:600; }
     .status-pending { background:#f59e0b !important; color:#fff !important; font-weight:600; }
     .status-rejected { background:#ef4444 !important; color:#fff !important; font-weight:600; }
+
+    /* Tab Navigation */
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+    .tab-btn:hover {
+      color: var(--brand, #d535d0);
+    }
+    .tab-btn.active {
+      color: var(--brand, #d535d0);
+      border-bottom-color: var(--brand, #d535d0);
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Quick Booking Container */
+    .quick-book-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .quick-book-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quick-calendar, .quick-slots-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-slots-section h3 {
+      color: var(--brand, #d535d0);
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
@@ -38,22 +99,28 @@
   </header>
 
   <main class="admin-wrap">
-    <h1 class="admin-title">Rezervacije</h1>
+    <h1 class="admin-title">Admin Panel</h1>
 
-    <!-- Poruka o grešci -->
-    <div id="admin-error" class="admin-error">Greška</div>
-    <div class="admin-actions" style="margin:10px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-      <span class="admin-pill" id="admin-user-pill">👤</span>
-      <button id="reload-btn" class="btn" type="button">Osvježi</button>
-      <button id="show-all-btn" class="btn" type="button" style="background:#6c757d;">Prikaži sve</button>
-      <input type="date" id="filter-date" class="btn" style="padding:8px; cursor:pointer;" placeholder="Filtriraj po datumu">
-      <span id="filter-label" style="font-size:14px; color:#666;"></span>
+    <!-- Tab Navigation -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="reservations">Rezervacije</button>
+      <button class="tab-btn" data-tab="quick-book">Brza Rezervacija</button>
     </div>
 
-   
+    <!-- Reservations Tab -->
+    <div id="reservations-tab" class="tab-content active">
+      <!-- Poruka o grešci -->
+      <div id="admin-error" class="admin-error">Greška</div>
+      <div class="admin-actions" style="margin:10px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <span class="admin-pill" id="admin-user-pill">👤</span>
+        <button id="reload-btn" class="btn" type="button">Osvježi</button>
+        <button id="show-all-btn" class="btn" type="button" style="background:#6c757d;">Prikaži sve</button>
+        <input type="date" id="filter-date" class="btn" style="padding:8px; cursor:pointer;" placeholder="Filtriraj po datumu">
+        <span id="filter-label" style="font-size:14px; color:#666;"></span>
+      </div>
 
-    <!-- Tabela rezervacija -->
-    <table class="admin-table">
+      <!-- Tabela rezervacija -->
+      <table class="admin-table">
       <thead>
         <tr>
           <th>Datum</th>
@@ -80,6 +147,51 @@
         <tr><td colspan="18">Učitavanje…</td></tr>
       </tbody>
     </table>
+    </div>
+
+    <!-- Quick Booking Tab -->
+    <div id="quick-book-tab" class="tab-content">
+      <div class="quick-book-container">
+        
+        <!-- Calendar Section -->
+        <div class="quick-calendar">
+          <div class="cal-header">
+            <button id="quick-prev-month" type="button" class="btn" aria-label="Prethodni mjesec">&lsaquo;</button>
+            <div id="quick-cal-title" class="cal-title">Mjesec Godina</div>
+            <button id="quick-next-month" type="button" class="btn" aria-label="Sljedeći mjesec">&rsaquo;</button>
+          </div>
+
+          <!-- Dani u sedmici -->
+          <div class="cal-weekdays" aria-hidden="true">
+            <span>Pon</span><span>Uto</span><span>Sri</span><span>Čet</span><span>Pet</span><span>Sub</span><span>Ned</span>
+          </div>
+
+          <!-- Grid dana mjeseca -->
+          <div id="quick-cal-grid" class="cal-grid"></div>
+
+          <!-- Legenda boja -->
+          <div class="cal-legend" role="note" aria-label="Legenda zauzeća">
+            <span class="legend-square full"></span> Zauzeto (100%)
+            <span class="legend-square free" style="margin-left:16px;"></span> Slobodno
+            <span class="legend-square partial" style="margin-left:16px;"></span> Djelimično zauzeto
+          </div>
+        </div>
+
+        <!-- Time Slots Section -->
+        <div class="quick-slots-section">
+          <h3 style="margin-bottom: 12px;">Izaberite termin</h3>
+          <input id="quick-res-date" type="date" required style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px; margin-bottom: 16px;" />
+          <div id="quick-time-slots" class="slots-grid" aria-live="polite"></div>
+          <div style="margin-top: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
+            <p style="margin: 0; font-size: 14px; color: #666;">
+              Kliknite na slobodan termin da biste rezervisali. Rezervacija će biti automatski odobrena.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <script src="toast.js"></script>

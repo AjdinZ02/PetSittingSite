@@ -339,7 +339,7 @@ function setupQuickBooking() {
   const quickNextBtn = byId('quick-next-month');
 
   // Render slots
-  function renderQuickSlots(allSlots, takenTimes) {
+  function renderQuickSlots(allSlots, takenTimes, reservationsForDate = []) {
     if (!quickSlotsEl) return;
     quickSlotsEl.innerHTML = '';
     quickSelectedTime = null;
@@ -350,7 +350,9 @@ function setupQuickBooking() {
       btn.type = 'button';
       btn.className = 'slot ' + (isTaken ? 'taken' : 'free');
       btn.textContent = t;
-      btn.disabled = isTaken;
+      
+      // Find reservation for this time slot
+      const reservation = reservationsForDate.find(r => r.vrijeme === t);
       
       btn.addEventListener('click', async () => {
         if (!quickDateEl.value) {
@@ -358,6 +360,38 @@ function setupQuickBooking() {
           return;
         }
 
+        // If slot is taken, offer to free it
+        if (isTaken && reservation) {
+          const confirmed = confirm(`Osloboditi termin?\n\nDatum: ${quickDateEl.value}\nVrijeme: ${t}\nIme: ${reservation.ime_prezime}\nŽivotinja: ${reservation.ime_zivotinje}\n\nTermin će biti obrisan.`);
+          if (!confirmed) return;
+
+          try {
+            const r = await fetch(`${API}/rezervacije/${reservation.id}`, {
+              method: 'DELETE',
+              headers: { ...authHeaders() }
+            });
+
+            if (!r.ok) {
+              const j = await r.json().catch(() => ({ error: 'Greška' }));
+              throw new Error(j.error || 'Greška pri brisanju.');
+            }
+
+            window.toast?.success?.('✅ Termin uspješno oslobođen!');
+            
+            // Refresh calendar and slots
+            if (quickDateEl.value) {
+              quickDateEl.dispatchEvent(new Event('change'));
+            }
+            renderQuickCalendar(quickCurrentMonth.year, quickCurrentMonth.month);
+
+          } catch (e) {
+            console.error(e);
+            alert('Greška pri oslobađanju termina: ' + e.message);
+          }
+          return;
+        }
+
+        // If slot is free, book it
         const confirmed = confirm(`Rezervisati termin:\nDatum: ${quickDateEl.value}\nVrijeme: ${t}\n\nOva rezervacija će biti automatski odobrena.`);
         if (!confirmed) return;
 
@@ -520,19 +554,37 @@ function setupQuickBooking() {
 
   // Date change handler
   if (quickDateEl) {
-    quickDateEl.addEventListener('change', () => {
+    quickDateEl.addEventListener('change', async () => {
       const date = quickDateEl.value;
       if (!date) return;
       
-      fetchAvailability(date)
-        .then(data => {
-          const allSlots = makeSlots(WORK_FROM, WORK_TO, SLOT_STEP_MIN);
-          renderQuickSlots(allSlots, data.takenTimes || []);
-        })
-        .catch(e => {
-          console.error(e);
-          alert('Nešto je pošlo po zlu pri dohvaćanju zauzeća.');
+      try {
+        // Fetch availability
+        const availData = await fetchAvailability(date);
+        const allSlots = makeSlots(WORK_FROM, WORK_TO, SLOT_STEP_MIN);
+        
+        // Fetch all reservations for this date to show details
+        const resResponse = await fetch(`${API}/rezervacije`, {
+          method: 'GET',
+          headers: { ...authHeaders() }
         });
+        
+        if (resResponse.ok) {
+          const allRes = await resResponse.json();
+          // Filter reservations for selected date
+          const reservationsForDate = allRes.filter(r => {
+            const resDate = r.datum ? r.datum.split('T')[0] : '';
+            return resDate === date && r.status === 'approved';
+          });
+          
+          renderQuickSlots(allSlots, availData.takenTimes || [], reservationsForDate);
+        } else {
+          renderQuickSlots(allSlots, availData.takenTimes || [], []);
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Nešto je pošlo po zlu pri dohvaćanju zauzeća.');
+      }
     });
   }
 

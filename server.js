@@ -268,6 +268,20 @@ app.put('/rezervacije/:id/reject', authenticate, authorizeRole('admin'), async (
     res.status(500).json({ error: 'Greška pri odbijanju.' });
   }
 });
+
+app.delete('/rezervacije/:id', authenticate, authorizeRole('admin'), async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const result = await db.query('DELETE FROM rezervacije WHERE id = $1 RETURNING id', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Rezervacija nije pronađena.' });
+    }
+    res.json({ ok: true, deleted: true });
+  } catch (e) {
+    console.error('[DELETE ERROR]', e);
+    res.status(500).json({ error: 'Greška pri brisanju rezervacije.' });
+  }
+});
   
 
 //  REVIEWS 

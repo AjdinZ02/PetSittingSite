@@ -39,13 +39,18 @@
       font-size: 16px;
       color: #666;
       transition: all 0.3s ease;
+      position: relative;
     }
     .tab-btn:hover {
       color: var(--brand, #d535d0);
+      background: rgba(213, 53, 208, 0.05);
     }
     .tab-btn.active {
-      color: var(--brand, #d535d0);
-      border-bottom-color: var(--brand, #d535d0);
+      color: #fff;
+      background: linear-gradient(135deg, #d535d0 0%, #8e44ad 100%);
+      border-radius: 8px 8px 0 0;
+      border-bottom-color: transparent;
+      box-shadow: 0 2px 8px rgba(213, 53, 208, 0.3);
     }
 
     /* Tab Content */
@@ -80,6 +85,32 @@
     .quick-slots-section h3 {
       color: var(--brand, #d535d0);
       margin-top: 0;
+    }
+
+    /* Admin quick booking: enable clicking on taken slots */
+    #quick-book-tab .slot.taken {
+      cursor: pointer;
+      opacity: 1;
+      position: relative;
+    }
+    
+    #quick-book-tab .slot.taken:hover {
+      background: #ef4444;
+      transform: scale(1.05);
+    }
+
+    #quick-book-tab .slot.taken::after {
+      content: '🗑️';
+      position: absolute;
+      right: 4px;
+      top: 2px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    #quick-book-tab .slot.taken:hover::after {
+      opacity: 1;
     }
   </style>
 </head>
@@ -183,8 +214,14 @@
           <input id="quick-res-date" type="date" required style="width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px; margin-bottom: 16px;" />
           <div id="quick-time-slots" class="slots-grid" aria-live="polite"></div>
           <div style="margin-top: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
-            <p style="margin: 0; font-size: 14px; color: #666;">
-              Kliknite na slobodan termin da biste rezervisali. Rezervacija će biti automatski odobrena.
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">
+              <strong>💡 Uputstvo:</strong>
+            </p>
+            <p style="margin: 0 0 4px 0; font-size: 13px; color: #666;">
+              ✅ <strong>Slobodan termin:</strong> Kliknite da rezervišete
+            </p>
+            <p style="margin: 0; font-size: 13px; color: #666;">
+              ❌ <strong>Zauzet termin:</strong> Kliknite da oslobodite (brisanje)
             </p>
           </div>
         </div>

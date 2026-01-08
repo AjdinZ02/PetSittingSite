@@ -441,6 +441,9 @@
   function applyReviews(lang) {
     const t = DICT[lang].reviews;
 
+    // logo
+    setText('.logo', DICT[lang].logo);
+
     // back link ako postoji
     const back = document.querySelector('.back-link');
     if (back) back.textContent = t.back;

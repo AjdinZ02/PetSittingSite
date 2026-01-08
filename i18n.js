@@ -256,6 +256,7 @@
     setText('a[href="#home"]', t.nav.home);
     setText('a[href="#about"]', t.nav.about);
     setText('a[href="#services"]', t.nav.services);
+    setText('a[href="#pricing"]', t.nav.pricing);
     setText('a[href="#gallery"]', t.nav.gallery);
     setText('a[href="#contact"]', t.nav.contact);
     setText('a[href="reservation.html"]', t.nav.reserve);
@@ -307,6 +308,24 @@
     setText('#price-note', t.index.price_note);
     setText('#price-variable', t.index.price_variable);
     setText('#price-weekend', t.index.price_weekend);
+
+    // PRICING section
+    const pricingH2 = document.querySelector('#pricing h2');
+    if (pricingH2) pricingH2.textContent = t.index.pricing_h2;
+    
+    // Apply i18n to all elements with data-i18n attribute in pricing section
+    document.querySelectorAll('#pricing [data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const keys = key.split('.');
+      let value = t;
+      for (let k of keys) {
+        if (value && value[k] !== undefined) value = value[k];
+        else { value = null; break; }
+      }
+      if (value && typeof value === 'string') {
+        el.textContent = value;
+      }
+    });
 
     // CONTACT
     setText('#contact h2', t.index.contact_h2);

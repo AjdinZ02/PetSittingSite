@@ -44,7 +44,7 @@
           sit_h3: 'Individualne šetnje',
           sit_p: 'Svjesni smo da svaki pas ima jedinstven karakter i naše individualne šetnje su posebno prilagođene onima koji se ne osjećaju prijatno u blizini drugih pasa. Prilagođavamo se tempu vašeg psa, izbjegavamo trigere i učinimo svaki izlazak napolje pozitivnim iskustvom. Trajanje: 30 minuta.',
           dropin_h3: 'Kućne posjete',
-          dropin_p: 'Znamo da je dom tamo gdje se vaš pas, mačka, papagaj ili drugi kućni ljubimac osjeća najsigurnije. Naše kućne posjete su osmišljene da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, doigranja i maženja. Ovo je savršena opcija za ljubimce koji ne vole promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. Idealna je za osobe koje putuju, jer ljubimcima omogućava da ostanu u svom domu i očuvaju svoju svakodnevnu rutinu. Trajanje: po dogovoru (15min. - par sati).',
+          dropin_p: 'Znamo da je dom tamo gdje se vaš pas, mačka, papagaj ili drugi kućni ljubimac osjeća najsigurnije. Naše kućne posjete su osmišljene da ljubimcima pruže sve neophodno dok ste vi odsutni - od svježe vode i obroka, do igranja i maženja. Ovo je savršena opcija za ljubimce koji ne vole promjenu okruženja, starije pse ili mačke koji uživaju u miru svog prostora. Idealna je za osobe koje putuju, jer ljubimcima omogućava da ostanu u svom domu i očuvaju svoju svakodnevnu rutinu. Trajanje: po dogovoru (15min. - par sati).',
         },
 
         contact_h2:'Kontakt',

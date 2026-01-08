@@ -5,7 +5,7 @@
     bs: {
       logo: 'Šetnja pasa | Kućne posjete',
       nav: {
-        home:'Početna', about:'O nama', services:'Usluge', gallery:'Galerija', contact:'Kontakt',
+        home:'Početna', about:'O nama', services:'Usluge', pricing:'Cjenovnik', gallery:'Galerija', contact:'Kontakt',
         reserve:'Rezervacija', reviews:'Recenzije', login:'Prijava', logout:'Odjava', admin:'Admin'
       },
       index: {
@@ -20,6 +20,23 @@
         price_note: 'Cijena šetnje/posjete je 20KM',
         price_variable: 'Cijena može varirati u zavisnosti od više faktora, kao što su udaljenost, poslušnost psa, posebni zahtjevi i dodatne usluge.',
         price_weekend: 'Zbog prilagođenog rasporeda rada, usluge vikendom i praznicima se naplaćuju više.',
+        
+        pricing_h2: 'Cjenovnik',
+        pricing_walk_title: 'Šetnja psa (30 min.)',
+        pricing_walk_desc: 'Cijena za jednog psa',
+        pricing_visit_title: 'Kućna posjeta',
+        pricing_visit_desc: 'U ovisnosti koliko traje',
+        pricing_monthly_title: 'Mjesečne usluge',
+        pricing_monthly_price: 'Prilagođeno',
+        pricing_monthly_desc: 'Javite nam se za individualne cijene',
+        pricing_weekend_title: 'Vikendi i praznici',
+        pricing_weekend_price: 'Viša cijena',
+        pricing_weekend_desc: 'Prilagođen raspored rada',
+        pricing_evening_title: 'Večernje šetnje',
+        pricing_evening_desc: 'Večernje šetnje se naplaćuju 5 KM više jer radimo tokom cijelog dana, a večernji termin je jedini period koji izdvajamo iz svog slobodnog vremena kako bismo vašim ljubimcima pružili istu pažnju, sigurnost i kvalitet usluge.',
+        pricing_note_title: 'Napomena',
+        pricing_note_desc: 'Konačna cijena može varirati u zavisnosti od više faktora, uključujući udaljenost, poslušnost psa, posebne zahtjeve i dodatne usluge.',
+        
         services_cards: {
           walk_h3: 'Grupne šetnje',
           walk_p: 'Savršena prilika za zabavu i druženje gdje vaš pas može uživati u društvu novih četveronožnih prijatelja. Naše šetnje pružaju socijalizaciju i fizičku aktivnost, što pomaže psima da postanu sretni i uravnoteženi ljubimci u sigurnom i kontrolisanom okruženju. Kroz igru i druženje u sigurnoj grupi, gradimo zdrave navike i veselu narav vašeg ljubimca. Trajanje: 30 minuta.',
@@ -108,7 +125,7 @@
     en: {
       logo: 'Dog walking | House visits',
       nav: {
-        home:'Home', about:'About', services:'Services', gallery:'Gallery', contact:'Contact',
+        home:'Home', about:'About', services:'Services', pricing:'Pricing', gallery:'Gallery', contact:'Contact',
         reserve:'Reserve', reviews:'Reviews', login:'Login', logout:'Logout', admin:'Admin'
       },
       index: {
@@ -123,6 +140,23 @@
         price_note: 'The price for walking/visit services is 20KM',
         price_variable: 'The price may vary depending on several factors, such as distance, dog obedience, special requirements and additional services.',
         price_weekend: 'Due to adjusted work schedule, services on weekends and holidays are charged more.',
+        
+        pricing_h2: 'Price List',
+        pricing_walk_title: 'Dog Walking (30 min.)',
+        pricing_walk_desc: 'Price for one dog',
+        pricing_visit_title: 'Home Visit',
+        pricing_visit_desc: 'Depending on duration',
+        pricing_monthly_title: 'Monthly Services',
+        pricing_monthly_price: 'Customized',
+        pricing_monthly_desc: 'Contact us for customized pricing',
+        pricing_weekend_title: 'Weekends & Holidays',
+        pricing_weekend_price: 'Higher rate',
+        pricing_weekend_desc: 'Adjusted work schedule',
+        pricing_evening_title: 'Evening Walks',
+        pricing_evening_desc: 'Evening walks are charged 5 KM extra because we work throughout the day, and the evening slot is the only period we dedicate from our free time to provide your pets with the same attention, safety, and quality of service.',
+        pricing_note_title: 'Note',
+        pricing_note_desc: 'The final price may vary depending on several factors, including distance, dog obedience, special requirements, and additional services.',
+        
         services_cards: {
           walk_h3: 'Group Walks',
           walk_p: 'A perfect opportunity for fun and socialization, where your dog can enjoy the company of new four-legged friends. Our group walks provide both social interaction and physical activity, helping dogs become happy and well-balanced companions in a safe and controlled environment. Through play and positive interaction in a small, supervised group, we build healthy habits and a cheerful spirit for your pet. Duration: 30 minutes.',

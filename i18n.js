@@ -35,7 +35,7 @@
         contact_instagram_handle:'@setnja_pasa_sarajevo',
         contact_p5:'Radno vrijeme: fleksibilno prema potrebama klijenata',
         cta_h2:'Spremni za rezervaciju?',
-        cta_p:'Osigurajte šetnju ili brigu – rezervacija je samo jedan klik daleko.',
+        cta_p:'Osigurajte svoj termin na vrijeme za neku od naših usluga.',
         cta_btn:'Rezervacija',
         footer_copy:'© 2025 Petsittingapp. Sva prava zadržana.',
         instagram:'Instagram'
@@ -138,7 +138,7 @@
         contact_instagram_handle:'@setnja_pasa_sarajevo',
         contact_p5:'Working hours: Flexible according to customer needs',
         cta_h2:'Ready for a reservation?',
-        cta_p:'Ensure a walk or care – a reservation is just one click away.',
+        cta_p:'Secure your spot in advance for one of our services.',
         cta_btn:'Reserve',
         footer_copy:'© 2025 Petsittingapp. All rights reserved.',
         instagram:'Instagram'

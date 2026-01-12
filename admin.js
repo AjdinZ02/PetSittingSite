@@ -87,6 +87,7 @@ function renderTable(rows) {
 
 let allReservations = [];
 let currentFilter = null;
+let statusFilter = null;
 
 async function loadReservations() {
   const token = localStorage.getItem('auth_token');
@@ -147,25 +148,38 @@ async function loadReservations() {
 
 function applyFilter() {
   let filteredData = allReservations;
+  let filterInfo = [];
   
+  // Apply date filter
   if (currentFilter) {
-    console.log('Filtering by:', currentFilter);
-    filteredData = allReservations.filter(res => {
+    console.log('Filtering by date:', currentFilter);
+    filteredData = filteredData.filter(res => {
       // Normalize date to YYYY-MM-DD format
       const resDate = res.datum ? res.datum.split('T')[0] : '';
       console.log('Comparing:', resDate, '===', currentFilter, '?', resDate === currentFilter);
       return resDate === currentFilter;
     });
-    console.log('Filtered results:', filteredData.length);
-    const filterLabel = byId('filter-label');
-    if (filterLabel) {
-      filterLabel.textContent = `Filtrirano: ${currentFilter} (${filteredData.length} rezervacija)`;
-    }
-  } else {
-    const filterLabel = byId('filter-label');
-    if (filterLabel) filterLabel.textContent = '';
+    filterInfo.push(`datum: ${currentFilter}`);
   }
   
+  // Apply status filter
+  if (statusFilter) {
+    console.log('Filtering by status:', statusFilter);
+    filteredData = filteredData.filter(res => res.status === statusFilter);
+    filterInfo.push(`status: ${statusFilter}`);
+  }
+  
+  // Update filter label
+  const filterLabel = byId('filter-label');
+  if (filterLabel) {
+    if (filterInfo.length > 0) {
+      filterLabel.textContent = `Filtrirano (${filterInfo.join(', ')}): ${filteredData.length} rezervacija`;
+    } else {
+      filterLabel.textContent = '';
+    }
+  }
+  
+  console.log('Filtered results:', filteredData.length);
   renderTable(filteredData);
 }
 
@@ -207,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Filter by date
   const filterDateInput = byId('filter-date');
+  const filterStatusSelect = byId('filter-status');
   const showAllBtn = byId('show-all-btn');
 
   if (filterDateInput) {
@@ -216,17 +231,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (allReservations.length > 0) {
         console.log('Sample reservation datum:', allReservations[0].datum);
       }
-      if (this.value) {
-        currentFilter = this.value;
-        applyFilter();
-      }
+      currentFilter = this.value || null;
+      applyFilter();
+    });
+  }
+
+  if (filterStatusSelect) {
+    filterStatusSelect.addEventListener('change', function() {
+      console.log('Status filter changed to:', this.value);
+      statusFilter = this.value || null;
+      applyFilter();
     });
   }
 
   if (showAllBtn) {
     showAllBtn.addEventListener('click', function() {
       currentFilter = null;
+      statusFilter = null;
       if (filterDateInput) filterDateInput.value = '';
+      if (filterStatusSelect) filterStatusSelect.value = '';
       applyFilter();
     });
   }

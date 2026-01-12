@@ -13,7 +13,9 @@ const {
   getTakenSlots, createReservation, toMinutes, hasUserReservation,
   // utils + admin
   db, formatHHMM,
-  updateReservationStatus, listReservationsAdmin
+  updateReservationStatus, listReservationsAdmin,
+  // pet profiles
+  getPetProfile, savePetProfile, listUserPetProfiles
 } = require('./db');
 
 const app = express();
@@ -366,6 +368,58 @@ app.delete('/reviews/:id', authenticate, async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Greška pri brisanju recenzije.' });
+  }
+});
+
+//  PET PROFILES 
+// Get pet profile by name and type
+app.get('/pet-profiles/:petName/:petType', authenticate, async (req, res) => {
+  try {
+    const { petName, petType } = req.params;
+    const profile = await getPetProfile(req.user.userId, petName, petType);
+    if (!profile) {
+      return res.status(404).json({ error: 'Profil nije pronađen.' });
+    }
+    res.json(profile);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Greška pri dohvaćanju profila.' });
+  }
+});
+
+// Get all user's pet profiles
+app.get('/pet-profiles', authenticate, async (req, res) => {
+  try {
+    const profiles = await listUserPetProfiles(req.user.userId);
+    res.json(profiles);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Greška pri dohvaćanju profila.' });
+  }
+});
+
+// Save/update pet profile
+app.post('/pet-profiles', authenticate, async (req, res) => {
+  try {
+    const {
+      petName, petType, address, phone, notes,
+      parking, males, females, leash, runaway, fears, mobility, vaccinated
+    } = req.body;
+    
+    if (!petName || !petType) {
+      return res.status(400).json({ error: 'Ime i vrsta životinje su obavezni.' });
+    }
+
+    const result = await savePetProfile({
+      userId: req.user.userId,
+      petName, petType, address, phone, notes,
+      parking, males, females, leash, runaway, fears, mobility, vaccinated
+    });
+    
+    res.status(result.created ? 201 : 200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Greška pri čuvanju profila.' });
   }
 });
 

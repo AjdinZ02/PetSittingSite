@@ -93,6 +93,33 @@ const ready = (async () => {
       CREATE INDEX IF NOT EXISTS idx_reviews_user ON reviews(user_id)
     `);
 
+    // Pet profiles tabela
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS pet_profiles (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        pet_name TEXT NOT NULL,
+        pet_type TEXT NOT NULL,
+        address TEXT,
+        phone TEXT,
+        notes TEXT,
+        parking TEXT,
+        males TEXT,
+        females TEXT,
+        leash TEXT,
+        runaway TEXT,
+        fears TEXT,
+        mobility TEXT,
+        vaccinated TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, pet_name, pet_type)
+      )
+    `);
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_pet_profiles_user ON pet_profiles(user_id)
+    `);
+
     // Seed admin
     await seedAdmin(client);
   } finally {
@@ -411,6 +438,84 @@ function listReservationsAdmin() {
   });
 }
 
+// Pet profiles helpers
+
+function getPetProfile(userId, petName, petType) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT id, user_id, pet_name, pet_type, address, phone, notes,
+                parking, males, females, leash, runaway, fears, mobility, vaccinated,
+                created_at, updated_at
+           FROM pet_profiles
+          WHERE user_id = $1 AND LOWER(pet_name) = LOWER($2) AND LOWER(pet_type) = LOWER($3)`,
+        [userId, petName, petType]
+      );
+      resolve(result.rows[0] || null);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function savePetProfile({
+  userId, petName, petType, address, phone, notes,
+  parking, males, females, leash, runaway, fears, mobility, vaccinated
+}) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const existing = await getPetProfile(userId, petName, petType);
+      
+      if (existing) {
+        // Update existing profile
+        const result = await pool.query(
+          `UPDATE pet_profiles
+              SET address = $1, phone = $2, notes = $3,
+                  parking = $4, males = $5, females = $6, leash = $7,
+                  runaway = $8, fears = $9, mobility = $10, vaccinated = $11,
+                  updated_at = CURRENT_TIMESTAMP
+            WHERE id = $12
+         RETURNING id`,
+          [address, phone, notes, parking, males, females, leash, runaway, fears, mobility, vaccinated, existing.id]
+        );
+        resolve({ id: result.rows[0].id, updated: true });
+      } else {
+        // Insert new profile
+        const result = await pool.query(
+          `INSERT INTO pet_profiles
+            (user_id, pet_name, pet_type, address, phone, notes,
+             parking, males, females, leash, runaway, fears, mobility, vaccinated)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+         RETURNING id`,
+          [userId, petName, petType, address, phone, notes, parking, males, females, leash, runaway, fears, mobility, vaccinated]
+        );
+        resolve({ id: result.rows[0].id, created: true });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function listUserPetProfiles(userId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await pool.query(
+        `SELECT id, pet_name, pet_type, address, phone, notes,
+                parking, males, females, leash, runaway, fears, mobility, vaccinated,
+                created_at, updated_at
+           FROM pet_profiles
+          WHERE user_id = $1
+       ORDER BY updated_at DESC`,
+        [userId]
+      );
+      resolve(result.rows);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 
 // Exports
 
@@ -424,4 +529,6 @@ module.exports = {
   toMinutes, formatHHMM, getDayReservations, getTakenSlots, createReservation, hasUserReservation,
   // admin reservations
   updateReservationStatus, listReservationsAdmin,
+  // pet profiles
+  getPetProfile, savePetProfile, listUserPetProfiles,
 };

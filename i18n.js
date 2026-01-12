@@ -73,6 +73,7 @@
           phone_hint:'Dozvoljeni su brojevi, razmaci, crtice i zagrade (npr. +387 61 123 456).',
           pet_type:'Vrsta životinje',
           pet_name:'Ime životinje',
+          pet_name_hint:'💡 Ako ste već rezervisali termin za ovu životinju, podaci će se automatski popuniti.',
           notes:'Posebna napomena',
           additional_info:'Dodatne informacije',
           parking:'Da li postoji parking u blizini adrese?',
@@ -194,6 +195,7 @@
           phone_hint:'Numbers, spaces, dashes and brackets are allowed (e.g. +387 61 123 456).',
           pet_type:'Pet type',
           pet_name:'Pet name',
+          pet_name_hint:'💡 If you have already reserved an appointment for this pet, the data will be auto-filled.',
           notes:'Special notes',
           additional_info:'Additional Information',
           parking:'Is there parking near the address?',
@@ -372,6 +374,16 @@
     if (hint) hint.textContent = t.labels.phone_hint;
     setText('label[for="res-pet-type"]', t.labels.pet_type);
     setText('label[for="res-pet-name"]', t.labels.pet_name);
+    
+    // Pet name hint 
+    const petNameInput = document.getElementById('res-pet-name');
+    if (petNameInput) {
+      const petNameHint = petNameInput.nextElementSibling;
+      if (petNameHint && petNameHint.tagName === 'SMALL') {
+        petNameHint.textContent = t.labels.pet_name_hint;
+      }
+    }
+    
     setText('label[for="res-notes"]', t.labels.notes);
     
     // Additional questions

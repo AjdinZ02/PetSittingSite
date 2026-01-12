@@ -54,6 +54,73 @@ function clearAuth() {
   localStorage.removeItem(AUTH_USER_KEY);
 }
 
+// Pet profile helpers 
+function savePetProfile(petName, petType, petData) {
+  var auth = getAuth();
+  if (!auth || !auth.token) {
+    console.error('Cannot save pet profile: user not authenticated');
+    return Promise.resolve(false);
+  }
+
+  return fetch(api('/pet-profiles'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + auth.token
+    },
+    body: JSON.stringify({
+      petName: petName,
+      petType: petType,
+      address: petData.address,
+      phone: petData.phone,
+      notes: petData.notes,
+      parking: petData.parking,
+      males: petData.males,
+      females: petData.females,
+      leash: petData.leash,
+      runaway: petData.runaway,
+      fears: petData.fears,
+      mobility: petData.mobility,
+      vaccinated: petData.vaccinated
+    })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Failed to save pet profile');
+    return r.json();
+  })
+  .then(function() {
+    return true;
+  })
+  .catch(function(e) {
+    console.error('Error saving pet profile:', e);
+    return false;
+  });
+}
+
+function loadPetProfile(petName, petType) {
+  var auth = getAuth();
+  if (!auth || !auth.token) {
+    console.error('Cannot load pet profile: user not authenticated');
+    return Promise.resolve(null);
+  }
+
+  return fetch(api('/pet-profiles/' + encodeURIComponent(petName) + '/' + encodeURIComponent(petType)), {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + auth.token
+    }
+  })
+  .then(function(r) {
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error('Failed to load pet profile');
+    return r.json();
+  })
+  .catch(function(e) {
+    console.error('Error loading pet profile:', e);
+    return null;
+  });
+}
+
 function applyNavAuthState() {
   var auth = getAuth();
   var navLogin = document.getElementById('navLogin');
@@ -300,6 +367,81 @@ if (dateEl) {
   });
 }
 
+// Auto-fill pet data when name and type are entered
+function setupPetAutoFill() {
+  if (!petNameEl || !petTypeEl) return;
+  
+  var autoFillPetData = function() {
+    var auth = getAuth();
+    if (!auth || !auth.user) return;
+    
+    var petName = petNameEl.value.trim();
+    var petType = petTypeEl.value;
+    
+    if (!petName || !petType) return;
+    
+    // Load from server 
+    loadPetProfile(petName, petType).then(function(profile) {
+      if (profile) {
+        // Show indicator that data was found
+        if (window.toast && toast.info) {
+          toast.info('📋 Podaci za ' + profile.pet_name + ' su učitani iz prethodne rezervacije.');
+        }
+        
+        // Fill in the fields
+        if (addressEl && profile.address) addressEl.value = profile.address;
+        if (phoneEl && profile.phone) phoneEl.value = profile.phone;
+        if (notesEl && profile.notes) notesEl.value = profile.notes;
+        
+        // Fill radio buttons
+        if (profile.parking) {
+          var parkingRadio = document.querySelector('input[name="parking"][value="' + profile.parking + '"]');
+          if (parkingRadio) parkingRadio.checked = true;
+        }
+        if (profile.males) {
+          var malesRadio = document.querySelector('input[name="males"][value="' + profile.males + '"]');
+          if (malesRadio) malesRadio.checked = true;
+        }
+        if (profile.females) {
+          var femalesRadio = document.querySelector('input[name="females"][value="' + profile.females + '"]');
+          if (femalesRadio) femalesRadio.checked = true;
+        }
+        if (profile.leash) {
+          var leashRadio = document.querySelector('input[name="leash"][value="' + profile.leash + '"]');
+          if (leashRadio) leashRadio.checked = true;
+        }
+        if (profile.runaway) {
+          var runawayRadio = document.querySelector('input[name="runaway"][value="' + profile.runaway + '"]');
+          if (runawayRadio) runawayRadio.checked = true;
+        }
+        if (profile.fears) {
+          var fearsRadio = document.querySelector('input[name="fears"][value="' + profile.fears + '"]');
+          if (fearsRadio) fearsRadio.checked = true;
+        }
+        if (profile.mobility) {
+          var mobilityRadio = document.querySelector('input[name="mobility"][value="' + profile.mobility + '"]');
+          if (mobilityRadio) mobilityRadio.checked = true;
+        }
+        if (profile.vaccinated) {
+          var vaccinatedRadio = document.querySelector('input[name="vaccinated"][value="' + profile.vaccinated + '"]');
+          if (vaccinatedRadio) vaccinatedRadio.checked = true;
+        }
+      }
+    }).catch(function(e) {
+      console.error('Error auto-filling pet data:', e);
+    });
+  };
+  
+  // Add event listeners
+  petNameEl.addEventListener('blur', autoFillPetData);
+  petTypeEl.addEventListener('change', autoFillPetData);
+}
+
+// Initialize auto-fill on page load
+if (petNameEl && petTypeEl) {
+  setupPetAutoFill();
+}
+
 // Submit rezervacije 
 if (submitBtn) {
   submitBtn.addEventListener('click', function () {
@@ -364,6 +506,26 @@ if (submitBtn) {
         return r.json();
       })
       .then(function () {
+        // Save pet profile for future use 
+        if (payload.ime_zivotinje && payload.vrsta_zivotinje) {
+          savePetProfile(payload.ime_zivotinje, payload.vrsta_zivotinje, {
+            address: payload.adresa,
+            phone: payload.telefon,
+            notes: payload.napomena,
+            parking: payload.parking,
+            males: payload.males,
+            females: payload.females,
+            leash: payload.leash,
+            runaway: payload.runaway,
+            fears: payload.fears,
+            mobility: payload.mobility,
+            vaccinated: payload.vaccinated
+          }).catch(function(e) {
+            console.error('Failed to save pet profile:', e);
+            // Don't fail the whole reservation if pet profile save fails
+          });
+        }
+        
         if (window.toast && toast.success) {
           toast.success('✅ Zahtjev poslan. Bićete obaviješteni nakon odobrenja.');
         } else {

@@ -150,13 +150,13 @@
           <!-- Izbor životinja sa profila -->
           <div id="profile-pets-section" style="display: none; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%); border-radius: 12px; border: 2px solid #d535d0; box-shadow: 0 2px 8px rgba(213, 53, 208, 0.1);">
             <label style="font-weight: 600; margin-bottom: 16px; display: block; color: #333; font-size: 16px;" data-i18n="reservation.profile_pets_title">
-              Vaše životinje
+              Vaše životinje (Your pets)
             </label>
             <div id="profile-pets-list" style="display: flex; flex-direction: column; gap: 10px;">
               <!-- Ovdje će biti checkboxes za životinje -->
             </div>
             <small style="display: block; margin-top: 12px; color: #555; font-size: 13px;" data-i18n="reservation.pets_auto_fill">
-              Podaci o izabranim životinjama će biti automatski popunjeni
+              Podaci o izabranim životinjama će biti automatski popunjeni (Data about selected pets will be auto-filled).
             </small>
           </div>
 
@@ -178,58 +178,58 @@
             💡 Ako ste već rezervisali termin za ovu životinju, podaci će se automatski popuniti.
           </small>
 
-          <label for="res-notes">Special notes (posebna napomena)</label>
+          <label for="res-notes" data-i18n="reservation.labels.notes">Posebna napomena</label>
           <textarea id="res-notes" placeholder="Npr. temperament, posebne potrebe..."></textarea>
 
-          <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark);">Additional Information (Dodatne informacije)</h3>
+          <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark);" data-i18n="reservation.labels.additional_info">Dodatne informacije</h3>
 
-          <label>Is there parking near the address? (Da li postoji parking u blizini adrese?)</label>
+          <label data-i18n="reservation.labels.parking">Da li postoji parking u blizini adrese?</label>
           <div class="radio-group">
-            <label><input type="radio" name="parking" value="yes" required> Yes (Da)</label>
-            <label><input type="radio" name="parking" value="no"> No (Ne)</label>
+            <label><input type="radio" name="parking" value="yes" required> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="parking" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
           <div id="dog-questions" style="display: none;">
-          <label>Does the dog get along with other males? (Da li se pas slaže sa drugim mužjacima?)</label>
+          <label data-i18n="reservation.labels.males">Da li se pas slaže sa drugim mužjacima?</label>
           <div class="radio-group">
-            <label><input type="radio" name="males" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="males" value="no"> No (Ne)</label>
+            <label><input type="radio" name="males" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="males" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Does the dog get along with other females? (Da li se pas slaže sa drugim ženkama?)</label>
+          <label data-i18n="reservation.labels.females">Da li se pas slaže sa drugim ženkama?</label>
           <div class="radio-group">
-            <label><input type="radio" name="females" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="females" value="no"> No (Ne)</label>
+            <label><input type="radio" name="females" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="females" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Is the dog used to a leash? (Da li je naviknut na povodac?)</label>
+          <label data-i18n="reservation.labels.leash">Da li je naviknut na povodac?</label>
           <div class="radio-group">
-            <label><input type="radio" name="leash" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="leash" value="no"> No (Ne)</label>
+            <label><input type="radio" name="leash" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="leash" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Does the dog tend to run away or pull on the leash? (Da li pas ima tendenciju da bježi ili se otima sa povodca?)</label>
+          <label data-i18n="reservation.labels.runaway">Da li pas ima tendenciju da bježi ili se otima sa povodca?</label>
           <div class="radio-group">
-            <label><input type="radio" name="runaway" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="runaway" value="no"> No (Ne)</label>
+            <label><input type="radio" name="runaway" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="runaway" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Does the dog have fears (sounds, children, vehicles)? (Da li pas ima strahove (zvukovi, djeca, vozila)?)</label>
+          <label data-i18n="reservation.labels.fears">Da li pas ima strahove (zvukovi, djeca, vozila)?</label>
           <div class="radio-group">
-            <label><input type="radio" name="fears" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="fears" value="no"> No (Ne)</label>
+            <label><input type="radio" name="fears" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="fears" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Does the dog have mobility restrictions? (Da li pas ima ograničenja u kretanju?)</label>
+          <label data-i18n="reservation.labels.mobility">Da li pas ima ograničenja u kretanju?</label>
           <div class="radio-group">
-            <label><input type="radio" name="mobility" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="mobility" value="no"> No (Ne)</label>
+            <label><input type="radio" name="mobility" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="mobility" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
 
-          <label>Is the dog regularly vaccinated? (Da li je pas redovno vakcinisan?)</label>
+          <label data-i18n="reservation.labels.vaccinated">Da li je pas redovno vakcinisan?</label>
           <div class="radio-group">
-            <label><input type="radio" name="vaccinated" value="yes"> Yes (Da)</label>
-            <label><input type="radio" name="vaccinated" value="no"> No (Ne)</label>
+            <label><input type="radio" name="vaccinated" value="yes"> <span data-i18n="reservation.labels.yes">Da</span></label>
+            <label><input type="radio" name="vaccinated" value="no"> <span data-i18n="reservation.labels.no">Ne</span></label>
           </div>
           </div>
 

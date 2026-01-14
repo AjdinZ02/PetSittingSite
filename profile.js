@@ -1,5 +1,19 @@
 const API = '';
 
+// Helper for translations
+function getTranslation(key) {
+  try {
+    const lang = localStorage.getItem('lang') || 'bs';
+    // Accessing i18n dictionary from i18n.js
+    if (window.DICT && window.DICT[lang] && window.DICT[lang].profile) {
+      return window.DICT[lang].profile[key] || key;
+    }
+    return key;
+  } catch (e) {
+    return key;
+  }
+}
+
 // Sigurni toast
 const _toastFallback = {
   warn:   (m) => console.warn(m),
@@ -92,12 +106,45 @@ async function loadPets() {
   }
 }
 
+// Expose loadPets for i18n.js to call after language change
+window.loadPets = loadPets;
+
+
 function displayPets(pets) {
   const container = document.getElementById('petsList');
   
+  // Get translations
+  const t_edit = getTranslation('edit');
+  const t_delete = getTranslation('delete');
+  const t_yes = getTranslation('yes');
+  const t_no = getTranslation('no');
+  const t_pet_type_label = getTranslation('pet_type_label');
+  const t_notes_label = getTranslation('notes_label');
+  const t_parking_label = getTranslation('parking_label');
+  const t_males_label = getTranslation('males_label');
+  const t_females_label = getTranslation('females_label');
+  const t_leash_label = getTranslation('leash_label');
+  const t_runaway_label = getTranslation('runaway_label');
+  const t_fears_label = getTranslation('fears_label');
+  const t_mobility_label = getTranslation('mobility_label');
+  const t_vaccinated_label = getTranslation('vaccinated_label');
+  const t_no_pets = localStorage.getItem('lang') === 'en' ? 'No pets added yet.' : 'Nemate dodanih životinja.';
+  
   if (!pets || pets.length === 0) {
-    container.innerHTML = '<p style="color: #999; font-style: italic;">Nemate dodanih životinja.</p>';
+    container.innerHTML = `<p style="color: #999; font-style: italic;">${t_no_pets}</p>`;
     return;
+  }
+
+  // Translate pet types
+  function translatePetType(type) {
+    if (!type) return '';
+    const lang = localStorage.getItem('lang') || 'bs';
+    if (lang === 'en') {
+      if (type === 'Pas') return 'Dog';
+      if (type === 'Mačka') return 'Cat';
+      if (type === 'Ostalo') return 'Other';
+    }
+    return type;
   }
 
   container.innerHTML = pets.map(pet => `
@@ -105,7 +152,7 @@ function displayPets(pets) {
       <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 6px;">
         <button onclick="editPet('${escapeHtml(pet.pet_name)}', '${escapeHtml(pet.pet_type)}')" 
                 style="padding: 4px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
-                title="Uredi">
+                title="${t_edit}">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -113,7 +160,7 @@ function displayPets(pets) {
         </button>
         <button onclick="deletePet('${escapeHtml(pet.pet_name)}', '${escapeHtml(pet.pet_type)}')" 
                 style="padding: 4px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
-                title="Obriši">
+                title="${t_delete}">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -124,17 +171,17 @@ function displayPets(pets) {
       </div>
       <div style="padding-right: 60px;">
         <h4 style="margin: 0 0 8px 0; color: #333;">${escapeHtml(pet.pet_name)}</h4>
-        <p style="margin: 0 0 4px 0; color: #666;"><strong>Vrsta:</strong> ${escapeHtml(pet.pet_type)}</p>
-        ${pet.notes ? `<p style="margin: 4px 0; color: #666;"><strong>Napomene:</strong> ${escapeHtml(pet.notes)}</p>` : ''}
-        ${pet.parking ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Parking:</strong> ${pet.parking === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+        <p style="margin: 0 0 4px 0; color: #666;"><strong>${t_pet_type_label}:</strong> ${translatePetType(pet.pet_type)}</p>
+        ${pet.notes ? `<p style="margin: 4px 0; color: #666;"><strong>${t_notes_label}:</strong> ${escapeHtml(pet.notes)}</p>` : ''}
+        ${pet.parking ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_parking_label}:</strong> ${pet.parking === 'yes' ? t_yes : t_no}</p>` : ''}
         ${pet.pet_type === 'Pas' ? `
-          ${pet.males ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Slaže se sa mužjacima:</strong> ${pet.males === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.females ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Slaže se sa ženkama:</strong> ${pet.females === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.leash ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Naviknut na povodac:</strong> ${pet.leash === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.runaway ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Tendencija da bježi:</strong> ${pet.runaway === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.fears ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Strahovi:</strong> ${pet.fears === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.mobility ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Ograničenja u kretanju:</strong> ${pet.mobility === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.vaccinated ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Vakcinisan:</strong> ${pet.vaccinated === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.males ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_males_label}:</strong> ${pet.males === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.females ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_females_label}:</strong> ${pet.females === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.leash ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_leash_label}:</strong> ${pet.leash === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.runaway ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_runaway_label}:</strong> ${pet.runaway === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.fears ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_fears_label}:</strong> ${pet.fears === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.mobility ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_mobility_label}:</strong> ${pet.mobility === 'yes' ? t_yes : t_no}</p>` : ''}
+          ${pet.vaccinated ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>${t_vaccinated_label}:</strong> ${pet.vaccinated === 'yes' ? t_yes : t_no}</p>` : ''}
         ` : ''}
       </div>
     </div>
@@ -215,8 +262,8 @@ async function updatePet(petData) {
     window.editingPet = null;
     document.getElementById('pet-name').disabled = false;
     document.getElementById('pet-type').disabled = false;
-    document.getElementById('petFormContainer').querySelector('h4').textContent = 'Dodaj novu životinju';
-    document.getElementById('petFormContainer').querySelector('button[type="submit"]').textContent = 'Sačuvaj';
+    document.getElementById('petFormContainer').querySelector('h4').textContent = getTranslation('add_new_pet');
+    document.getElementById('petFormContainer').querySelector('button[type="submit"]').textContent = getTranslation('save');
 
   } catch (error) {
     console.error('Error updating pet:', error);
@@ -274,8 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
       window.editingPet = null;
       document.getElementById('pet-name').disabled = false;
       document.getElementById('pet-type').disabled = false;
-      formContainer.querySelector('h4').textContent = 'Dodaj novu životinju';
-      formContainer.querySelector('button[type="submit"]').textContent = 'Sačuvaj';
+      formContainer.querySelector('h4').textContent = getTranslation('add_new_pet');
+      formContainer.querySelector('button[type="submit"]').textContent = getTranslation('save');
       document.getElementById('addPetForm').reset();
       additionalQuestions.style.display = 'none';
       dogQuestions.style.display = 'none';
@@ -293,8 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.editingPet = null;
     document.getElementById('pet-name').disabled = false;
     document.getElementById('pet-type').disabled = false;
-    formContainer.querySelector('h4').textContent = 'Dodaj novu životinju';
-    formContainer.querySelector('button[type="submit"]').textContent = 'Sačuvaj';
+    formContainer.querySelector('h4').textContent = getTranslation('add_new_pet');
+    formContainer.querySelector('button[type="submit"]').textContent = getTranslation('save');
   });
 
   // Prikaži/sakrij pitanja na osnovu vrste životinje
@@ -402,8 +449,8 @@ window.editPet = async function(petName, petType) {
     const submitBtn = formContainer.querySelector('button[type="submit"]');
     
     formContainer.style.display = 'block';
-    formTitle.textContent = 'Uredi životinju';
-    submitBtn.textContent = 'Ažuriraj';
+    formTitle.textContent = getTranslation('edit_pet');
+    submitBtn.textContent = getTranslation('update');
     
     // Popuni formu sa podacima
     document.getElementById('pet-name').value = pet.pet_name;

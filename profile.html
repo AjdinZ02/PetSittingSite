@@ -15,19 +15,34 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="auth-page">
+  <!-- Language Switch -->
+  <div id="lang-switch" style="position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 1000;">
+    <button data-lang="bs" class="active" style="background: none; border: none; cursor: pointer; opacity: 0.6; transition: opacity 0.3s;">
+      <img src="Images/bih.png" alt="Bosanski" style="width: 32px; height: 22px; border-radius: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+    </button>
+    <button data-lang="en" style="background: none; border: none; cursor: pointer; opacity: 0.6; transition: opacity 0.3s;">
+      <img src="Images/eng.png" alt="English" style="width: 32px; height: 22px; border-radius: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" />
+    </button>
+  </div>
+  
+  <style>
+    #lang-switch button.active { opacity: 1 !important; }
+    #lang-switch button:hover { opacity: 0.8 !important; }
+  </style>
+
   <main class="auth-card" style="max-width: 900px;">
-    <h2>Moj profil</h2>
-    <p class="sub">Vaši korisnički podaci</p>
+    <h2 data-i18n="profile.title">Moj profil</h2>
+    <p class="sub" data-i18n="profile.sub">Vaši korisnički podaci</p>
     
     <div id="profileContent" style="margin-top: 24px;">
       <!-- Red 1: Ime i prezime | Email adresa -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
         <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Ime i prezime</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.fullname">Ime i prezime</label>
           <div id="profile-fullname" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
         </div>
         <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Email adresa</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.email">Email adresa</label>
           <div id="profile-email" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
         </div>
       </div>
@@ -35,11 +50,11 @@
       <!-- Red 2: Broj telefona | Adresa -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
         <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Broj telefona</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.phone">Broj telefona</label>
           <div id="profile-phone" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
         </div>
         <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Adresa</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.address">Adresa</label>
           <div id="profile-address" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
         </div>
       </div>
@@ -47,122 +62,123 @@
 
     <hr style="margin: 32px 0; border: none; border-top: 2px solid #e0e0e0;" />
 
-    <h3 style="margin-bottom: 16px; color: #333;">Moje životinje</h3>
+    <h3 style="margin-bottom: 16px; color: #333;" data-i18n="profile.my_pets">Moje životinje</h3>
     
     <div id="petsList" style="margin-bottom: 24px;">
       <!-- Ovdje će biti prikazane životinje -->
     </div>
 
-    <button id="togglePetFormBtn" type="button" style="padding: 10px 20px; background: #d535d0; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 16px;">+ Dodaj životinju</button>
+    <button id="togglePetFormBtn" type="button" style="padding: 10px 20px; background: #d535d0; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 16px;" data-i18n="profile.add_pet">+ Dodaj životinju</button>
 
     <div id="petFormContainer" style="display: none; padding: 20px; background: #f9f9f9; border-radius: 8px; margin-bottom: 24px;">
-      <h4 style="margin-bottom: 16px;">Dodaj novu životinju</h4>
+      <h4 style="margin-bottom: 16px;" data-i18n="profile.add_new_pet">Dodaj novu životinju</h4>
       <form id="addPetForm">
         <div style="margin-bottom: 16px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Ime životinje *</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.pet_name">Ime životinje *</label>
           <input id="pet-name" type="text" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;" />
         </div>
         
         <div style="margin-bottom: 16px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Vrsta životinje *</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.pet_type">Vrsta životinje *</label>
           <select id="pet-type" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-            <option value="">Izaberite...</option>
-            <option value="Pas">Pas</option>
-            <option value="Mačka">Mačka</option>
-            <option value="Ostalo">Ostalo</option>
+            <option value="" data-i18n="profile.select">Izaberite...</option>
+            <option value="Pas" data-i18n="profile.dog">Pas</option>
+            <option value="Mačka" data-i18n="profile.cat">Mačka</option>
+            <option value="Ostalo" data-i18n="profile.other">Ostalo</option>
           </select>
         </div>
 
         <div style="margin-bottom: 16px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Napomene</label>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.notes">Napomene</label>
           <textarea id="pet-notes" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; resize: vertical;"></textarea>
         </div>
 
         <!-- Dodatna pitanja -->
         <div id="additionalQuestions" style="display: none;">
-          <h4 style="margin: 20px 0 12px 0; color: #333;">Dodatne informacije</h4>
+          <h4 style="margin: 20px 0 12px 0; color: #333;" data-i18n="profile.additional_info">Dodatne informacije</h4>
 
           <!-- Parking - za sve -->
           <div class="question-block" style="margin-bottom: 16px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li postoji parking u blizini adrese?</label>
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.parking">Da li postoji parking u blizini adrese?</label>
             <div style="display: flex; gap: 16px;">
-              <label style="cursor: pointer;"><input type="radio" name="parking" value="yes"> Da</label>
-              <label style="cursor: pointer;"><input type="radio" name="parking" value="no"> Ne</label>
+              <label style="cursor: pointer;"><input type="radio" name="parking" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+              <label style="cursor: pointer;"><input type="radio" name="parking" value="no"> <span data-i18n="profile.no">Ne</span></label>
             </div>
           </div>
 
           <!-- Pitanja samo za pse -->
           <div id="dogQuestions" style="display: none;">
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li se pas slaže sa drugim mužjacima?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.males">Da li se pas slaže sa drugim mužjacima?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="males" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="males" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="males" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="males" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li se pas slaže sa drugim ženkama?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.females">Da li se pas slaže sa drugim ženkama?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="females" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="females" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="females" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="females" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li je pas naviknut na povodac?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.leash">Da li je pas naviknut na povodac?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="leash" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="leash" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="leash" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="leash" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima tendenciju da bježi ili se otima sa povodca?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.runaway">Da li pas ima tendenciju da bježi ili se otima sa povodca?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="runaway" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="runaway" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="runaway" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="runaway" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima strahove (zvukovi, djeca, vozila)?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.fears">Da li pas ima strahove (zvukovi, djeca, vozila)?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="fears" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="fears" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="fears" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="fears" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima ograničenja u kretanju?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.mobility">Da li pas ima ograničenja u kretanju?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="mobility" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="mobility" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="mobility" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="mobility" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
 
             <div class="question-block" style="margin-bottom: 16px;">
-              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li je pas redovno vakcinisan?</label>
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;" data-i18n="profile.vaccinated">Da li je pas redovno vakcinisan?</label>
               <div style="display: flex; gap: 16px;">
-                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="yes"> Da</label>
-                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="no"> Ne</label>
+                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="yes"> <span data-i18n="profile.yes">Da</span></label>
+                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="no"> <span data-i18n="profile.no">Ne</span></label>
               </div>
             </div>
           </div>
         </div>
 
         <div style="display: flex; gap: 12px; margin-top: 20px;">
-          <button type="submit" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Sačuvaj</button>
-          <button type="button" id="cancelPetBtn" style="padding: 10px 20px; background: #999; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Odustani</button>
+          <button type="submit" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" data-i18n="profile.save">Sačuvaj</button>
+          <button type="button" id="cancelPetBtn" style="padding: 10px 20px; background: #999; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" data-i18n="profile.cancel">Odustani</button>
         </div>
       </form>
     </div>
 
     <div style="margin-top: 24px;">
-      <a href="index.html" style="display: inline-block; padding: 12px 24px; background: #d535d0; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Nazad na početnu</a>
+      <a href="index.html" style="display: inline-block; padding: 12px 24px; background: #d535d0; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;" data-i18n="profile.back_home">Nazad na početnu</a>
     </div>
   </main>
 
+  <script src="i18n.js" defer></script>
   <script src="toast.js" defer></script>
   <script src="profile.js" defer></script>
 </body>

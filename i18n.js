@@ -127,6 +127,53 @@
         eligible_warn: 'Samo korisnici sa završenom rezervacijom mogu ostaviti recenziju.',
         content_warn: 'Unesite sadržaj (min 3 znaka).',
       },
+
+      profile: {
+        title: 'Moj profil',
+        sub: 'Vaši korisnički podaci',
+        fullname: 'Ime i prezime',
+        email: 'Email adresa',
+        phone: 'Broj telefona',
+        address: 'Adresa',
+        my_pets: 'Moje životinje',
+        add_pet: '+ Dodaj životinju',
+        add_new_pet: 'Dodaj novu životinju',
+        pet_name: 'Ime životinje',
+        pet_type: 'Vrsta životinje',
+        pet_type_label: 'Vrsta',
+        select: 'Izaberite...',
+        notes: 'Napomene',
+        notes_label: 'Napomene',
+        additional_info: 'Dodatne informacije',
+        save: 'Sačuvaj',
+        cancel: 'Odustani',
+        back_home: 'Nazad na početnu',
+        yes: 'Da',
+        no: 'Ne',
+        dog: 'Pas',
+        cat: 'Mačka',
+        other: 'Ostalo',
+        parking: 'Da li postoji parking u blizini adrese?',
+        parking_label: 'Parking',
+        males: 'Da li se pas slaže sa drugim mužjacima?',
+        males_label: 'Slaže se sa mužjacima',
+        females: 'Da li se pas slaže sa drugim ženkama?',
+        females_label: 'Slaže se sa ženkama',
+        leash: 'Da li je pas naviknut na povodac?',
+        leash_label: 'Naviknut na povodac',
+        runaway: 'Da li pas ima tendenciju da bježi ili se otima sa povodca?',
+        runaway_label: 'Tendencija da bježi',
+        fears: 'Da li pas ima strahove (zvukovi, djeca, vozila)?',
+        fears_label: 'Strahovi',
+        mobility: 'Da li pas ima ograničenja u kretanju?',
+        mobility_label: 'Ograničenja u kretanju',
+        vaccinated: 'Da li je pas redovno vakcinisan?',
+        vaccinated_label: 'Vakcinisan',
+        edit: 'Izmijeni',
+        delete: 'Obriši',
+        edit_pet: 'Uredi životinju',
+        update: 'Ažuriraj'
+      },
     },
 
     en: {
@@ -253,6 +300,53 @@
         added_ok: 'Review added.',
         eligible_warn: 'Only users with a completed reservation can leave a review.',
         content_warn: 'Enter content (min 3 characters).',
+      },
+
+      profile: {
+        title: 'My Profile',
+        sub: 'Your user information',
+        fullname: 'Full name',
+        email: 'Email address',
+        phone: 'Phone number',
+        address: 'Address',
+        my_pets: 'My Pets',
+        add_pet: '+ Add Pet',
+        add_new_pet: 'Add New Pet',
+        pet_name: 'Pet name',
+        pet_type: 'Pet type',
+        pet_type_label: 'Type',
+        select: 'Select...',
+        notes: 'Notes',
+        notes_label: 'Notes',
+        additional_info: 'Additional Information',
+        save: 'Save',
+        cancel: 'Cancel',
+        back_home: 'Back to Home',
+        yes: 'Yes',
+        no: 'No',
+        dog: 'Dog',
+        cat: 'Cat',
+        other: 'Other',
+        parking: 'Is there parking near the address?',
+        parking_label: 'Parking',
+        males: 'Does the dog get along with other males?',
+        males_label: 'Gets along with males',
+        females: 'Does the dog get along with other females?',
+        females_label: 'Gets along with females',
+        leash: 'Is the dog used to a leash?',
+        leash_label: 'Used to leash',
+        runaway: 'Does the dog tend to run away or pull on the leash?',
+        runaway_label: 'Tendency to run away',
+        fears: 'Does the dog have fears (sounds, children, vehicles)?',
+        fears_label: 'Fears',
+        mobility: 'Does the dog have mobility restrictions?',
+        mobility_label: 'Mobility restrictions',
+        vaccinated: 'Is the dog regularly vaccinated?',
+        vaccinated_label: 'Vaccinated',
+        edit: 'Edit',
+        delete: 'Delete',
+        edit_pet: 'Edit Pet',
+        update: 'Update'
       },
     }
   };
@@ -396,36 +490,6 @@
     
     setText('label[for="res-notes"]', t.labels.notes);
     
-    // Additional questions
-    const additionalHeading = document.querySelector('.reservation-form h3');
-    if (additionalHeading) additionalHeading.textContent = t.labels.additional_info;
-    
-    const allLabels = document.querySelectorAll('.reservation-form > label');
-    const questionLabels = Array.from(allLabels).filter(label => !label.hasAttribute('for'));
-    
-    if (questionLabels.length >= 8) {
-      questionLabels[0].textContent = t.labels.parking;
-      questionLabels[1].textContent = t.labels.males;
-      questionLabels[2].textContent = t.labels.females;
-      questionLabels[3].textContent = t.labels.leash;
-      questionLabels[4].textContent = t.labels.runaway;
-      questionLabels[5].textContent = t.labels.fears;
-      questionLabels[6].textContent = t.labels.mobility;
-      questionLabels[7].textContent = t.labels.vaccinated;
-    }
-    
-    // Yes/No radio buttons
-    document.querySelectorAll('.radio-group label').forEach(label => {
-      const radio = label.querySelector('input[type="radio"]');
-      if (radio && radio.value === 'yes') {
-        const textNode = Array.from(label.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
-        if (textNode) textNode.textContent = ` ${t.labels.yes}`;
-      } else if (radio && radio.value === 'no') {
-        const textNode = Array.from(label.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
-        if (textNode) textNode.textContent = ` ${t.labels.no}`;
-      }
-    });
-    
     // opcije
     setText('#res-service option[value="Pet Walking"]', t.options.walk);
     setText('#res-service option[value="Home Visit"]', t.options.visit);
@@ -473,7 +537,27 @@
     });
   }
 
-  // === Reviews stranica ===
+  
+
+  // === Profile stranica ===
+  function applyProfile(lang) {
+    // Apply i18n to all elements with data-i18n attribute in profile page
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const keys = key.split('.');
+      let value = DICT[lang];
+      for (let k of keys) {
+        if (value && value[k] !== undefined) value = value[k];
+        else { value = null; break; }
+      }
+      if (value && typeof value === 'string') {
+        el.textContent = value;
+      }
+    });
+    
+    // Expose translations to profile.js
+    window.__profile_lang__ = lang;
+  }
   function applyReviews(lang) {
     const t = DICT[lang].reviews;
 
@@ -519,6 +603,7 @@
     if (path.endsWith('/index.html') || path === '/' || path === '') applyIndex(lang);
     else if (path.endsWith('/reservation.html')) applyReservation(lang);
     else if (path.endsWith('/reviews.html')) applyReviews(lang);
+    else if (path.endsWith('/profile.html')) applyProfile(lang);
     
   }
 
@@ -533,6 +618,10 @@
         const lang = btn.getAttribute('data-lang');
         localStorage.setItem(LANG_KEY, lang);
         applyAll(lang);
+        // Reload pets list after language change on profile page
+        if (location.pathname.endsWith('/profile.html') && typeof window.loadPets === 'function') {
+          window.loadPets();
+        }
       });
     }
   }
@@ -542,4 +631,7 @@
   } else {
     init();
   }
+
+  // Expose DICT for other scripts
+  window.DICT = DICT;
 })();

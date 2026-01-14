@@ -522,12 +522,11 @@ function escapeHtml(text) {
 
 function handlePetSelection() {
   var checkboxes = document.querySelectorAll('.pet-checkbox:checked');
-  var selectedPetsTypesDiv = document.getElementById('selected-pets-types');
+  var additionalTypesDiv = document.getElementById('additional-pet-types');
   
   if (checkboxes.length === 0) {
-    if (selectedPetsTypesDiv) {
-      selectedPetsTypesDiv.style.display = 'none';
-      selectedPetsTypesDiv.innerHTML = '';
+    if (additionalTypesDiv) {
+      additionalTypesDiv.innerHTML = '';
     }
     // Clear form fields
     if (petNameEl) petNameEl.value = '';
@@ -547,58 +546,57 @@ function handlePetSelection() {
   
   if (selectedPets.length === 0) return;
   
-  // Create pet type selectors for each selected pet
-  if (selectedPetsTypesDiv && selectedPets.length > 1) {
-    selectedPetsTypesDiv.style.display = 'block';
-    selectedPetsTypesDiv.innerHTML = '<div style="padding: 12px; background: white; border-radius: 8px; border: 1px solid #e0e0e0;">' +
-      '<h4 style="margin: 0 0 12px 0; color: #333; font-size: 14px;">Odaberite vrstu za svaku životinju:</h4>' +
-      selectedPets.map(function(pet, idx) {
-        var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
-        var defaultType = typeMap[pet.pet_type] || 'Dog';
-        return '<div style="margin-bottom: 10px;">' +
-          '<label style="display: block; font-weight: 500; margin-bottom: 4px; color: #555; font-size: 13px;">' + 
-          escapeHtml(pet.pet_name) + '</label>' +
-          '<select class="pet-type-selector" data-pet-index="' + idx + '" ' +
-          'style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">' +
-          '<option value="Dog"' + (defaultType === 'Dog' ? ' selected' : '') + '>Dog (Pas)</option>' +
-          '<option value="Cat"' + (defaultType === 'Cat' ? ' selected' : '') + '>Cat (Mačka)</option>' +
-          '<option value="Other"' + (defaultType === 'Other' ? ' selected' : '') + '>Other (Ostalo)</option>' +
-          '</select>' +
-          '</div>';
-      }).join('') +
-      '</div>';
-  } else {
-    if (selectedPetsTypesDiv) {
-      selectedPetsTypesDiv.style.display = 'none';
-      selectedPetsTypesDiv.innerHTML = '';
+  // Update pet names - list them side by side
+  var petNames = selectedPets.map(function(p) { return p.pet_name; }).join(', ');
+  if (petNameEl) petNameEl.value = petNames;
+  
+  // Set first pet type in main selector
+  if (petTypeEl) {
+    var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
+    petTypeEl.value = typeMap[selectedPets[0].pet_type] || 'Dog';
+    
+    // Update label to show Pet 1
+    var mainLabel = document.querySelector('label[for="res-pet-type"]');
+    if (mainLabel) {
+      if (selectedPets.length > 1) {
+        mainLabel.textContent = 'Pet 1 type (' + selectedPets[0].pet_name + ')';
+      } else {
+        mainLabel.textContent = 'Pet type (vrsta zivotinje)';
+      }
     }
   }
   
-  // Fill form based on number of selected pets
-  if (selectedPets.length === 1) {
-    var pet = selectedPets[0];
-    if (petNameEl) petNameEl.value = pet.pet_name;
-    if (petTypeEl) {
+  // Create additional pet type selectors if more than 1 pet
+  if (additionalTypesDiv && selectedPets.length > 1) {
+    additionalTypesDiv.innerHTML = selectedPets.slice(1).map(function(pet, idx) {
       var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
-      petTypeEl.value = typeMap[pet.pet_type] || 'Dog';
-    }
+      var defaultType = typeMap[pet.pet_type] || 'Dog';
+      var petNum = idx + 2; // Start from 2 since first is Pet 1
+      
+      return '<div>' +
+        '<label for="res-pet-type-' + petNum + '">Pet ' + petNum + ' type (' + escapeHtml(pet.pet_name) + ')</label>' +
+        '<select id="res-pet-type-' + petNum + '" class="additional-pet-type" data-pet-index="' + (idx + 1) + '" required>' +
+        '<option value="Dog"' + (defaultType === 'Dog' ? ' selected' : '') + '>Dog</option>' +
+        '<option value="Cat"' + (defaultType === 'Cat' ? ' selected' : '') + '>Cat</option>' +
+        '<option value="Other"' + (defaultType === 'Other' ? ' selected' : '') + '>Other</option>' +
+        '</select>' +
+        '</div>';
+    }).join('');
+  } else if (additionalTypesDiv) {
+    additionalTypesDiv.innerHTML = '';
+  }
+  
+  // Fill form based on first pet
+  if (selectedPets.length >= 1) {
+    var pet = selectedPets[0];
     if (notesEl && pet.notes) notesEl.value = pet.notes;
     
-    // Fill radio buttons from pet profile
-    fillRadioButtons(pet);
-  } else {
-    // Multiple pets - create combined pet name
-    var petNames = selectedPets.map(function(p) { return p.pet_name; }).join(', ');
-    if (petNameEl) petNameEl.value = petNames;
-    
-    // Set first pet type as default
-    if (petTypeEl) {
-      var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
-      petTypeEl.value = typeMap[selectedPets[0].pet_type] || 'Dog';
+    // Fill radio buttons from first pet or prioritize dogs
+    if (selectedPets.length === 1) {
+      fillRadioButtons(pet);
+    } else {
+      fillRadioButtonsMultiple(selectedPets);
     }
-    
-    // Fill radio buttons based on selected pets (prioritize dogs)
-    fillRadioButtonsMultiple(selectedPets);
   }
   
   // Store selected pets globally for submission

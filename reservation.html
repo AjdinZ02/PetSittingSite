@@ -155,20 +155,22 @@
             <div id="profile-pets-list" style="display: flex; flex-direction: column; gap: 10px;">
               <!-- Ovdje će biti checkboxes za životinje -->
             </div>
-            <div id="selected-pets-types" style="margin-top: 16px; display: none;">
-              <!-- Ovdje će biti pet type selectori za svaku izabranu životinju -->
-            </div>
             <small style="display: block; margin-top: 12px; color: #555; font-size: 13px;">
               ✅ Podaci o izabranim životinjama će biti automatski popunjeni
             </small>
           </div>
 
-          <label for="res-pet-type">Pet type (vrsta zivotinje)</label>
-          <select id="res-pet-type" required>
-            <option value="Dog">Dog</option>
-            <option value="Cat">Cat</option>
-            <option value="Other">Other</option>
-          </select>
+          <div id="pet-types-container">
+            <label for="res-pet-type">Pet type (vrsta zivotinje)</label>
+            <select id="res-pet-type" required>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Other">Other</option>
+            </select>
+            <div id="additional-pet-types" style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+              <!-- Dodatni pet type selectori će biti dodani ovdje -->
+            </div>
+          </div>
 
           <label for="res-pet-name">Pet name (ime zivotinje)</label>
           <input id="res-pet-name" type="text" placeholder="Unesite ime ljubimca" required />

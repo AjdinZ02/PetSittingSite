@@ -109,6 +109,22 @@ app.get('/auth/me', authenticate, (req, res) => {
   res.json({ id: req.user.userId, username: req.user.username, role: req.user.role });
 });
 
+app.get('/auth/profile', authenticate, async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT username, fullname, email, phone, address FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Korisnik nije prona\u0111en.' });
+    }
+    res.json(result.rows[0]);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Gre\u0161ka pri dohva\u0107anju profila.' });
+  }
+});
+
 // RESERVATIONS 
 app.get('/availability', async (req, res) => {
   try {

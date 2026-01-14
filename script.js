@@ -489,13 +489,17 @@ function displayUserPets(pets) {
   section.style.display = 'block';
   
   list.innerHTML = pets.map(function(pet, index) {
-    return '<label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border-radius: 6px; cursor: pointer;">' +
+    return '<label style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid #e0e0e0;" ' +
+      'onmouseover="this.style.borderColor=\'#d535d0\'; this.style.transform=\'translateX(4px)\';" ' +
+      'onmouseout="this.style.borderColor=\'#e0e0e0\'; this.style.transform=\'translateX(0)\';">' +
       '<input type="checkbox" class="pet-checkbox" data-pet-index="' + index + '" ' +
       'data-pet-name="' + escapeHtml(pet.pet_name) + '" ' +
       'data-pet-type="' + escapeHtml(pet.pet_type) + '" ' +
-      'style="cursor: pointer;">' +
-      '<span style="font-weight: 500;">' + escapeHtml(pet.pet_name) + '</span>' +
-      '<span style="color: #666;">(' + escapeHtml(pet.pet_type) + ')</span>' +
+      'style="cursor: pointer; width: 18px; height: 18px; margin: 0; flex-shrink: 0;">' +
+      '<div style="flex: 1; display: flex; align-items: center; gap: 8px;">' +
+      '<span style="font-weight: 600; color: #333; font-size: 15px;">' + escapeHtml(pet.pet_name) + '</span>' +
+      '<span style="background: #f0f0f0; padding: 2px 8px; border-radius: 12px; color: #666; font-size: 12px;">' + escapeHtml(pet.pet_type) + '</span>' +
+      '</div>' +
       '</label>';
   }).join('');
   
@@ -518,8 +522,19 @@ function escapeHtml(text) {
 
 function handlePetSelection() {
   var checkboxes = document.querySelectorAll('.pet-checkbox:checked');
+  var selectedPetsTypesDiv = document.getElementById('selected-pets-types');
   
-  if (checkboxes.length === 0) return;
+  if (checkboxes.length === 0) {
+    if (selectedPetsTypesDiv) {
+      selectedPetsTypesDiv.style.display = 'none';
+      selectedPetsTypesDiv.innerHTML = '';
+    }
+    // Clear form fields
+    if (petNameEl) petNameEl.value = '';
+    if (petTypeEl) petTypeEl.selectedIndex = 0;
+    if (notesEl) notesEl.value = '';
+    return;
+  }
   
   // Get selected pets
   var selectedPets = [];
@@ -532,12 +547,38 @@ function handlePetSelection() {
   
   if (selectedPets.length === 0) return;
   
-  // If single pet selected, fill in the form
+  // Create pet type selectors for each selected pet
+  if (selectedPetsTypesDiv && selectedPets.length > 1) {
+    selectedPetsTypesDiv.style.display = 'block';
+    selectedPetsTypesDiv.innerHTML = '<div style="padding: 12px; background: white; border-radius: 8px; border: 1px solid #e0e0e0;">' +
+      '<h4 style="margin: 0 0 12px 0; color: #333; font-size: 14px;">Odaberite vrstu za svaku životinju:</h4>' +
+      selectedPets.map(function(pet, idx) {
+        var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
+        var defaultType = typeMap[pet.pet_type] || 'Dog';
+        return '<div style="margin-bottom: 10px;">' +
+          '<label style="display: block; font-weight: 500; margin-bottom: 4px; color: #555; font-size: 13px;">' + 
+          escapeHtml(pet.pet_name) + '</label>' +
+          '<select class="pet-type-selector" data-pet-index="' + idx + '" ' +
+          'style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">' +
+          '<option value="Dog"' + (defaultType === 'Dog' ? ' selected' : '') + '>Dog (Pas)</option>' +
+          '<option value="Cat"' + (defaultType === 'Cat' ? ' selected' : '') + '>Cat (Mačka)</option>' +
+          '<option value="Other"' + (defaultType === 'Other' ? ' selected' : '') + '>Other (Ostalo)</option>' +
+          '</select>' +
+          '</div>';
+      }).join('') +
+      '</div>';
+  } else {
+    if (selectedPetsTypesDiv) {
+      selectedPetsTypesDiv.style.display = 'none';
+      selectedPetsTypesDiv.innerHTML = '';
+    }
+  }
+  
+  // Fill form based on number of selected pets
   if (selectedPets.length === 1) {
     var pet = selectedPets[0];
     if (petNameEl) petNameEl.value = pet.pet_name;
     if (petTypeEl) {
-      // Map pet type to form values
       var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
       petTypeEl.value = typeMap[pet.pet_type] || 'Dog';
     }
@@ -546,20 +587,22 @@ function handlePetSelection() {
     // Fill radio buttons from pet profile
     fillRadioButtons(pet);
   } else {
-    // Multiple pets - create combined pet name and fill common data
+    // Multiple pets - create combined pet name
     var petNames = selectedPets.map(function(p) { return p.pet_name; }).join(', ');
     if (petNameEl) petNameEl.value = petNames;
     
-    // Check if all are same type
-    var allSameType = selectedPets.every(function(p) { return p.pet_type === selectedPets[0].pet_type; });
-    if (allSameType && petTypeEl) {
+    // Set first pet type as default
+    if (petTypeEl) {
       var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
       petTypeEl.value = typeMap[selectedPets[0].pet_type] || 'Dog';
     }
     
-    // Fill radio buttons based on all selected pets
+    // Fill radio buttons based on selected pets (prioritize dogs)
     fillRadioButtonsMultiple(selectedPets);
   }
+  
+  // Store selected pets globally for submission
+  window.selectedPetsForReservation = selectedPets;
 }
 
 function fillRadioButtons(pet) {

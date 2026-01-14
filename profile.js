@@ -113,7 +113,7 @@ function displayPets(pets) {
           ${pet.pet_type === 'Pas' && pet.vaccinated ? `<p style="margin: 4px 0 0 0; color: #666; font-size: 14px;"><strong>Vakcinisan:</strong> ${pet.vaccinated === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
         </div>
         <button onclick="deletePet('${escapeHtml(pet.pet_name)}', '${escapeHtml(pet.pet_type)}')" 
-                style="padding: 3px 8px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 11px;">
+                style="padding: 2px 6px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 10px;">
           Obriši
         </button>
       </div>

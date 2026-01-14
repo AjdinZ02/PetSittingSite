@@ -15,34 +15,33 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="auth-page">
-  <main class="auth-card">
+  <main class="auth-card" style="max-width: 900px;">
     <h2>Moj profil</h2>
     <p class="sub">Vaši korisnički podaci</p>
     
     <div id="profileContent" style="margin-top: 24px;">
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Ime i prezime</label>
-        <div id="profile-fullname" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+      <!-- Red 1: Ime i prezime | Email adresa -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Ime i prezime</label>
+          <div id="profile-fullname" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Email adresa</label>
+          <div id="profile-email" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+        </div>
       </div>
 
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Korisničko ime</label>
-        <div id="profile-username" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Email adresa</label>
-        <div id="profile-email" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Broj telefona</label>
-        <div id="profile-phone" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Adresa</label>
-        <div id="profile-address" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+      <!-- Red 2: Broj telefona | Adresa -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Broj telefona</label>
+          <div id="profile-phone" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Adresa</label>
+          <div id="profile-address" style="padding: 12px; background: #f5f5f5; border-radius: 8px; color: #333;">-</div>
+        </div>
       </div>
     </div>
 
@@ -79,7 +78,80 @@
           <textarea id="pet-notes" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; resize: vertical;"></textarea>
         </div>
 
-        <div style="display: flex; gap: 12px;">
+        <!-- Dodatna pitanja -->
+        <div id="additionalQuestions" style="display: none;">
+          <h4 style="margin: 20px 0 12px 0; color: #333;">Dodatne informacije</h4>
+
+          <!-- Parking - za sve -->
+          <div class="question-block" style="margin-bottom: 16px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li postoji parking u blizini adrese?</label>
+            <div style="display: flex; gap: 16px;">
+              <label style="cursor: pointer;"><input type="radio" name="parking" value="yes"> Da</label>
+              <label style="cursor: pointer;"><input type="radio" name="parking" value="no"> Ne</label>
+            </div>
+          </div>
+
+          <!-- Pitanja samo za pse -->
+          <div id="dogQuestions" style="display: none;">
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li se pas slaže sa drugim mužjacima?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="males" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="males" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li se pas slaže sa drugim ženkama?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="females" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="females" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li je pas naviknut na povodac?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="leash" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="leash" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima tendenciju da bježi ili se otima sa povodca?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="runaway" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="runaway" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima strahove (zvukovi, djeca, vozila)?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="fears" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="fears" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li pas ima ograničenja u kretanju?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="mobility" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="mobility" value="no"> Ne</label>
+              </div>
+            </div>
+
+            <div class="question-block" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #555;">Da li je pas redovno vakcinisan?</label>
+              <div style="display: flex; gap: 16px;">
+                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="yes"> Da</label>
+                <label style="cursor: pointer;"><input type="radio" name="vaccinated" value="no"> Ne</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
           <button type="submit" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Sačuvaj</button>
           <button type="button" id="cancelPetBtn" style="padding: 10px 20px; background: #999; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Odustani</button>
         </div>

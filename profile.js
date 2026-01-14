@@ -101,27 +101,41 @@ function displayPets(pets) {
   }
 
   container.innerHTML = pets.map(pet => `
-    <div style="padding: 16px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px;">
-      <div style="display: flex; justify-content: space-between; align-items: start;">
-        <div style="flex: 1;">
-          <h4 style="margin: 0 0 8px 0; color: #333;">${escapeHtml(pet.pet_name)}</h4>
-          <p style="margin: 0; color: #666;"><strong>Vrsta:</strong> ${escapeHtml(pet.pet_type)}</p>
-          ${pet.notes ? `<p style="margin: 8px 0 0 0; color: #666;"><strong>Napomene:</strong> ${escapeHtml(pet.notes)}</p>` : ''}
-          ${pet.parking ? `<p style="margin: 4px 0 0 0; color: #666; font-size: 14px;"><strong>Parking:</strong> ${pet.parking === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.pet_type === 'Pas' && pet.males ? `<p style="margin: 4px 0 0 0; color: #666; font-size: 14px;"><strong>Slaže se sa mužjacima:</strong> ${pet.males === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.pet_type === 'Pas' && pet.females ? `<p style="margin: 4px 0 0 0; color: #666; font-size: 14px;"><strong>Slaže se sa ženkama:</strong> ${pet.females === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-          ${pet.pet_type === 'Pas' && pet.vaccinated ? `<p style="margin: 4px 0 0 0; color: #666; font-size: 14px;"><strong>Vakcinisan:</strong> ${pet.vaccinated === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
-        </div>
+    <div style="padding: 16px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; position: relative;">
+      <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 6px;">
+        <button onclick="editPet('${escapeHtml(pet.pet_name)}', '${escapeHtml(pet.pet_type)}')" 
+                style="padding: 4px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
+                title="Uredi">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
         <button onclick="deletePet('${escapeHtml(pet.pet_name)}', '${escapeHtml(pet.pet_type)}')" 
-                style="padding: 6px; background: #f44336; color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
+                style="padding: 4px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;" 
                 title="Obriši">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
             <line x1="10" y1="11" x2="10" y2="17"></line>
             <line x1="14" y1="11" x2="14" y2="17"></line>
           </svg>
         </button>
+      </div>
+      <div style="padding-right: 60px;">
+        <h4 style="margin: 0 0 8px 0; color: #333;">${escapeHtml(pet.pet_name)}</h4>
+        <p style="margin: 0 0 4px 0; color: #666;"><strong>Vrsta:</strong> ${escapeHtml(pet.pet_type)}</p>
+        ${pet.notes ? `<p style="margin: 4px 0; color: #666;"><strong>Napomene:</strong> ${escapeHtml(pet.notes)}</p>` : ''}
+        ${pet.parking ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Parking:</strong> ${pet.parking === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+        ${pet.pet_type === 'Pas' ? `
+          ${pet.males ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Slaže se sa mužjacima:</strong> ${pet.males === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.females ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Slaže se sa ženkama:</strong> ${pet.females === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.leash ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Naviknut na povodac:</strong> ${pet.leash === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.runaway ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Tendencija da bježi:</strong> ${pet.runaway === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.fears ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Strahovi:</strong> ${pet.fears === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.mobility ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Ograničenja u kretanju:</strong> ${pet.mobility === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+          ${pet.vaccinated ? `<p style="margin: 4px 0; color: #666; font-size: 14px;"><strong>Vakcinisan:</strong> ${pet.vaccinated === 'yes' ? 'Da' : 'Ne'}</p>` : ''}
+        ` : ''}
       </div>
     </div>
   `).join('');
@@ -293,3 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Globalna funkcija za brisanje (poziva se iz HTML-a)
 window.deletePet = deletePet;
+
+// Globalna funkcija za editovanje (poziva se iz HTML-a)
+window.editPet = function(petName, petType) {
+  toast.info('Funkcionalnost editovanja će uskoro biti dostupna.');
+  // TODO: Implementirati edit funkcionalnost
+};

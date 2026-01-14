@@ -457,6 +457,20 @@
         if (cm2 && titleEl) titleEl.textContent = `${t.months[cm2.month]} ${cm2.year}`;
       }, 0);
     });
+    
+    // Apply i18n to all elements with data-i18n attribute in reservation page
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const keys = key.split('.');
+      let value = DICT[lang];
+      for (let k of keys) {
+        if (value && value[k] !== undefined) value = value[k];
+        else { value = null; break; }
+      }
+      if (value && typeof value === 'string') {
+        el.textContent = value;
+      }
+    });
   }
 
   // === Reviews stranica ===

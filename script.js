@@ -437,9 +437,198 @@ function setupPetAutoFill() {
   petTypeEl.addEventListener('change', autoFillPetData);
 }
 
+// Load user profile and pets for auto-fill
+function loadUserProfileAndPets() {
+  var auth = getAuth();
+  if (!auth || !auth.token) return;
+
+  // Load user profile
+  fetch(api('/auth/profile'), {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + auth.token }
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Failed to load profile');
+    return r.json();
+  })
+  .then(function(userData) {
+    // Auto-fill user data
+    if (nameEl && userData.fullname) nameEl.value = userData.fullname;
+    if (addressEl && userData.address) addressEl.value = userData.address;
+    if (phoneEl && userData.phone) phoneEl.value = userData.phone;
+  })
+  .catch(function(e) {
+    console.error('Error loading user profile:', e);
+  });
+
+  // Load user's pets
+  fetch(api('/pet-profiles'), {
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + auth.token }
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Failed to load pets');
+    return r.json();
+  })
+  .then(function(pets) {
+    if (pets && pets.length > 0) {
+      displayUserPets(pets);
+    }
+  })
+  .catch(function(e) {
+    console.error('Error loading pets:', e);
+  });
+}
+
+function displayUserPets(pets) {
+  var section = document.getElementById('profile-pets-section');
+  var list = document.getElementById('profile-pets-list');
+  
+  if (!section || !list || !pets || pets.length === 0) return;
+  
+  section.style.display = 'block';
+  
+  list.innerHTML = pets.map(function(pet, index) {
+    return '<label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border-radius: 6px; cursor: pointer;">' +
+      '<input type="checkbox" class="pet-checkbox" data-pet-index="' + index + '" ' +
+      'data-pet-name="' + escapeHtml(pet.pet_name) + '" ' +
+      'data-pet-type="' + escapeHtml(pet.pet_type) + '" ' +
+      'style="cursor: pointer;">' +
+      '<span style="font-weight: 500;">' + escapeHtml(pet.pet_name) + '</span>' +
+      '<span style="color: #666;">(' + escapeHtml(pet.pet_type) + ')</span>' +
+      '</label>';
+  }).join('');
+  
+  // Store pets data globally
+  window.userPets = pets;
+  
+  // Add event listeners to checkboxes
+  var checkboxes = list.querySelectorAll('.pet-checkbox');
+  checkboxes.forEach(function(cb) {
+    cb.addEventListener('change', handlePetSelection);
+  });
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function handlePetSelection() {
+  var checkboxes = document.querySelectorAll('.pet-checkbox:checked');
+  
+  if (checkboxes.length === 0) return;
+  
+  // Get selected pets
+  var selectedPets = [];
+  checkboxes.forEach(function(cb) {
+    var index = parseInt(cb.getAttribute('data-pet-index'));
+    if (window.userPets && window.userPets[index]) {
+      selectedPets.push(window.userPets[index]);
+    }
+  });
+  
+  if (selectedPets.length === 0) return;
+  
+  // If single pet selected, fill in the form
+  if (selectedPets.length === 1) {
+    var pet = selectedPets[0];
+    if (petNameEl) petNameEl.value = pet.pet_name;
+    if (petTypeEl) {
+      // Map pet type to form values
+      var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
+      petTypeEl.value = typeMap[pet.pet_type] || 'Dog';
+    }
+    if (notesEl && pet.notes) notesEl.value = pet.notes;
+    
+    // Fill radio buttons from pet profile
+    fillRadioButtons(pet);
+  } else {
+    // Multiple pets - create combined pet name and fill common data
+    var petNames = selectedPets.map(function(p) { return p.pet_name; }).join(', ');
+    if (petNameEl) petNameEl.value = petNames;
+    
+    // Check if all are same type
+    var allSameType = selectedPets.every(function(p) { return p.pet_type === selectedPets[0].pet_type; });
+    if (allSameType && petTypeEl) {
+      var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
+      petTypeEl.value = typeMap[selectedPets[0].pet_type] || 'Dog';
+    }
+    
+    // Fill radio buttons based on all selected pets
+    fillRadioButtonsMultiple(selectedPets);
+  }
+}
+
+function fillRadioButtons(pet) {
+  if (pet.parking) {
+    var parkingRadio = document.querySelector('input[name="parking"][value="' + pet.parking + '"]');
+    if (parkingRadio) parkingRadio.checked = true;
+  }
+  
+  // Only fill dog-specific questions if it's a dog
+  if (pet.pet_type === 'Pas') {
+    if (pet.males) {
+      var malesRadio = document.querySelector('input[name="males"][value="' + pet.males + '"]');
+      if (malesRadio) malesRadio.checked = true;
+    }
+    if (pet.females) {
+      var femalesRadio = document.querySelector('input[name="females"][value="' + pet.females + '"]');
+      if (femalesRadio) femalesRadio.checked = true;
+    }
+    if (pet.leash) {
+      var leashRadio = document.querySelector('input[name="leash"][value="' + pet.leash + '"]');
+      if (leashRadio) leashRadio.checked = true;
+    }
+    if (pet.runaway) {
+      var runawayRadio = document.querySelector('input[name="runaway"][value="' + pet.runaway + '"]');
+      if (runawayRadio) runawayRadio.checked = true;
+    }
+    if (pet.fears) {
+      var fearsRadio = document.querySelector('input[name="fears"][value="' + pet.fears + '"]');
+      if (fearsRadio) fearsRadio.checked = true;
+    }
+    if (pet.mobility) {
+      var mobilityRadio = document.querySelector('input[name="mobility"][value="' + pet.mobility + '"]');
+      if (mobilityRadio) mobilityRadio.checked = true;
+    }
+    if (pet.vaccinated) {
+      var vaccinatedRadio = document.querySelector('input[name="vaccinated"][value="' + pet.vaccinated + '"]');
+      if (vaccinatedRadio) vaccinatedRadio.checked = true;
+    }
+  }
+}
+
+function fillRadioButtonsMultiple(pets) {
+  // Check if any pet has parking info (use first one that has it)
+  var parkingPet = pets.find(function(p) { return p.parking; });
+  if (parkingPet && parkingPet.parking) {
+    var parkingRadio = document.querySelector('input[name="parking"][value="' + parkingPet.parking + '"]');
+    if (parkingRadio) parkingRadio.checked = true;
+  }
+  
+  // Check if we have any dogs in selection
+  var hasDog = pets.some(function(p) { return p.pet_type === 'Pas'; });
+  
+  if (hasDog) {
+    // Use data from first dog
+    var firstDog = pets.find(function(p) { return p.pet_type === 'Pas'; });
+    if (firstDog) {
+      fillRadioButtons(firstDog);
+    }
+  }
+}
+
 // Initialize auto-fill on page load
 if (petNameEl && petTypeEl) {
   setupPetAutoFill();
+  
+  // Load user profile and pets when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    loadUserProfileAndPets();
+  });
 }
 
 // Submit rezervacije 

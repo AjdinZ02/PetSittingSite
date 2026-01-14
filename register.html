@@ -21,22 +21,22 @@
     <form id="registerForm" novalidate>
       <div class="auth-grid">
 
-        <div>
+        <div class="full">
           <label for="reg-fullname">Ime i prezime</label>
           <input id="reg-fullname" name="fullname" type="text" required minlength="3" />
         </div>
 
-        <div>
+        <div class="full">
           <label for="reg-username">Korisničko ime</label>
           <input id="reg-username" name="username" type="text" required minlength="3" />
         </div>
 
-        <div>
+        <div class="full">
           <label for="reg-email">Email</label>
           <input id="reg-email" name="email" type="email" required />
         </div>
 
-        <div>
+        <div class="full">
           <label for="reg-phone">Telefon</label>
           <input id="reg-phone" name="phone" type="tel" required
                  pattern="^\+?[0-9 ()-]{7,20}$"

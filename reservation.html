@@ -149,19 +149,19 @@
 
           <!-- Izbor životinja sa profila -->
           <div id="profile-pets-section" style="display: none; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%); border-radius: 12px; border: 2px solid #d535d0; box-shadow: 0 2px 8px rgba(213, 53, 208, 0.1);">
-            <label style="font-weight: 600; margin-bottom: 16px; display: block; color: #333; font-size: 16px;">
+            <label style="font-weight: 600; margin-bottom: 16px; display: block; color: #333; font-size: 16px;" data-i18n="reservation.profile_pets_title">
               🐾 Vaše životinje
             </label>
             <div id="profile-pets-list" style="display: flex; flex-direction: column; gap: 10px;">
               <!-- Ovdje će biti checkboxes za životinje -->
             </div>
-            <small style="display: block; margin-top: 12px; color: #555; font-size: 13px;">
+            <small style="display: block; margin-top: 12px; color: #555; font-size: 13px;" data-i18n="reservation.pets_auto_fill">
               ✅ Podaci o izabranim životinjama će biti automatski popunjeni
             </small>
           </div>
 
           <div id="pet-types-container">
-            <label for="res-pet-type">Pet type (vrsta zivotinje)</label>
+            <label for="res-pet-type" id="main-pet-type-label" data-i18n="reservation.pet_type_label">Vrsta životinje</label>
             <select id="res-pet-type" required>
               <option value="Dog">Dog</option>
               <option value="Cat">Cat</option>

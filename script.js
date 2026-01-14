@@ -558,27 +558,42 @@ function handlePetSelection() {
     // Update label to show Pet 1
     var mainLabel = document.querySelector('label[for="res-pet-type"]');
     if (mainLabel) {
+      var currentLang = localStorage.getItem('lang') || 'bs';
       if (selectedPets.length > 1) {
-        mainLabel.textContent = 'Pet 1 type (' + selectedPets[0].pet_name + ')';
+        var petNumberText = currentLang === 'en' 
+          ? 'Pet 1 type (' + selectedPets[0].pet_name + ')'
+          : 'Vrsta životinje 1 (' + selectedPets[0].pet_name + ')';
+        mainLabel.textContent = petNumberText;
+        mainLabel.removeAttribute('data-i18n');
       } else {
-        mainLabel.textContent = 'Pet type (vrsta zivotinje)';
+        mainLabel.setAttribute('data-i18n', 'reservation.pet_type_label');
+        mainLabel.textContent = currentLang === 'en' ? 'Pet type' : 'Vrsta životinje';
       }
     }
   }
   
   // Create additional pet type selectors if more than 1 pet
   if (additionalTypesDiv && selectedPets.length > 1) {
+    var currentLang = localStorage.getItem('lang') || 'bs';
     additionalTypesDiv.innerHTML = selectedPets.slice(1).map(function(pet, idx) {
       var typeMap = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
       var defaultType = typeMap[pet.pet_type] || 'Dog';
       var petNum = idx + 2; // Start from 2 since first is Pet 1
       
+      var labelText = currentLang === 'en'
+        ? 'Pet ' + petNum + ' type (' + escapeHtml(pet.pet_name) + ')'
+        : 'Vrsta životinje ' + petNum + ' (' + escapeHtml(pet.pet_name) + ')';
+      
+      var dogText = currentLang === 'en' ? 'Dog' : 'Pas';
+      var catText = currentLang === 'en' ? 'Cat' : 'Mačka';
+      var otherText = currentLang === 'en' ? 'Other' : 'Ostalo';
+      
       return '<div>' +
-        '<label for="res-pet-type-' + petNum + '">Pet ' + petNum + ' type (' + escapeHtml(pet.pet_name) + ')</label>' +
+        '<label for="res-pet-type-' + petNum + '">' + labelText + '</label>' +
         '<select id="res-pet-type-' + petNum + '" class="additional-pet-type" data-pet-index="' + (idx + 1) + '" required>' +
-        '<option value="Dog"' + (defaultType === 'Dog' ? ' selected' : '') + '>Dog</option>' +
-        '<option value="Cat"' + (defaultType === 'Cat' ? ' selected' : '') + '>Cat</option>' +
-        '<option value="Other"' + (defaultType === 'Other' ? ' selected' : '') + '>Other</option>' +
+        '<option value="Dog"' + (defaultType === 'Dog' ? ' selected' : '') + '>' + dogText + '</option>' +
+        '<option value="Cat"' + (defaultType === 'Cat' ? ' selected' : '') + '>' + catText + '</option>' +
+        '<option value="Other"' + (defaultType === 'Other' ? ' selected' : '') + '>' + otherText + '</option>' +
         '</select>' +
         '</div>';
     }).join('');
@@ -736,8 +751,8 @@ if (submitBtn) {
         return r.json();
       })
       .then(function () {
-        // Save pet profile for future use 
-        if (payload.ime_zivotinje && payload.vrsta_zivotinje) {
+        // Save pet profile for future use - only if single pet name (no commas)
+        if (payload.ime_zivotinje && payload.vrsta_zivotinje && !payload.ime_zivotinje.includes(',')) {
           savePetProfile(payload.ime_zivotinje, payload.vrsta_zivotinje, {
             address: payload.adresa,
             phone: payload.telefon,

@@ -56,14 +56,36 @@ function renderTable(rows) {
     return value;
   }
 
+  // Helper function to format pet names and types
+  function formatPets(names, types) {
+    if (!names || !types) return { names: '-', types: '-' };
+    
+    const petNames = names.split(',').map(n => n.trim());
+    const petTypes = types.split(',').map(t => t.trim());
+    
+    if (petNames.length === 1) {
+      return { names: petNames[0], types: petTypes[0] };
+    }
+    
+    // Multiple pets - format as list
+    const formattedNames = petNames.map((name, idx) => {
+      const type = petTypes[idx] || petTypes[0]; // Use corresponding type or first one
+      return `${name} (${type})`;
+    }).join('<br>');
+    
+    return { names: formattedNames, types: petTypes.join(', ') };
+  }
+
   rows.forEach(r => {
+    const pets = formatPets(r.ime_zivotinje, r.vrsta_zivotinje);
+    
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td data-label="Datum">${formatDate(r.datum)}</td>
       <td data-label="Početak">${r.vrijeme ?? ''}</td>
       <td data-label="Ime i prezime">${r.ime_prezime}</td>
-      <td data-label="Životinja">${r.ime_zivotinje}</td>
-      <td data-label="Vrsta">${r.vrsta_zivotinje}</td>
+      <td data-label="Životinja">${pets.names}</td>
+      <td data-label="Vrsta">${pets.types}</td>
       <td data-label="Adresa">${r.adresa ?? ''}</td>
       <td data-label="Telefon">${r.telefon ?? ''}</td>
       <td data-label="Napomena">${r.napomena ?? ''}</td>

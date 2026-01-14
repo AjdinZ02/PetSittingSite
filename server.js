@@ -439,6 +439,26 @@ app.post('/pet-profiles', authenticate, async (req, res) => {
   }
 });
 
+// Delete pet profile
+app.delete('/pet-profiles/:petName/:petType', authenticate, async (req, res) => {
+  try {
+    const { petName, petType } = req.params;
+    const result = await db.query(
+      'DELETE FROM pet_profiles WHERE user_id = $1 AND pet_name = $2 AND pet_type = $3 RETURNING id',
+      [req.user.userId, petName, petType]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Životinja nije pronađena.' });
+    }
+    
+    res.json({ message: 'Životinja je obrisana.', deleted: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Greška pri brisanju životinje.' });
+  }
+});
+
 // Start 
 const PORT = process.env.PORT ?? 3000;
 app.listen(PORT, () => console.log(`Server sluša na portu ${PORT}`));

@@ -64,9 +64,9 @@
         title:'Rezervišite termin',
         sub:'Odaberite datum, recite nam više o ljubimcu i pošaljite zahtjev. Rezervacija postaje važeća tek nakon našeg odobrenja.',
         legend_full:'Zauzeto (100%)', legend_free:'Slobodno', legend_partial:'Djelimično zauzeto',
-        profile_pets_title:'🐾 Vaše životinje',
+        profile_pets_title:'Vaše životinje',
         profile_pets_sub:'Izaberite životinje za ovu rezervaciju:',
-        pets_auto_fill:'✅ Podaci o izabranim životinjama će biti automatski popunjeni',
+        pets_auto_fill:'Podaci o izabranim životinjama će biti automatski popunjeni',
         pet_type_label:'Vrsta životinje',
         pet_number_type: function(num, petName) { return 'Vrsta životinje ' + num + ' (' + petName + ')'; },
         labels:{
@@ -191,9 +191,9 @@
         title:'Reserve your appointment',
         sub:'Select a date, tell us more about your pet and send us a request. The reservation becomes valid only after our approval.',
         legend_full:'Fully booked (100%)', legend_free:'Available', legend_partial:'Partially booked',
-        profile_pets_title:'🐾 Your Pets',
+        profile_pets_title:'Your Pets',
         profile_pets_sub:'Select pets for this reservation:',
-        pets_auto_fill:'✅ Data for selected pets will be automatically filled',
+        pets_auto_fill:'Data for selected pets will be automatically filled',
         pet_type_label:'Pet type',
         pet_number_type: function(num, petName) { return 'Pet ' + num + ' type (' + petName + ')'; },
         labels:{

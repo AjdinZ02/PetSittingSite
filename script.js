@@ -434,7 +434,53 @@ function setupPetAutoFill() {
   
   // Add event listeners
   petNameEl.addEventListener('blur', autoFillPetData);
-  petTypeEl.addEventListener('change', autoFillPetData);
+  petTypeEl.addEventListener('change', function() {
+    autoFillPetData();
+    updateDogQuestionsVisibility();
+  });
+  
+  // Also listen to additional pet type changes
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('additional-pet-type')) {
+      updateDogQuestionsVisibility();
+    }
+  });
+}
+
+function updateDogQuestionsVisibility() {
+  var dogQuestionsDiv = document.getElementById('dog-questions');
+  if (!dogQuestionsDiv) return;
+  
+  // Check main pet type
+  var mainPetType = petTypeEl ? petTypeEl.value : '';
+  var hasDog = mainPetType === 'Dog';
+  
+  // Check additional pet types
+  var additionalSelects = document.querySelectorAll('.additional-pet-type');
+  additionalSelects.forEach(function(select) {
+    if (select.value === 'Dog') {
+      hasDog = true;
+    }
+  });
+  
+  if (hasDog) {
+    dogQuestionsDiv.style.display = 'block';
+    // Make dog questions required
+    var dogInputs = dogQuestionsDiv.querySelectorAll('input[type="radio"]');
+    dogInputs.forEach(function(input) {
+      if (input.value === 'yes') {
+        input.required = true;
+      }
+    });
+  } else {
+    dogQuestionsDiv.style.display = 'none';
+    // Remove required from dog questions and clear selections
+    var dogInputs = dogQuestionsDiv.querySelectorAll('input[type="radio"]');
+    dogInputs.forEach(function(input) {
+      input.required = false;
+      input.checked = false;
+    });
+  }
 }
 
 // Load user profile and pets for auto-fill
@@ -488,7 +534,16 @@ function displayUserPets(pets) {
   
   section.style.display = 'block';
   
+  var currentLang = localStorage.getItem('lang') || 'bs';
+  
   list.innerHTML = pets.map(function(pet, index) {
+    // Translate pet type based on current language
+    var displayPetType = pet.pet_type;
+    if (currentLang === 'en') {
+      var typeTranslations = { 'Pas': 'Dog', 'Mačka': 'Cat', 'Ostalo': 'Other' };
+      displayPetType = typeTranslations[pet.pet_type] || pet.pet_type;
+    }
+    
     return '<label style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 1px solid #e0e0e0;" ' +
       'onmouseover="this.style.borderColor=\'#d535d0\'; this.style.transform=\'translateX(4px)\';" ' +
       'onmouseout="this.style.borderColor=\'#e0e0e0\'; this.style.transform=\'translateX(0)\';">' +
@@ -498,7 +553,7 @@ function displayUserPets(pets) {
       'style="cursor: pointer; width: 18px; height: 18px; margin: 0; flex-shrink: 0;">' +
       '<div style="flex: 1; display: flex; align-items: center; gap: 8px;">' +
       '<span style="font-weight: 600; color: #333; font-size: 15px;">' + escapeHtml(pet.pet_name) + '</span>' +
-      '<span style="background: #f0f0f0; padding: 2px 8px; border-radius: 12px; color: #666; font-size: 12px;">' + escapeHtml(pet.pet_type) + '</span>' +
+      '<span style="background: #f0f0f0; padding: 2px 8px; border-radius: 12px; color: #666; font-size: 12px;">' + escapeHtml(displayPetType) + '</span>' +
       '</div>' +
       '</label>';
   }).join('');
@@ -614,8 +669,40 @@ function handlePetSelection() {
     }
   }
   
+  // Show/hide dog questions based on selected pet types
+  toggleDogQuestions(selectedPets);
+  
   // Store selected pets globally for submission
   window.selectedPetsForReservation = selectedPets;
+}
+
+function toggleDogQuestions(selectedPets) {
+  var dogQuestionsDiv = document.getElementById('dog-questions');
+  if (!dogQuestionsDiv) return;
+  
+  // Check if any selected pet is a dog
+  var hasDog = selectedPets.some(function(pet) {
+    return pet.pet_type === 'Pas';
+  });
+  
+  if (hasDog) {
+    dogQuestionsDiv.style.display = 'block';
+    // Make dog questions required
+    var dogInputs = dogQuestionsDiv.querySelectorAll('input[type="radio"]');
+    dogInputs.forEach(function(input) {
+      if (input.value === 'yes') {
+        input.required = true;
+      }
+    });
+  } else {
+    dogQuestionsDiv.style.display = 'none';
+    // Remove required from dog questions and clear selections
+    var dogInputs = dogQuestionsDiv.querySelectorAll('input[type="radio"]');
+    dogInputs.forEach(function(input) {
+      input.required = false;
+      input.checked = false;
+    });
+  }
 }
 
 function fillRadioButtons(pet) {
@@ -684,6 +771,8 @@ if (petNameEl && petTypeEl) {
   // Load user profile and pets when page loads
   document.addEventListener('DOMContentLoaded', function() {
     loadUserProfileAndPets();
+    // Initialize dog questions visibility
+    updateDogQuestionsVisibility();
   });
 }
 
@@ -704,7 +793,7 @@ if (submitBtn) {
       vrijeme: (selectedTime != null ? selectedTime : (timeEl && timeEl.value ? timeEl.value : '')),
       trajanje_min: SLOT_STEP_MIN, // 60 min
       ime_zivotinje: (petNameEl && petNameEl.value ? petNameEl.value.trim() : ''),
-      vrsta_zivotinje: (petTypeEl && petTypeEl.value ? petTypeEl.value : ''),
+      vrsta_zivotinje: '',
       napomena: (notesEl && notesEl.value ? notesEl.value.trim() : ''),
       adresa: (addressEl && addressEl.value ? addressEl.value.trim() : ''),
       telefon: (phoneEl && phoneEl.value ? phoneEl.value.trim() : ''),
@@ -717,6 +806,19 @@ if (submitBtn) {
       mobility: document.querySelector('input[name="mobility"]:checked')?.value || null,
       vaccinated: document.querySelector('input[name="vaccinated"]:checked')?.value || null
     };
+    
+    // Collect all pet types (main + additional)
+    var petTypes = [];
+    if (petTypeEl && petTypeEl.value) {
+      petTypes.push(petTypeEl.value);
+    }
+    var additionalSelects = document.querySelectorAll('.additional-pet-type');
+    additionalSelects.forEach(function(select) {
+      if (select.value) {
+        petTypes.push(select.value);
+      }
+    });
+    payload.vrsta_zivotinje = petTypes.join(', ');
 
     if (!payload.datum || !payload.vrijeme) {
       alert('Molimo izaberite datum i slobodan termin.');

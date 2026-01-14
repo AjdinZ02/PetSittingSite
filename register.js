@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form       = document.getElementById("registerForm");
   const btn        = document.getElementById("reg-btn");
+  const fullnameEl = document.getElementById("reg-fullname");
   const usernameEl = document.getElementById("reg-username");
   const emailEl    = document.getElementById("reg-email");
   const phoneEl    = document.getElementById("reg-phone");
@@ -54,18 +55,20 @@ document.addEventListener("DOMContentLoaded", () => {
   btn.addEventListener("click", async () => {
     console.log("[register.js] Klik na 'Kreiraj nalog'"); // DEBUG
 
+    const fullname = (fullnameEl?.value || "").trim();
     const username = (usernameEl?.value || "").trim();
     const email    = (emailEl?.value || "").trim();
     const phone    = (phoneEl?.value || "").trim();
     const address  = (addressEl?.value || "").trim();
     const password = passwordEl?.value || "";
 
-    if (!username ||
+    if (!fullname || fullname.length < 3 ||
+        !username ||
         !password || password.length < 6 ||
         !emailRegex.test(email) ||
         !phoneRegex.test(phone) ||
         !address || address.length < 5) {
-      try { toast.warn("Popunite: korisničko ime, lozinka (min 6), ispravan email, telefon i adresu (min 5)."); } catch {}
+      try { toast.warn("Popunite: ime i prezime, korisničko ime, lozinka (min 6), ispravan email, telefon i adresu (min 5)."); } catch {}
       return;
     }
 
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const r = await fetch(`${API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, email, phone, address }),
+        body: JSON.stringify({ fullname, username, password, email, phone, address }),
       });
       const j = await safeJSON(r);
 

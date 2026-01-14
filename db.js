@@ -35,6 +35,7 @@ const ready = (async () => {
         role TEXT NOT NULL CHECK(role IN ('admin','user')),
         password_salt TEXT NOT NULL,
         password_hash TEXT NOT NULL,
+        fullname TEXT,
         email TEXT UNIQUE,
         phone TEXT,
         address TEXT,
@@ -120,6 +121,16 @@ const ready = (async () => {
       CREATE INDEX IF NOT EXISTS idx_pet_profiles_user ON pet_profiles(user_id)
     `);
 
+    // Migracija: Dodavanje fullname polja u users tabelu
+    try {
+      await client.query(`
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS fullname TEXT
+      `);
+      console.log('[MIGRATION] Successfully added fullname column to users table');
+    } catch (e) {
+      console.log('[MIGRATION] Fullname column may already exist:', e.message);
+    }
+
     // Seed admin
     await seedAdmin(client);
   } finally {
@@ -159,14 +170,14 @@ function seedAdmin(client) {
 
 // Users helpers
 
-function createUser({ username, password, email, phone, address, role = 'user' }) {
+function createUser({ username, password, email, phone, address, fullname, role = 'user' }) {
   return new Promise(async (resolve, reject) => {
     try {
       const { salt, hash } = hashPassword(password);
       const result = await pool.query(
-        `INSERT INTO users (username, role, password_salt, password_hash, email, phone, address)
-         VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`,
-        [username, role, salt, hash, email, phone, address]
+        `INSERT INTO users (username, role, password_salt, password_hash, fullname, email, phone, address)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+        [username, role, salt, hash, fullname, email, phone, address]
       );
       resolve({ id: result.rows[0].id, username, role });
     } catch (err) {

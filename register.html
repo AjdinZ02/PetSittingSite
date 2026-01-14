@@ -21,7 +21,12 @@
     <form id="registerForm" novalidate>
       <div class="auth-grid">
 
-        <div class="full">
+        <div>
+          <label for="reg-fullname">Ime i prezime</label>
+          <input id="reg-fullname" name="fullname" type="text" required minlength="3" />
+        </div>
+
+        <div>
           <label for="reg-username">Korisničko ime</label>
           <input id="reg-username" name="username" type="text" required minlength="3" />
         </div>

@@ -182,6 +182,48 @@ async function addPet(petData) {
   }
 }
 
+async function updatePet(petData) {
+  try {
+    const token = getToken();
+    if (!token) return;
+
+    const response = await fetch(`${API}/pet-profiles`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(petData)
+    });
+
+    if (!response.ok) {
+      const error = await safeJSON(response);
+      throw new Error(error?.error || 'Greška pri ažuriranju životinje');
+    }
+
+    toast.success('Životinja je uspješno ažurirana!');
+    loadPets();
+    
+    // Reset forma i sakrij dodatna pitanja
+    document.getElementById('addPetForm').reset();
+    document.getElementById('petFormContainer').style.display = 'none';
+    document.getElementById('additionalQuestions').style.display = 'none';
+    document.getElementById('dogQuestions').style.display = 'none';
+    
+    // Reset edit mode
+    window.isEditMode = false;
+    window.editingPet = null;
+    document.getElementById('pet-name').disabled = false;
+    document.getElementById('pet-type').disabled = false;
+    document.getElementById('petFormContainer').querySelector('h4').textContent = 'Dodaj novu životinju';
+    document.getElementById('petFormContainer').querySelector('button[type="submit"]').textContent = 'Sačuvaj';
+
+  } catch (error) {
+    console.error('Error updating pet:', error);
+    toast.error(error.message);
+  }
+}
+
 async function deletePet(petName, petType) {
   if (!confirm(`Da li ste sigurni da želite obrisati ${petName}?`)) {
     return;
@@ -225,6 +267,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   toggleBtn.addEventListener('click', () => {
     formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    
+    // Reset edit mode kada se otvara za dodavanje
+    if (formContainer.style.display === 'block') {
+      window.isEditMode = false;
+      window.editingPet = null;
+      document.getElementById('pet-name').disabled = false;
+      document.getElementById('pet-type').disabled = false;
+      formContainer.querySelector('h4').textContent = 'Dodaj novu životinju';
+      formContainer.querySelector('button[type="submit"]').textContent = 'Sačuvaj';
+      document.getElementById('addPetForm').reset();
+      additionalQuestions.style.display = 'none';
+      dogQuestions.style.display = 'none';
+    }
   });
 
   cancelBtn.addEventListener('click', () => {
@@ -232,6 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addPetForm').reset();
     additionalQuestions.style.display = 'none';
     dogQuestions.style.display = 'none';
+    
+    // Reset edit mode
+    window.isEditMode = false;
+    window.editingPet = null;
+    document.getElementById('pet-name').disabled = false;
+    document.getElementById('pet-type').disabled = false;
+    formContainer.querySelector('h4').textContent = 'Dodaj novu životinju';
+    formContainer.querySelector('button[type="submit"]').textContent = 'Sačuvaj';
   });
 
   // Prikaži/sakrij pitanja na osnovu vrste životinje
@@ -261,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Submit forma za dodavanje životinje
+  // Submit forma za dodavanje/editovanje životinje
   document.getElementById('addPetForm').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -301,7 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    addPet(petData);
+    // Provjeri da li je edit mode
+    if (window.isEditMode && window.editingPet) {
+      // Ažuriraj postojeću životinju
+      updatePet(petData);
+    } else {
+      // Dodaj novu životinju
+      addPet(petData);
+    }
   });
 });
 
@@ -309,7 +379,96 @@ document.addEventListener('DOMContentLoaded', () => {
 window.deletePet = deletePet;
 
 // Globalna funkcija za editovanje (poziva se iz HTML-a)
-window.editPet = function(petName, petType) {
-  toast.info('Funkcionalnost editovanja će uskoro biti dostupna.');
-  // TODO: Implementirati edit funkcionalnost
+window.editPet = async function(petName, petType) {
+  const token = getToken();
+  if (!token) return;
+
+  try {
+    // Učitaj podatke o životinjama
+    const response = await fetch(`${API}/pet-profiles/${encodeURIComponent(petName)}/${encodeURIComponent(petType)}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+      throw new Error('Greška pri učitavanju podataka o životinjama');
+    }
+
+    const pet = await response.json();
+
+    // Prikaži formu
+    const formContainer = document.getElementById('petFormContainer');
+    const formTitle = formContainer.querySelector('h4');
+    const submitBtn = formContainer.querySelector('button[type="submit"]');
+    
+    formContainer.style.display = 'block';
+    formTitle.textContent = 'Uredi životinju';
+    submitBtn.textContent = 'Ažuriraj';
+    
+    // Popuni formu sa podacima
+    document.getElementById('pet-name').value = pet.pet_name;
+    document.getElementById('pet-name').disabled = true; // Ne dozvoli promjenu imena
+    document.getElementById('pet-type').value = pet.pet_type;
+    document.getElementById('pet-type').disabled = true; // Ne dozvoli promjenu vrste
+    document.getElementById('pet-notes').value = pet.notes || '';
+
+    // Prikaži dodatna pitanja
+    const additionalQuestions = document.getElementById('additionalQuestions');
+    const dogQuestions = document.getElementById('dogQuestions');
+    
+    additionalQuestions.style.display = 'block';
+    
+    // Popuni parking
+    if (pet.parking) {
+      const parkingRadio = document.querySelector(`input[name="parking"][value="${pet.parking}"]`);
+      if (parkingRadio) parkingRadio.checked = true;
+    }
+    
+    // Ako je pas, prikaži i popuni sva pitanja
+    if (pet.pet_type === 'Pas') {
+      dogQuestions.style.display = 'block';
+      
+      if (pet.males) {
+        const radio = document.querySelector(`input[name="males"][value="${pet.males}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.females) {
+        const radio = document.querySelector(`input[name="females"][value="${pet.females}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.leash) {
+        const radio = document.querySelector(`input[name="leash"][value="${pet.leash}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.runaway) {
+        const radio = document.querySelector(`input[name="runaway"][value="${pet.runaway}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.fears) {
+        const radio = document.querySelector(`input[name="fears"][value="${pet.fears}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.mobility) {
+        const radio = document.querySelector(`input[name="mobility"][value="${pet.mobility}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (pet.vaccinated) {
+        const radio = document.querySelector(`input[name="vaccinated"][value="${pet.vaccinated}"]`);
+        if (radio) radio.checked = true;
+      }
+    } else {
+      dogQuestions.style.display = 'none';
+    }
+
+    // Označi da je edit mode
+    window.isEditMode = true;
+    window.editingPet = { name: petName, type: petType };
+
+    // Skroluj na formu
+    formContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch (error) {
+    console.error('Error loading pet for edit:', error);
+    toast.error('Greška pri učitavanju podataka o životinjama.');
+  }
 };

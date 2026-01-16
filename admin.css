@@ -1,4 +1,4 @@
-/* Paleta u “pink” tonu – slobodno prilagodi */
+/* Paleta u “pink” tonu */
 :root {
   --bg: #ffffff;
   --bg-soft: #f7f7fb;
@@ -141,7 +141,7 @@
   border: 1px solid #f8cdf3;
 }
 
-/* Akcioni dugmiće – Uredi/Obriši  */
+/* Uredi/Obriši  */
 .actions {
   display: flex;
   gap: 8px;

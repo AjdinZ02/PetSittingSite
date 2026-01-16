@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
 // 3) Garantovana navigacija (apsolutna putanja + replace)
 try {
-  // 1) Log da vidimo kuda pokušavamo ići
   const target = new URL('index.html', window.location.origin + window.location.pathname).toString();
   console.log('[register.js] Redirect ->', target);
 

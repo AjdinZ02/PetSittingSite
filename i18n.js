@@ -539,7 +539,7 @@
 
   
 
-  // === Profile stranica ===
+  // Profile stranica 
   function applyProfile(lang) {
     // Apply i18n to all elements with data-i18n attribute in profile page
     document.querySelectorAll('[data-i18n]').forEach(el => {

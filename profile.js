@@ -251,7 +251,7 @@ async function updatePet(petData) {
     toast.success('Životinja je uspješno ažurirana!');
     loadPets();
     
-    // Reset forma i sakrij dodatna pitanja
+    // Reset form, hide additional questions
     document.getElementById('addPetForm').reset();
     document.getElementById('petFormContainer').style.display = 'none';
     document.getElementById('additionalQuestions').style.display = 'none';

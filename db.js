@@ -141,8 +141,13 @@ const ready = (async () => {
 function seedAdmin(client) {
   return new Promise(async (resolve, reject) => {
     try {
-      const ADMIN_USER = process.env.ADMIN_USER ?? 'admin';
-      const ADMIN_PASS = process.env.ADMIN_PASS ?? 'adminadmin123';
+      const ADMIN_USER = process.env.ADMIN_USER ;
+      const ADMIN_PASS = process.env.ADMIN_PASS ;
+      if (!ADMIN_USER || !ADMIN_PASS) {
+      console.log('[SEED] ADMIN_USER / ADMIN_PASS not set, skipping admin seed');
+      return null;
+    }
+
       
       console.log('[SEED] Checking for admin user:', ADMIN_USER);
       const res = await client.query(`SELECT id FROM users WHERE username = $1`, [ADMIN_USER]);

@@ -54,6 +54,64 @@ function clearAuth() {
   localStorage.removeItem(AUTH_USER_KEY);
 }
 
+// Dinamičko dodavanje/uklanjanje datuma
+var dateCounter = 1;
+var addDateBtn = document.getElementById('add-date');
+if (addDateBtn) {
+  addDateBtn.addEventListener('click', function() {
+    var datesContainer = document.getElementById('dates-container');
+    if (!datesContainer) return;
+    
+    var dateItem = document.createElement('div');
+    dateItem.className = 'date-item';
+    dateItem.innerHTML = `
+      <label for="res-date-${dateCounter}">Date (datum) ${dateCounter + 1}</label>
+      <input id="res-date-${dateCounter}" type="date" required />
+      <label for="res-time-${dateCounter}">Time (vrijeme) ${dateCounter + 1}</label>
+      <input id="res-time-${dateCounter}" type="time" required />
+      <button type="button" class="remove-date">Ukloni</button>
+    `;
+    datesContainer.appendChild(dateItem);
+    
+    // Show remove button on first item if more than one
+    var firstRemove = datesContainer.querySelector('.remove-date');
+    if (firstRemove) firstRemove.style.display = 'inline-block';
+    
+    dateCounter++;
+  });
+}
+
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('remove-date')) {
+    var dateItem = e.target.parentElement;
+    var datesContainer = document.getElementById('dates-container');
+    if (datesContainer && dateItem) {
+      datesContainer.removeChild(dateItem);
+      dateCounter--;
+      
+      // Hide remove button if only one left
+      var remaining = datesContainer.querySelectorAll('.date-item');
+      if (remaining.length === 1) {
+        var removeBtn = remaining[0].querySelector('.remove-date');
+        if (removeBtn) removeBtn.style.display = 'none';
+      }
+      
+      // Renumber labels
+      var items = datesContainer.querySelectorAll('.date-item');
+      items.forEach(function(item, index) {
+        var label = item.querySelector('label');
+        if (label) {
+          label.textContent = index === 0 ? 'Date (datum)' : `Date (datum) ${index + 1}`;
+        }
+        var timeLabel = item.querySelectorAll('label')[1];
+        if (timeLabel) {
+          timeLabel.textContent = index === 0 ? 'Time (vrijeme)' : `Time (vrijeme) ${index + 1}`;
+        }
+      });
+    }
+  }
+});
+
 // Pet profile helpers 
 function savePetProfile(petName, petType, petData) {
   var auth = getAuth();
@@ -789,8 +847,6 @@ if (submitBtn) {
 
     var payload = {
       ime_prezime: (nameEl && nameEl.value ? nameEl.value.trim() : ''),
-      datum: (dateEl && dateEl.value ? dateEl.value : ''),
-      vrijeme: (selectedTime != null ? selectedTime : (timeEl && timeEl.value ? timeEl.value : '')),
       trajanje_min: SLOT_STEP_MIN, // 60 min
       ime_zivotinje: (petNameEl && petNameEl.value ? petNameEl.value.trim() : ''),
       vrsta_zivotinje: '',
@@ -807,23 +863,26 @@ if (submitBtn) {
       vaccinated: document.querySelector('input[name="vaccinated"]:checked')?.value || null
     };
     
-    // Collect all pet types (main + additional)
-    var petTypes = [];
-    if (petTypeEl && petTypeEl.value) {
-      petTypes.push(petTypeEl.value);
-    }
-    var additionalSelects = document.querySelectorAll('.additional-pet-type');
-    additionalSelects.forEach(function(select) {
-      if (select.value) {
-        petTypes.push(select.value);
+    // Collect all date/time pairs
+    var selectedDateTimes = [];
+    var dateItems = document.querySelectorAll('.date-item');
+    dateItems.forEach(function(item) {
+      var dateInput = item.querySelector('input[type="date"]');
+      var timeInput = item.querySelector('input[type="time"]');
+      if (dateInput && timeInput && dateInput.value && timeInput.value) {
+        selectedDateTimes.push({
+          datum: dateInput.value,
+          vrijeme: timeInput.value
+        });
       }
     });
-    payload.vrsta_zivotinje = petTypes.join(', ');
 
-    if (!payload.datum || !payload.vrijeme) {
-      alert('Molimo izaberite datum i slobodan termin.');
+    if (selectedDateTimes.length === 0) {
+      alert('Molimo izaberite barem jedan datum i vrijeme.');
       return;
     }
+
+    // Validate all required fields
     if (!payload.ime_prezime || !payload.ime_zivotinje || !payload.vrsta_zivotinje) {
       alert('Molimo popunite obavezna polja (ime, vrsta i ime ljubimca).');
       return;
@@ -838,20 +897,48 @@ if (submitBtn) {
       return;
     }
 
-    fetch(api('/rezervacija'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + auth.token
-      },
-      body: JSON.stringify(payload)
-    })
+    // Create payloads for each date/time
+    var payloads = selectedDateTimes.map(function(dt) {
+      return {
+        ime_prezime: payload.ime_prezime,
+        datum: dt.datum,
+        vrijeme: dt.vrijeme,
+        trajanje_min: SLOT_STEP_MIN,
+        ime_zivotinje: payload.ime_zivotinje,
+        vrsta_zivotinje: payload.vrsta_zivotinje,
+        napomena: payload.napomena,
+        adresa: payload.adresa,
+        telefon: payload.telefon,
+        parking: payload.parking,
+        males: payload.males,
+        females: payload.females,
+        leash: payload.leash,
+        runaway: payload.runaway,
+        fears: payload.fears,
+        mobility: payload.mobility,
+        vaccinated: payload.vaccinated
+      };
+    });
+
+    // Send all reservations
+    var promises = payloads.map(function(p) {
+      return fetch(api('/rezervacija'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + auth.token
+        },
+        body: JSON.stringify(p)
+      })
       .then(function (r) {
         if (!r.ok)
           return r.json().catch(function () { return { error: 'Greška' }; })
-            .then(function (j) { throw new Error(j.error || 'Greška pri slanju zahtjeva.'); });
+            .then(function (j) { throw new Error(j.error || 'Greška pri slanju zahtjeva za ' + p.datum + ' ' + p.vrijeme); });
         return r.json();
-      })
+      });
+    });
+
+    Promise.all(promises)
       .then(function () {
         // Save pet profile for future use - only if single pet name (no commas)
         if (payload.ime_zivotinje && payload.vrsta_zivotinje && !payload.ime_zivotinje.includes(',')) {
@@ -874,12 +961,16 @@ if (submitBtn) {
         }
         
         if (window.toast && toast.success) {
-          toast.success('✅ Zahtjev poslan. Bićete obaviješteni nakon odobrenja.');
+          toast.success('✅ Zahtjevi poslani. Bićete obaviješteni nakon odobrenja.');
         } else {
-          alert('Zahtjev poslan. Bićete obaviješteni nakon odobrenja.');
+          alert('Zahtjevi poslani. Bićete obaviješteni nakon odobrenja.');
         }
         selectedTime = null;
-        if (timeEl) timeEl.value = '';
+        // Clear all date/time inputs
+        var allDateInputs = document.querySelectorAll('input[type="date"]');
+        var allTimeInputs = document.querySelectorAll('input[type="time"]');
+        allDateInputs.forEach(function(input) { input.value = ''; });
+        allTimeInputs.forEach(function(input) { input.value = ''; });
         if (nameEl) nameEl.value = '';
         if (petNameEl) petNameEl.value = '';
         if (notesEl) notesEl.value = '';
@@ -889,7 +980,7 @@ if (submitBtn) {
       })
       .catch(function (e) {
         console.error(e);
-        alert('Nešto je pošlo po zlu pri slanju zahtjeva.');
+        alert('Nešto je pošlo po zlu pri slanju zahtjeva: ' + e.message);
       });
   });
 }

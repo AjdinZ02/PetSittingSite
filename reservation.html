@@ -55,6 +55,49 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
+
+    .date-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+    }
+    .date-item label {
+      font-weight: 600;
+    }
+    .date-item input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .remove-date {
+      align-self: flex-start;
+      margin-top: 5px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .remove-date:hover {
+      background: #cc3333;
+    }
+    .btn-secondary {
+      background: #666;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #555;
+    }
   </style>
 </head>
 <body class="reservation-page">
@@ -116,12 +159,19 @@
 
         <!-- Forma za rezervaciju -->
         <div class="reservation-form">
-          <label for="res-date">Date (datum)</label>
-          <input id="res-date" type="date" required />
+          <!-- Kontejner za više termina -->
+          <div id="dates-container">
+            <div class="date-item">
+              <label for="res-date-0">Date (datum)</label>
+              <input id="res-date-0" type="date" required />
+              <label for="res-time-0">Time (vrijeme)</label>
+              <input id="res-time-0" type="time" required />
+              <button type="button" class="remove-date" style="display: none;">Ukloni</button>
+            </div>
+          </div>
+          <button type="button" id="add-date" class="btn-secondary" style="margin-top: 10px;">+ Dodaj još jedan termin</button>
 
           <div id="time-slots" class="slots-grid" aria-live="polite"></div>
-
-          <input id="res-time" type="text" placeholder="HH:mm" readonly required />
 
           <label for="res-service">Service type (vrsta usluge)</label>
           <select id="res-service" required>

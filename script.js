@@ -326,6 +326,8 @@ function renderSlots(allSlots, takenTimes) {
   slotsEl.innerHTML = '';
   selectedTime = null;
   if (timeEl) timeEl.value = '';
+  if (!allSlots) allSlots = [];
+  if (!takenTimes) takenTimes = [];
   allSlots.forEach(function (t) {
     var isTaken = takenTimes.indexOf(t) !== -1;
     var btn = document.createElement('button');

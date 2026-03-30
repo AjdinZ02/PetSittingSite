@@ -124,6 +124,18 @@
           <label for="res-date">Date (datum)</label>
           <input id="res-date" type="date" required />
 
+          <!-- Više termina: dani u sedmici -->
+          <label>Dani u sedmici (odaberite više ako želite)</label>
+          <div class="days-selection" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+            <label><input type="checkbox" name="days" value="1"> Pon</label>
+            <label><input type="checkbox" name="days" value="2"> Uto</label>
+            <label><input type="checkbox" name="days" value="3"> Sri</label>
+            <label><input type="checkbox" name="days" value="4"> Čet</label>
+            <label><input type="checkbox" name="days" value="5"> Pet</label>
+            <label><input type="checkbox" name="days" value="6"> Sub</label>
+            <label><input type="checkbox" name="days" value="0"> Ned</label>
+          </div>
+
           <div id="time-slots" class="slots-grid" aria-live="polite"></div>
 
           <input id="res-time" type="text" placeholder="HH:mm" readonly required />

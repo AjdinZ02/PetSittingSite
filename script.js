@@ -252,7 +252,6 @@ function fetchAvailabilityRange(from, to) {
 }
 
 // Slots render
-var selectedDates = []; // Array za više odabranih datuma
 function renderSlots(allSlots, takenTimes) {
   if (!slotsEl) return;
   slotsEl.innerHTML = '';
@@ -317,20 +316,13 @@ function renderCalendar(year, month) {
               alert('Ovaj dan je 100% zauzet.');
               return;
             }
-            if (selectedDates.includes(key)) {
-              selectedDates = selectedDates.filter(d => d !== key);
-              cell.classList.remove('selected');
-            } else {
-              selectedDates.push(key);
-              cell.classList.add('selected');
-            }
-            // Update date input with first selected date for slots
-            if (selectedDates.length > 0 && dateEl) {
-              dateEl.value = selectedDates[0];
+            if (dateEl) {
+              dateEl.value = key;
               dateEl.dispatchEvent(new Event('change'));
-            } else if (dateEl) {
-              dateEl.value = '';
             }
+            Array.prototype.slice.call(calGrid.querySelectorAll('.day.selected'))
+              .forEach(function (el) { el.classList.remove('selected'); });
+            cell.classList.add('selected');
           });
           calGrid.appendChild(cell);
         })(day);
@@ -797,6 +789,7 @@ if (submitBtn) {
 
     var payload = {
       ime_prezime: (nameEl && nameEl.value ? nameEl.value.trim() : ''),
+      datum: (dateEl && dateEl.value ? dateEl.value : ''),
       vrijeme: (selectedTime != null ? selectedTime : (timeEl && timeEl.value ? timeEl.value : '')),
       trajanje_min: SLOT_STEP_MIN, // 60 min
       ime_zivotinje: (petNameEl && petNameEl.value ? petNameEl.value.trim() : ''),
@@ -827,8 +820,8 @@ if (submitBtn) {
     });
     payload.vrsta_zivotinje = petTypes.join(', ');
 
-    if (selectedDates.length === 0 || !selectedTime) {
-      alert('Molimo izaberite datum(e) i slobodan termin.');
+    if (!payload.datum || !payload.vrijeme) {
+      alert('Molimo izaberite datum i slobodan termin.');
       return;
     }
     if (!payload.ime_prezime || !payload.ime_zivotinje || !payload.vrsta_zivotinje) {
@@ -845,55 +838,58 @@ if (submitBtn) {
       return;
     }
 
-    // Pošalji rezervacije za svaki odabrani datum
-    var promises = selectedDates.map(function(datum) {
-      var payloadCopy = Object.assign({}, payload);
-      payloadCopy.datum = datum;
-      return fetch(api('/rezervacija'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + auth.token
-        },
-        body: JSON.stringify(payloadCopy)
-      });
-    });
-
-    Promise.all(promises)
-      .then(function (responses) {
-        var allOk = responses.every(r => r.ok);
-        if (!allOk) {
-          return Promise.all(responses.map(r => r.ok ? { ok: true } : r.json().catch(() => ({ error: 'Greška' }))));
-        }
-        return responses.map(() => ({ ok: true }));
+    fetch(api('/rezervacija'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + auth.token
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) {
+        if (!r.ok)
+          return r.json().catch(function () { return { error: 'Greška' }; })
+            .then(function (j) { throw new Error(j.error || 'Greška pri slanju zahtjeva.'); });
+        return r.json();
       })
-      .then(function (results) {
-        var errors = results.filter(r => !r.ok);
-        if (errors.length > 0) {
-          throw new Error('Neke rezervacije nisu uspjele: ' + errors.map(e => e.error).join(', '));
+      .then(function () {
+        // Save pet profile for future use - only if single pet name (no commas)
+        if (payload.ime_zivotinje && payload.vrsta_zivotinje && !payload.ime_zivotinje.includes(',')) {
+          savePetProfile(payload.ime_zivotinje, payload.vrsta_zivotinje, {
+            address: payload.adresa,
+            phone: payload.telefon,
+            notes: payload.napomena,
+            parking: payload.parking,
+            males: payload.males,
+            females: payload.females,
+            leash: payload.leash,
+            runaway: payload.runaway,
+            fears: payload.fears,
+            mobility: payload.mobility,
+            vaccinated: payload.vaccinated
+          }).catch(function(e) {
+            console.error('Failed to save pet profile:', e);
+            // Don't fail the whole reservation if pet profile save fails
+          });
         }
-        // Uspjeh
+        
         if (window.toast && toast.success) {
-          toast.success('✅ Zahtjevi poslani (' + selectedDates.length + ' termina). Bićete obaviješteni nakon odobrenja.');
+          toast.success('✅ Zahtjev poslan. Bićete obaviješteni nakon odobrenja.');
         } else {
-          alert('Zahtjevi poslani (' + selectedDates.length + ' termina). Bićete obaviješteni nakon odobrenja.');
+          alert('Zahtjev poslan. Bićete obaviješteni nakon odobrenja.');
         }
         selectedTime = null;
-        selectedDates = [];
         if (timeEl) timeEl.value = '';
         if (nameEl) nameEl.value = '';
         if (petNameEl) petNameEl.value = '';
         if (notesEl) notesEl.value = '';
         if (addressEl) addressEl.value = '';
         if (phoneEl) phoneEl.value = '';
-        // Reset selected days in calendar
-        Array.prototype.slice.call(calGrid.querySelectorAll('.day.selected'))
-          .forEach(function (el) { el.classList.remove('selected'); });
         setTimeout(function () { window.location.href = 'index.html'; }, 600);
       })
       .catch(function (e) {
         console.error(e);
-        alert('Nešto je pošlo po zlu pri slanju zahtjeva: ' + e.message);
+        alert('Nešto je pošlo po zlu pri slanju zahtjeva.');
       });
   });
 }

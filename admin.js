@@ -101,6 +101,7 @@ function renderTable(rows) {
       <td data-label="Akcije" class="admin-actions">
         <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
         <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>
+        <button class="btn btn-delete" data-id="${r.id}">Obriši</button>
       </td>
     `;
     body.appendChild(tr);
@@ -228,6 +229,11 @@ if (body) {
         if (!r.ok) throw new Error(j.error || 'Greška');
         window.toast?.success?.('Zahtjev odbijen.');
         loadReservations();
+      } else if (t.classList.contains('btn-delete')) {
+        // Sakrij karticu iz frontenda bez diranja baze
+        const tr = t.closest('tr');
+        if (tr) tr.style.display = 'none';
+        window.toast?.info?.('Rezervacija skrivena iz prikaza.');
       }
     } catch (e) {
       console.error(e);

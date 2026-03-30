@@ -157,7 +157,7 @@ body {
 }
 .admin-actions {
   display: flex;
-  gap: 16px;
+  gap: 40px;
   align-items: center;
 }
 .btn {

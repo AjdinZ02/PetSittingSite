@@ -302,22 +302,10 @@ function loadSlots(date) {
   fetchAvailability(date)
     .then(function (data) {
       renderSlots(data.allSlots, data.takenTimes);
-      if (slotsEl) slotsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     })
     .catch(function (e) {
       console.error(e);
-      // Fallback za testiranje bez servera
-      var defaultSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-      var taken = ['10:00', '14:00']; // primjer zauzetih
-      renderSlots(defaultSlots, taken);
-      if (slotsEl) {
-        var errorDiv = document.createElement('div');
-        errorDiv.style.color = '#c00';
-        errorDiv.style.fontSize = '12px';
-        errorDiv.textContent = 'Server nedostupan - prikazani su demo termini.';
-        slotsEl.appendChild(errorDiv);
-        slotsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+      if (slotsEl) slotsEl.innerHTML = '<div style="color:#c00">Greška pri učitavanju termina.</div>';
     });
 }
 
@@ -326,8 +314,6 @@ function renderSlots(allSlots, takenTimes) {
   slotsEl.innerHTML = '';
   selectedTime = null;
   if (timeEl) timeEl.value = '';
-  if (!allSlots) allSlots = [];
-  if (!takenTimes) takenTimes = [];
   allSlots.forEach(function (t) {
     var isTaken = takenTimes.indexOf(t) !== -1;
     var btn = document.createElement('button');

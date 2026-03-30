@@ -62,22 +62,34 @@ if (addDateBtn) {
     var datesContainer = document.getElementById('dates-container');
     if (!datesContainer) return;
     
+    dateCounter++;
+    var prefix = 'term-' + dateCounter;
+    termData[prefix] = {selectedDate: null, selectedTime: null};
+    termMonths[prefix] = {year: new Date().getFullYear(), month: new Date().getMonth()};
+    
     var dateItem = document.createElement('div');
     dateItem.className = 'date-item';
+    dateItem.dataset.prefix = prefix;
     dateItem.innerHTML = `
-      <label for="res-date-${dateCounter}">Date (datum) ${dateCounter + 1}</label>
-      <input id="res-date-${dateCounter}" type="date" required />
-      <label for="res-time-${dateCounter}">Time (vrijeme) ${dateCounter + 1}</label>
-      <input id="res-time-${dateCounter}" type="time" required />
+      <div class="calendar">
+        <div class="cal-header">
+          <button id="${prefix}-prev-month" type="button" class="btn" aria-label="Prethodni mjesec">&lsaquo;</button>
+          <div id="${prefix}-cal-title" class="cal-title">Mjesec Godina</div>
+          <button id="${prefix}-next-month" type="button" class="btn" aria-label="Sljedeći mjesec">&rsaquo;</button>
+        </div>
+        <div id="${prefix}-cal-grid" class="cal-grid"></div>
+        <div class="cal-legend" role="note" aria-label="Legenda zauzeća">
+          <span class="legend-square full"></span> Zauzeto (100%)
+          <span class="legend-square free" style="margin-left:16px;"></span> Slobodno
+          <span class="legend-square partial" style="margin-left:16px;"></span> Djelimično zauzeto
+        </div>
+      </div>
+      <div id="${prefix}-time-slots" class="slots-grid" aria-live="polite"></div>
       <button type="button" class="remove-date">Ukloni</button>
     `;
     datesContainer.appendChild(dateItem);
     
-    // Show remove button on first item if more than one
-    var firstRemove = datesContainer.querySelector('.remove-date');
-    if (firstRemove) firstRemove.style.display = 'inline-block';
-    
-    dateCounter++;
+    renderCalendar(prefix, termMonths[prefix].year, termMonths[prefix].month);
   });
 }
 
@@ -86,28 +98,13 @@ document.addEventListener('click', function(e) {
     var dateItem = e.target.parentElement;
     var datesContainer = document.getElementById('dates-container');
     if (datesContainer && dateItem) {
+      var prefix = dateItem.dataset.prefix;
+      if (prefix) {
+        delete termData[prefix];
+        delete termMonths[prefix];
+      }
       datesContainer.removeChild(dateItem);
       dateCounter--;
-      
-      // Hide remove button if only one left
-      var remaining = datesContainer.querySelectorAll('.date-item');
-      if (remaining.length === 1) {
-        var removeBtn = remaining[0].querySelector('.remove-date');
-        if (removeBtn) removeBtn.style.display = 'none';
-      }
-      
-      // Renumber labels
-      var items = datesContainer.querySelectorAll('.date-item');
-      items.forEach(function(item, index) {
-        var label = item.querySelector('label');
-        if (label) {
-          label.textContent = index === 0 ? 'Date (datum)' : `Date (datum) ${index + 1}`;
-        }
-        var timeLabel = item.querySelectorAll('label')[1];
-        if (timeLabel) {
-          timeLabel.textContent = index === 0 ? 'Time (vrijeme)' : `Time (vrijeme) ${index + 1}`;
-        }
-      });
     }
   }
 });
@@ -260,6 +257,11 @@ var currentMonth = (function () {
   return { year: d.getFullYear(), month: d.getMonth() }; // 0–11
 })();
 
+// Za više termina
+var termData = {};
+var termMonths = {};
+var dateCounter = 0;
+
 // Helpers
 function toMinutes(hhmm) {
   var parts = String(hhmm).split(':');
@@ -310,11 +312,23 @@ function fetchAvailabilityRange(from, to) {
 }
 
 // Slots render
-function renderSlots(allSlots, takenTimes) {
+function loadSlots(date, prefix) {
+  fetchAvailability(date)
+    .then(function (data) {
+      renderSlots(data.allSlots, data.takenTimes, prefix);
+    })
+    .catch(function (e) {
+      console.error(e);
+      var slotsEl = document.getElementById(prefix === 'main' ? 'time-slots' : prefix + '-time-slots');
+      if (slotsEl) slotsEl.innerHTML = '<div style="color:#c00">Greška pri učitavanju termina.</div>';
+    });
+}
+
+function renderSlots(allSlots, takenTimes, prefix) {
+  var slotsEl = document.getElementById(prefix === 'main' ? 'time-slots' : prefix + '-time-slots');
   if (!slotsEl) return;
   slotsEl.innerHTML = '';
-  selectedTime = null;
-  if (timeEl) timeEl.value = '';
+  termData[prefix].selectedTime = null;
   allSlots.forEach(function (t) {
     var isTaken = takenTimes.indexOf(t) !== -1;
     var btn = document.createElement('button');
@@ -326,23 +340,23 @@ function renderSlots(allSlots, takenTimes) {
       Array.prototype.slice.call(slotsEl.querySelectorAll('.slot.selected'))
         .forEach(function (el) { el.classList.remove('selected'); });
       btn.classList.add('selected');
-      selectedTime = t;
-      if (timeEl) timeEl.value = t;
-      if (dateEl) dateEl.dispatchEvent(new Event('input'));
+      termData[prefix].selectedTime = t;
     });
     slotsEl.appendChild(btn);
   });
 }
 
 // Kalendar render
-function renderCalendar(year, month) {
-  if (!calGrid || !calTitle) return;
+function renderCalendar(prefix, year, month) {
+  var calGridEl = document.getElementById(prefix === 'main' ? 'cal-grid' : prefix + '-cal-grid');
+  var calTitleEl = document.getElementById(prefix === 'main' ? 'cal-title' : prefix + '-cal-title');
+  if (!calGridEl || !calTitleEl) return;
   var first = firstDayOfMonth(year, month);
   var last = lastDayOfMonth(year, month);
   try {
-    calTitle.textContent = first.toLocaleDateString('bs-BA', { month: 'long', year: 'numeric' });
+    calTitleEl.textContent = first.toLocaleDateString('bs-BA', { month: 'long', year: 'numeric' });
   } catch (e) {
-    calTitle.textContent = year + '-' + (month + 1);
+    calTitleEl.textContent = year + '-' + (month + 1);
   }
   var from = yyyyMMDD(first);
   var to   = yyyyMMDD(last);
@@ -350,12 +364,12 @@ function renderCalendar(year, month) {
     .then(function (data) {
       var weekStart = (first.getDay() || 7) - 1; // 0=pon
       var totalDays = last.getDate();
-      calGrid.innerHTML = '';
+      calGridEl.innerHTML = '';
       for (var i = 0; i < weekStart; i++) {
         var empty = document.createElement('div');
         empty.className = 'day disabled';
         empty.textContent = '';
-        calGrid.appendChild(empty);
+        calGridEl.appendChild(empty);
       }
       var totalSlots = data.settings.totalSlots;
       for (var day = 1; day <= totalDays; day++) {
@@ -369,27 +383,50 @@ function renderCalendar(year, month) {
           else if (info.takenTimes.length > 0 && info.takenTimes.length < totalSlots) statusClass = 'partial';
           cell.className = 'day ' + statusClass;
           cell.textContent = String(dayIdx);
+          cell.dataset.date = key;
           cell.addEventListener('click', function () {
             if (statusClass === 'full') {
               alert('Ovaj dan je 100% zauzet.');
               return;
             }
-            if (dateEl) {
-              dateEl.value = key;
-              dateEl.dispatchEvent(new Event('change'));
-            }
-            Array.prototype.slice.call(calGrid.querySelectorAll('.day.selected'))
+            termData[prefix].selectedDate = key;
+            Array.prototype.slice.call(calGridEl.querySelectorAll('.day.selected'))
               .forEach(function (el) { el.classList.remove('selected'); });
             cell.classList.add('selected');
+            loadSlots(key, prefix);
           });
-          calGrid.appendChild(cell);
+          calGridEl.appendChild(cell);
         })(day);
       }
     })
     .catch(function (e) {
       console.error(e);
-      calGrid.innerHTML = '<div style="grid-column:1/-1;color:#c00">Greška pri učitavanju kalendara.</div>';
+      calGridEl.innerHTML = '<div style="grid-column:1/-1;color:#c00">Greška pri učitavanju kalendara.</div>';
     });
+
+  // Event listeneri za navigaciju
+  var prevBtn = document.getElementById(prefix === 'main' ? 'prev-month' : prefix + '-prev-month');
+  var nextBtn = document.getElementById(prefix === 'main' ? 'next-month' : prefix + '-next-month');
+  if (prevBtn) {
+    prevBtn.onclick = function() {
+      termMonths[prefix].month--;
+      if (termMonths[prefix].month < 0) {
+        termMonths[prefix].month = 11;
+        termMonths[prefix].year--;
+      }
+      renderCalendar(prefix, termMonths[prefix].year, termMonths[prefix].month);
+    };
+  }
+  if (nextBtn) {
+    nextBtn.onclick = function() {
+      termMonths[prefix].month++;
+      if (termMonths[prefix].month > 11) {
+        termMonths[prefix].month = 0;
+        termMonths[prefix].year++;
+      }
+      renderCalendar(prefix, termMonths[prefix].year, termMonths[prefix].month);
+    };
+  }
 }
 
 // Navigacija mjeseca
@@ -865,17 +902,11 @@ if (submitBtn) {
     
     // Collect all date/time pairs
     var selectedDateTimes = [];
-    var dateItems = document.querySelectorAll('.date-item');
-    dateItems.forEach(function(item) {
-      var dateInput = item.querySelector('input[type="date"]');
-      var timeInput = item.querySelector('input[type="time"]');
-      if (dateInput && timeInput && dateInput.value && timeInput.value) {
-        selectedDateTimes.push({
-          datum: dateInput.value,
-          vrijeme: timeInput.value
-        });
+    for (var p in termData) {
+      if (termData[p].selectedDate && termData[p].selectedTime) {
+        selectedDateTimes.push({datum: termData[p].selectedDate, vrijeme: termData[p].selectedTime});
       }
-    });
+    }
 
     if (selectedDateTimes.length === 0) {
       alert('Molimo izaberite barem jedan datum i vrijeme.');
@@ -965,12 +996,10 @@ if (submitBtn) {
         } else {
           alert('Zahtjevi poslani. Bićete obaviješteni nakon odobrenja.');
         }
-        selectedTime = null;
-        // Clear all date/time inputs
-        var allDateInputs = document.querySelectorAll('input[type="date"]');
-        var allTimeInputs = document.querySelectorAll('input[type="time"]');
-        allDateInputs.forEach(function(input) { input.value = ''; });
-        allTimeInputs.forEach(function(input) { input.value = ''; });
+        // Clear selected times
+        for (var p in termData) {
+          termData[p].selectedTime = null;
+        }
         if (nameEl) nameEl.value = '';
         if (petNameEl) petNameEl.value = '';
         if (notesEl) notesEl.value = '';
@@ -987,9 +1016,10 @@ if (submitBtn) {
 
 // Inicijalizacija
 (function init() {
-  if (calGrid && calTitle) {
-    renderCalendar(currentMonth.year, currentMonth.month);
-  }
+  // Inicijalizacija za main termin
+  termData['main'] = {selectedDate: null, selectedTime: null};
+  termMonths['main'] = {year: new Date().getFullYear(), month: new Date().getMonth()};
+  renderCalendar('main', termMonths['main'].year, termMonths['main'].month);
   
   // Gallery tab functionality
   initGallery();

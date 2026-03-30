@@ -238,22 +238,10 @@ var SLOT_STEP_MIN = 60;
 var WORK_FROM = '08:00';
 var WORK_TO = '22:00';
 
-var dateEl     = document.getElementById('res-date');
-var slotsEl    = document.getElementById('time-slots');
-var timeEl     = document.getElementById('res-time');
-var nameEl     = document.getElementById('res-name');
-var petTypeEl  = document.getElementById('res-pet-type');
-var petNameEl  = document.getElementById('res-pet-name');
-var notesEl    = document.getElementById('res-notes');
-var submitBtn  = document.getElementById('submit-res');
-var addressEl  = document.getElementById('res-address');
-var phoneEl    = document.getElementById('res-phone');
-
-var calGrid    = document.getElementById('cal-grid');
-var calTitle   = document.getElementById('cal-title');
-var prevMonthBtn = document.getElementById('prev-month');
-var nextMonthBtn = document.getElementById('next-month');
-
+// Elementi se inicijalizuju u init
+var nameEl, petNameEl, petTypeEl, notesEl, addressEl, phoneEl, timeEl, dateEl;
+var calGrid, calTitle, prevMonthBtn, nextMonthBtn;
+var slotsEl, submitBtn;
 var selectedTime = null;
 var currentMonth = (function () {
   var d = new Date();
@@ -996,6 +984,22 @@ if (submitBtn) {
 
 // Inicijalizacija
 (function init() {
+  // Inicijalizacija elemenata
+  dateEl = document.getElementById('res-date');
+  slotsEl = document.getElementById('time-slots');
+  timeEl = document.getElementById('res-time');
+  nameEl = document.getElementById('res-name');
+  petTypeEl = document.getElementById('res-pet-type');
+  petNameEl = document.getElementById('res-pet-name');
+  notesEl = document.getElementById('res-notes');
+  submitBtn = document.getElementById('submit-res');
+  addressEl = document.getElementById('res-address');
+  phoneEl = document.getElementById('res-phone');
+  calGrid = document.getElementById('cal-grid');
+  calTitle = document.getElementById('cal-title');
+  prevMonthBtn = document.getElementById('prev-month');
+  nextMonthBtn = document.getElementById('next-month');
+
   if (calGrid && calTitle) {
     renderCalendar(currentMonth.year, currentMonth.month);
   }

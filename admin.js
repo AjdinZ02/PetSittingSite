@@ -84,8 +84,8 @@ function renderTable(rows) {
       <td data-label="Datum">${formatDate(r.datum)}</td>
       <td data-label="Početak">${r.vrijeme ?? ''}</td>
       <td data-label="Ime i prezime">${r.ime_prezime}</td>
-      <td data-label="Životinja">${pets.names}</td>
-      <td data-label="Vrsta">${pets.types}</td>
+      <td data-label="Životinja">${pets.types}</td>
+      <td data-label="Vrsta">${pets.names}</td>
       <td data-label="Adresa">${r.adresa ?? ''}</td>
       <td data-label="Telefon">${r.telefon ?? ''}</td>
       <td data-label="Napomena">${r.napomena ?? ''}</td>

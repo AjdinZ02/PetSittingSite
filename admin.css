@@ -201,6 +201,9 @@
     border-bottom: 1px dashed var(--border);
     position: relative;
     padding: 12px 16px;
+    word-wrap:break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
   .admin-table td:last-child { border-bottom: none; }
 

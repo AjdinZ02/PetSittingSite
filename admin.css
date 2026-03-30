@@ -207,6 +207,8 @@
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 .admin-table td {
   border: none;

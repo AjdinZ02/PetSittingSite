@@ -155,6 +155,11 @@ body {
   display: flex;
   gap: 8px;
 }
+.admin-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
 .btn {
   display: inline-flex;
   align-items: center;

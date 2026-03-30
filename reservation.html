@@ -159,27 +159,12 @@
 
         <!-- Forma za rezervaciju -->
         <div class="reservation-form">
-<!-- KALENDAR -->
-        <div class="calendar">
-          <div class="cal-header">
-            <button id="prev-month" type="button" class="btn" aria-label="Prethodni mjesec">&lsaquo;</button>
-            <div id="cal-title" class="cal-title">Mjesec Godina</div>
-            <button id="next-month" type="button" class="btn" aria-label="Sljedeći mjesec">&rsaquo;</button>
-          </div>
+          <label for="res-date">Date (datum)</label>
+          <input id="res-date" type="date" required />
 
-          <!-- Grid dana mjeseca -->
-          <div id="cal-grid" class="cal-grid"></div>
+          <div id="time-slots" class="slots-grid" aria-live="polite"></div>
 
-          <!-- Legenda boja -->
-          <div class="cal-legend" role="note" aria-label="Legenda zauzeća">
-            <span class="legend-square full"></span> Zauzeto (100%)
-            <span class="legend-square free" style="margin-left:16px;"></span> Slobodno
-            <span class="legend-square partial" style="margin-left:16px;"></span> Djelimično zauzeto
-          </div>
-        </div>
-
-        <!-- Slotovi za termin -->
-        <div id="time-slots" class="slots-grid" aria-live="polite"></div>
+          <input id="res-time" type="text" placeholder="HH:mm" readonly required />
 
           <!-- Izbor životinja sa profila -->
           <div id="profile-pets-section" style="display: none; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #f0f8ff 0%, #e8f4ff 100%); border-radius: 12px; border: 2px solid #d535d0; box-shadow: 0 2px 8px rgba(213, 53, 208, 0.1);">

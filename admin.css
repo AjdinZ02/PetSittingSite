@@ -212,27 +212,20 @@
   border: none;
   border-bottom: 1px dashed var(--border);
   position: relative;
-  padding: 8px 16px;
+  padding: 12px 16px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 .admin-table td:last-child { border-bottom: none; }
 
-.field-label {
+/* "Labela: vrijednost" stil iz data-label atributa */
+.admin-table td::before {
+  content: attr(data-label);
+  display: block;
   font-weight: 700;
   color: var(--text-muted);
+  margin-bottom: 6px;
   font-size: 0.86rem;
-  flex-shrink: 0;
-  margin-right: 8px;
-}
-
-.field-value {
-  flex: 1;
-  text-align: right;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  letter-spacing: 0.2px;
 }

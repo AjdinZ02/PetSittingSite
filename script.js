@@ -302,6 +302,7 @@ function loadSlots(date) {
   fetchAvailability(date)
     .then(function (data) {
       renderSlots(data.allSlots, data.takenTimes);
+      if (slotsEl) slotsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     })
     .catch(function (e) {
       console.error(e);
@@ -315,6 +316,7 @@ function loadSlots(date) {
         errorDiv.style.fontSize = '12px';
         errorDiv.textContent = 'Server nedostupan - prikazani su demo termini.';
         slotsEl.appendChild(errorDiv);
+        slotsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     });
 }

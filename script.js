@@ -317,7 +317,17 @@ function loadSlots(date) {
     })
     .catch(function (e) {
       console.error(e);
-      if (slotsEl) slotsEl.innerHTML = '<div style="color:#c00">Greška pri učitavanju termina.</div>';
+      // Fallback za testiranje bez servera
+      var defaultSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+      var taken = ['10:00', '14:00']; // primjer zauzetih
+      renderSlots(defaultSlots, taken);
+      if (slotsEl) {
+        var errorDiv = document.createElement('div');
+        errorDiv.style.color = '#c00';
+        errorDiv.style.fontSize = '12px';
+        errorDiv.textContent = 'Server nedostupan - prikazani su demo termini.';
+        slotsEl.appendChild(errorDiv);
+      }
     });
 }
 

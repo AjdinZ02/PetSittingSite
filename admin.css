@@ -195,11 +195,16 @@
 .admin-table tr,
 .admin-table td { display: block; width: 100%; }
 
+.admin-table tbody {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 12px;
+}
+
 .admin-table tr {
   background: var(--bg-card);
   box-shadow: var(--shadow-sm);
   border-radius: var(--radius);
-  margin-bottom: 12px;
   overflow: hidden;
   border: 1px solid var(--border);
 }

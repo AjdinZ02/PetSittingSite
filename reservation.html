@@ -116,16 +116,12 @@
 
         <!-- Forma za rezervaciju -->
         <div class="reservation-form">
-          <div id="dates-container">
-            <div class="date-item">
-              <label for="res-date-0">Date (datum)</label>
-              <input id="res-date-0" type="date" required />
-              <label for="res-time-0">Time (vrijeme)</label>
-              <input id="res-time-0" type="time" required />
-              <button type="button" class="remove-date" style="display:none;">Ukloni</button>
-            </div>
-          </div>
-          <button type="button" id="add-date">Dodaj još jedan datum</button>
+          <label for="res-date">Date (datum)</label>
+          <input id="res-date" type="date" required />
+
+          <div id="time-slots" class="slots-grid" aria-live="polite"></div>
+
+          <input id="res-time" type="text" placeholder="HH:mm" readonly required />
 
           <label for="res-service">Service type (vrsta usluge)</label>
           <select id="res-service" required>

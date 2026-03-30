@@ -81,26 +81,29 @@ function renderTable(rows) {
     
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td data-label="Datum">${formatDate(r.datum)}</td>
-      <td data-label="Početak">${r.vrijeme ?? ''}</td>
-      <td data-label="Ime i prezime">${r.ime_prezime}</td>
-      <td data-label="Životinja">${pets.names}</td>
-      <td data-label="Vrsta">${pets.types}</td>
-      <td data-label="Adresa">${r.adresa ?? ''}</td>
-      <td data-label="Telefon">${r.telefon ?? ''}</td>
-      <td data-label="Napomena">${r.napomena ?? ''}</td>
-      <td data-label="Parking">${formatYesNo(r.parking)}</td>
-      <td data-label="Sa mužjacima">${formatYesNo(r.males)}</td>
-      <td data-label="Sa ženkama">${formatYesNo(r.females)}</td>
-      <td data-label="Povodac">${formatYesNo(r.leash)}</td>
-      <td data-label="Bježi">${formatYesNo(r.runaway)}</td>
-      <td data-label="Strahovi">${formatYesNo(r.fears)}</td>
-      <td data-label="Kretanje">${formatYesNo(r.mobility)}</td>
-      <td data-label="Vakcinisan">${formatYesNo(r.vaccinated)}</td>
-      <td data-label="Status"><span class="admin-pill status-${r.status}">${r.status}</span></td>
-      <td data-label="Akcije" class="admin-actions">
-        <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
-        <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>
+      <td><span class="field-label">Datum:</span> <span class="field-value">${formatDate(r.datum)}</span></td>
+      <td><span class="field-label">Početak:</span> <span class="field-value">${r.vrijeme ?? ''}</span></td>
+      <td><span class="field-label">Ime i prezime:</span> <span class="field-value">${r.ime_prezime}</span></td>
+      <td><span class="field-label">Životinja:</span> <span class="field-value">${pets.names}</span></td>
+      <td><span class="field-label">Vrsta:</span> <span class="field-value">${pets.types}</span></td>
+      <td><span class="field-label">Adresa:</span> <span class="field-value">${r.adresa ?? ''}</span></td>
+      <td><span class="field-label">Telefon:</span> <span class="field-value">${r.telefon ?? ''}</span></td>
+      <td><span class="field-label">Napomena:</span> <span class="field-value">${r.napomena ?? ''}</span></td>
+      <td><span class="field-label">Parking:</span> <span class="field-value">${formatYesNo(r.parking)}</span></td>
+      <td><span class="field-label">Sa mužjacima:</span> <span class="field-value">${formatYesNo(r.males)}</span></td>
+      <td><span class="field-label">Sa ženkama:</span> <span class="field-value">${formatYesNo(r.females)}</span></td>
+      <td><span class="field-label">Povodac:</span> <span class="field-value">${formatYesNo(r.leash)}</span></td>
+      <td><span class="field-label">Bježi:</span> <span class="field-value">${formatYesNo(r.runaway)}</span></td>
+      <td><span class="field-label">Strahovi:</span> <span class="field-value">${formatYesNo(r.fears)}</span></td>
+      <td><span class="field-label">Kretanje:</span> <span class="field-value">${formatYesNo(r.mobility)}</span></td>
+      <td><span class="field-label">Vakcinisan:</span> <span class="field-value">${formatYesNo(r.vaccinated)}</span></td>
+      <td><span class="field-label">Status:</span> <span class="field-value"><span class="admin-pill status-${r.status}">${r.status}</span></span></td>
+      <td class="admin-actions">
+        <span class="field-label">Akcije:</span>
+        <span class="field-value">
+          <button class="btn btn-approve" data-id="${r.id}" ${r.status==='approved' ? 'disabled' : ''}>Odobri</button>
+          <button class="btn btn-reject"  data-id="${r.id}" ${r.status==='rejected' ? 'disabled' : ''}>Odbij</button>
+        </span>
       </td>
     `;
     body.appendChild(tr);

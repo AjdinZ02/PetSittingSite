@@ -398,6 +398,10 @@ function renderCalendar(year, month) {
               return;
             }
             selectedDate = key;
+            if (dateEl) {
+              dateEl.value = key;
+              dateEl.dispatchEvent(new Event('change'));
+            }
             Array.prototype.slice.call(calGrid.querySelectorAll('.day.selected'))
               .forEach(function (el) { el.classList.remove('selected'); });
             cell.classList.add('selected');

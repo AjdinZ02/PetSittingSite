@@ -21,6 +21,10 @@
   --shadow-md: 0 10px 24px rgba(17, 24, 39, 0.08);
 }
 
+body {
+  overflow-x: hidden;
+}
+
 /* Wrapper i naslov  */
 .admin-wrap {
   max-width: 1080px;

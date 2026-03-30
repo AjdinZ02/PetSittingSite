@@ -21,10 +21,20 @@
     .admin-title { font-weight: 800; letter-spacing: .2px; margin-bottom: 20px; color: var(--brand, #d535d0); }
     .admin-error { display:none; margin:12px 0; padding:10px; border-radius:10px; background:#fdecea; color:#b91c1c; font-weight:600; }
     .admin-debug { display:none; padding:10px; background:#f3f4f6; border-radius:10px; overflow:auto; }
-    .admin-table { width:100%; border-collapse:collapse; margin-top:12px; background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:12px; }
-    .admin-table thead tr { background:#f3f4f6; }
-    .admin-table th, .admin-table td { text-align:left; padding:10px; border-bottom:1px solid rgba(0,0,0,0.06); }
-    .admin-table tbody tr:hover { background:#fafafa; }
+    .admin-table { width:100%; max-width:720px; border-collapse: separate; margin-top:12px; background:#fff; border-radius:12px; }
+    .admin-table thead { display:none; }
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+      display:block;
+      width:100%;
+    }
+    .admin-table tr { background:#fff; margin-bottom:12px; border:1px solid rgba(0,0,0,0.08); border-radius:12px; padding:12px; box-shadow:0 3px 10px rgba(0,0,0,0.06); }
+    .admin-table td { text-align:left; padding:8px 10px; border-bottom:1px dashed rgba(0,0,0,0.08); white-space:normal; word-break:break-word; }
+    .admin-table td:last-child { border-bottom:none; }
+    .admin-table td::before { content:attr(data-label); font-weight:700; color:#6b7280; display:block; margin-bottom:4px; }
+    .admin-table tbody tr:hover { background:#fff0fb; }
     .admin-actions { display:flex; gap:8px; align-items:center; }
     .admin-pill { display:inline-block; padding:6px 10px; border-radius:16px; background:#f3f4f6; color:#111; font-size:0.9rem; }
     .status-approved { background:#10b981 !important; color:#fff !important; font-weight:600; }

@@ -196,9 +196,7 @@
 .admin-table td { display: block; width: 100%; }
 
 .admin-table tbody {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-  gap: 12px;
+  display: block;
 }
 
 .admin-table tr {
@@ -208,6 +206,7 @@
   overflow: hidden;
   border: 1px solid var(--border);
   max-width: 600px;
+  margin: 0 auto 12px auto;
   overflow-x: hidden;
 }
 .admin-table td {
